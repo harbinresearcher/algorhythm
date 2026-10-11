@@ -1,7 +1,7 @@
 # Agent 工作约束
 
 - 开始前必须先读 docs/STATUS.md 和 docs/ROADMAP.md，再读 README.md 与 docs/ARCHITECTURE.md；历史背景按需读 docs/project-context.md、docs/phase-1-plan.md、docs/HANDOFF.md。
-- 严格限定第一阶段范围，不能自行加后端、账号、抓取、扩展、面试或掌握度统计。
+- 严格限定第一阶段范围，不能自行加后端、账号、批量抓取、扩展、面试或掌握度统计。用户已授权通过 Jina Reader 读取单条原题链接；不据此扩展爬虫或平台同步。
 - 固定使用方案中的 16 种模式。FSRS 默认参数并 enable_fuzz。
 - 核心逻辑与 UI 分离，存储职责独立，不引入单次使用的过度抽象。
 - 改动前说明假设和验收方式；有实质歧义先确认。

@@ -1,6 +1,6 @@
 # AlgoRhythm 架构
 
-纯前端、本地 Web App。没有后端、账号或云存储；只有题目分析调用用户配置的外部 AI 服务。
+纯前端、本地 Web App。没有后端、账号或云存储。原题链接由 Jina Reader 读取，题目正文发送到用户配置的外部 AI 服务；AI Key 不发送给 Reader。
 
 ## 技术栈
 
@@ -21,6 +21,8 @@ src/
 ├── patterns.ts             16 个固定模式与骨架
 ├── types.ts                题目、分析结果和配置类型
 ├── ai.ts                   Prompt、HTTP 请求、校验、AI 配置
+├── source.ts               原题链接校验与 Jina Reader 正文读取
+├── backup.ts               白名单导出、解析校验与事务恢复
 ├── db.ts                   存储、到期查询、评分事务
 ├── fsrs.ts                 新卡与评分排期
 ├── logger.ts               不包含个人数据的动作日志
@@ -55,7 +57,9 @@ UI 通过存储模块读取题目。题库使用响应式查询；复习队列�
 - localStorage `algorhythm.ai.v1`：API Key、Base URL、Model。2026-10-10 更名前为 `companion.ai.v1`，更名后不读取旧键，需要重新填写 AI 设置。
 - 请求：`${baseUrl}/chat/completions`，发送题目正文和约束 Prompt；有链接时先通过 source.ts 请求 Jina Reader。
 
-AI 结果不能视为标准答案；非法 JSON 不入库，字段默认值带警告。密钥未加密，清除站点数据会丢题库，不同访问地址的数据隔离。没有导出、复习日志表或模式掌握度统计，不把未来模块写成已有能力。
+AI 结果不能视为标准答案；非法 JSON 不入库，字段默认值带警告。密钥未加密，清除站点数据会丢题库，不同访问地址的数据隔离。题库提供 JSON 备份与恢复；没有云同步、复习日志表或模式掌握度统计，不把未来模块写成已有能力。
+
+备份链路：完整题库 → 白名单 JSON（不含 AI 设置）→ 校验并恢复卡片 Date → 只读预览 → skip / overwrite → 单事务写入。写入时重新读取实际 ID；保留卡片排期，不重新调度。
 
 
 ## 10 月 9 日导入修复

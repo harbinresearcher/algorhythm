@@ -78,11 +78,13 @@ AI 只允许预定义的 16 种模式。无法解析的 JSON 不入库；字段�
 
 ## 本地数据
 
-题目和卡片保存在 IndexedDB，刷新不会丢失。不同浏览器、配置文件和访问地址各自保存独立数据。清除站点数据会删除题库；当前没有云同步或导出功能。
+题目和卡片保存在 IndexedDB，刷新不会丢失。不同浏览器、配置文件和访问地址各自保存独立数据。清除站点数据会删除题库；没有云同步。
+
+题库页提供 JSON「导出备份」和「导入备份」。导出完整题库与复习进度，不含 AI 设置和 Key。导入先预览，默认跳过同 ID 的题目；选择覆盖会替换这些题目及其复习进度。取消预览不写入数据，成功结果以实际写入计数为准。
 
 ## 运行截图
 
-截图来自隔离浏览器，使用示例题和模拟 AI 响应，不代表真实服务分类验收。
+截图保留此前的深色界面，当前 main 已改为浅色学习工作台。截图来自隔离浏览器，使用示例题和模拟 AI 响应，不代表真实服务分类验收。
 
 ### 导入
 
@@ -103,6 +105,8 @@ AI 只允许预定义的 16 种模式。无法解析的 JSON 不入库；字段�
 ## 结构
 
 - `src/ai.ts`：Prompt、请求、字段校验与本地配置。
+- `src/source.ts`：通过 Jina Reader 读取原题链接。
+- `src/backup.ts`：备份白名单、文件校验、日期恢复与事务导入。
 - `src/db.ts`：Dexie CRUD、到期索引和评分事务。
 - `src/fsrs.ts`：默认 FSRS 初始化与排期，不依赖 React。
 - `src/patterns.ts`：固定 16 种模式。
@@ -119,7 +123,7 @@ AI 只允许预定义的 16 种模式。无法解析的 JSON 不入库；字段�
 
 第一阶段不做后端、账号、浏览器扩展、代码编辑器、掌握度图表或面试模拟。后续任务见 [ROADMAP.md](docs/ROADMAP.md)。
 
-仓库已公开并启用 `main` 分支保护：改动通过 PR 合入，请勿直接推送。CI（lint + test + build）待有实际协作需求后再加。
+仓库已公开并启用 `main` 分支保护：改动通过 PR 合入，请勿直接推送。CI 已验证 lint、format:check、test 和 build。仓库自动检查与定时任务见 [自动化说明](docs/REPOSITORY-AUTOMATION.md)；CI 是否为 required check，以 GitHub 当前分支保护为准。
 
 ## 贡献与支持
 
@@ -129,7 +133,7 @@ AI 只允许预定义的 16 种模式。无法解析的 JSON 不入库；字段�
 - 版本变更历史：[CHANGELOG.md](CHANGELOG.md)
 - 报告安全漏洞：**请勿使用公开 Issue**，见 [SECURITY.md](SECURITY.md)
 
-请勿在提交中包含 API Key、个人题库或浏览器配置。[推送保护](https://docs.github.com/code-security/secret-scanning/about-push-protection) 会在检测到疑似密钥时直接拒绝推送；遇到拦截请移除密钥并到服务商处轮换，不要绕过。
+请勿在提交中包含 API Key、个人题库或浏览器配置。[推送保护](https://docs.github.com/en/code-security/concepts/secret-security/push-protection) 会在检测到疑似密钥时直接拒绝推送；遇到拦截请移除密钥并到服务商处轮换，不要绕过。
 
 
 ## License

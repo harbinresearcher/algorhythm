@@ -66,4 +66,8 @@ chore: configure lint and formatting
 4. 填写 PR 模板，说明问题、改动、验证方式和关联 Issue。
 5. 根据评审修改后重复受影响检查，再合入 main。
 
-MVP 阶段手动验证，暂不启用 GitHub Actions（代码扫描使用 GitHub 托管的 CodeQL 默认配置）。测试替身只能证明交互与数据流程，不能当作真实 AI 分类验收。许可证为 MIT，提交前确认新增代码和素材允许以此方式分发。
+GitHub Actions 已验证 lint、format:check、test 和 build；仓库维护工作流另检查文档链接、工作流语法和依赖漏洞，具体触发条件见 [自动化说明](docs/REPOSITORY-AUTOMATION.md)。CodeQL 使用 GitHub 托管的默认配置。自动检查是否为 required check，以当前分支保护为准，不将“检查通过”写成“强制门禁已开启”。
+
+Dependabot 每周提出更新 PR；小版本按生产依赖、开发依赖或 Actions 分组，大版本单独评估。更新不会自动合并；需核对当前 head SHA 的检查，业务和框架迁移交总架构确认。不要用 `--force` 或 `--legacy-peer-deps` 绕过依赖冲突。
+
+测试替身只能证明交互与数据流程，不能当作真实 AI 分类验收。许可证为 MIT，提交前确认新增代码和素材允许以此方式分发。
