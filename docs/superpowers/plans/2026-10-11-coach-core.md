@@ -19,26 +19,26 @@
 
 接口：消费 AlgoRhythmDB/Problem；产出 startPractice/loadPractice/recoverPractice/runPracticeEvent/finishPractice，精确签名见规格。
 
-- [ ] 写独立行为测试。v1 用真实 Dexie 创建，写完整 Problem，关闭后用 AlgoRhythmDB 打开；期望原 Card 的 due 保持 Date 且新会话无旧权限。
-- [ ] 用保存的 attempts/requests/feedback 断言正常两轮、提示与摘要；fetch 仅作为外部边界替身。
-- [ ] 用延迟 promise 控制跨标签并发、刷新、结束和过期响应；断言无多余请求与反馈。
-- [ ] npm test -- tests/practice.test.ts，记录未实现失败。
-- [ ] 实现公开类型、v2 表与事务预留/完成流程。存储失败不得开始 HTTP。
-- [ ] 重跑独立测试及旧核心测试，确保升级和原业务一致。
+- [x] 写独立行为测试。v1 用真实 Dexie 创建，写完整 Problem，关闭后用 AlgoRhythmDB 打开；期望原 Card 的 due 保持 Date 且新会话无旧权限。
+- [x] 用保存的 attempts/requests/feedback 断言正常两轮、提示与摘要；fetch 仅作为外部边界替身。
+- [x] 用延迟 promise 控制跨标签并发、刷新、结束和过期响应；断言无多余请求与反馈。
+- [x] npm test -- tests/practice.test.ts，记录未实现失败。
+- [x] 实现公开类型、v2 表与事务预留/完成流程。存储失败不得开始 HTTP。
+- [x] 重跑独立测试及旧核心测试，确保升级和原业务一致。
 
 ## 任务 2：真实 HTTP 边界
 
 文件：新增 src/coach.ts、tests/coach.test.ts。
 接口：消费 AIConfig 与 CoachContext；产出 requestCoach/parseCoachReply。
 
-- [ ] 先写真实 requestCoach + fetch 替身测试，断言题干与用户观察进入上下文、原 aiAnalysis 不进入；401/非法输出/超时无重试。
-- [ ] npm test -- tests/coach.test.ts，确认缺功能失败。
-- [ ] 最小实现 OpenAI 兼容请求、脱敏错误、结构校验、等级约束、超时清理。
-- [ ] 增补核心整合测试，模拟 HTTP 且记录尝试已先入库；不把模拟结果当教学验收。
+- [x] 先写真实 requestCoach + fetch 替身测试，断言题干与用户观察进入上下文、原 aiAnalysis 不进入；401/非法输出/超时无重试。
+- [x] npm test -- tests/coach.test.ts，确认缺功能失败。
+- [x] 最小实现 OpenAI 兼容请求、脱敏错误、结构校验、等级约束、超时清理。
+- [x] 增补核心整合测试，模拟 HTTP 且记录尝试已先入库；不把模拟结果当教学验收。
 
 ## 任务 3：交付
 
-- [ ] 新增 docs/handoffs/04-COACH-FRONTEND.md，提供直接可用调用示例、恢复/状态处理和备份边界；公共 STATUS 由总架构更新。
-- [ ] 四项质量检查与 git diff --check。
-- [ ] 仅提交本切片文件，推送 feature/coach-core，新建 PR，不合并。
-- [ ] 核对对应提交 SHA 的 CI/CodeQL，报告实测结果与自然语言教学质量边界。
+- [x] 新增 docs/handoffs/04-COACH-FRONTEND.md，提供直接可用调用示例、恢复/状态处理和备份边界；公共 STATUS 由总架构更新。
+- [x] 四项质量检查与 git diff --check。
+- [x] 仅提交本切片文件，推送 feature/coach-core，新建 PR，不合并。
+- [x] 核对对应提交 SHA 的 CI/CodeQL，报告实测结果与自然语言教学质量边界。
