@@ -9,6 +9,7 @@
 ## 已完成
 
 - AI 设置保存到 localStorage，文本或链接导入；链接先经 Jina Reader 读取正文。
+- AI 配置跟上当前模型：默认改为 Base URL `https://api.deepseek.com` + Model `deepseek-flash`（旧默认 `deepseek-chat` 已被 DeepSeek 于 2026-07-24 停用）；设置界面加入「预设供应商」（DeepSeek / OpenAI）与各字段说明；README、SUPPORT 的示例模型名同步。验证：`lint`、`format:check`、`test`（29 项）、`build` 全部通过。
 - OpenAI 风格分析请求，固定 16 种模式，JSON/字段校验、超时与可见错误。
 - IndexedDB 题库、模式筛选、完整题干与分析详情。
 - 先独立回忆再揭示，FSRS 默认参数 + fuzz，事务评分与防重复点击。

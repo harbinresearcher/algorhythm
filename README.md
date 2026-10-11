@@ -50,23 +50,27 @@ FSRS 使用默认参数并开启 fuzz。“忘了”可能几分钟后再次到�
 
 ## AI 配置
 
-默认 Base URL 为 `https://api.deepseek.com/v1`，Model 为 `deepseek-chat`。
+默认 Base URL 为 `https://api.deepseek.com`，Model 为 `deepseek-flash`。
 
 配置示例（Key 均需自行申请，模型以账号可用列表为准）：
 
 ```text
 DeepSeek
-  Base URL: https://api.deepseek.com/v1
-  Model:    deepseek-chat
+  Base URL: https://api.deepseek.com
+  Model:    deepseek-flash
   API Key:  你的 DeepSeek API Key
 
 OpenAI
   Base URL: https://api.openai.com/v1
-  Model:    gpt-4o-mini
+  Model:    gpt-6-luna
   API Key:  你的 OpenAI API Key
 ```
 
-参考：[DeepSeek API](https://api-docs.deepseek.com/)、[OpenAI 模型文档](https://developers.openai.com/api/docs/models/gpt-4o-mini)。
+> **模型名会过时，配置前先查服务商当前文档。** 例如 DeepSeek 已于 2026-07-24 停用
+> `deepseek-chat` 与 `deepseek-reasoner`，现在应使用 `deepseek-flash`（默认）或 `deepseek-v4-pro`。
+> 填了已下线的模型名，接口会直接报错。
+
+参考：[DeepSeek API](https://api-docs.deepseek.com/)、[OpenAI 模型文档](https://developers.openai.com/api/docs/models/gpt-6-luna)。
 
 支持 OpenAI 风格的 `/chat/completions` 服务。Base URL 填 API 根地址，不含 `/chat/completions`。模型必须支持 JSON 输出，服务必须允许浏览器跨域调用。远程服务使用 HTTPS，本机服务允许 HTTP。
 

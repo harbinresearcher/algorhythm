@@ -2,6 +2,26 @@ import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { loadAIConfig, saveAIConfig } from '../ai';
 import { logger } from '../logger';
 
+/**
+ * 预设供应商：点一下自动填好 Base URL 与 Model。
+ * 模型名会过时（例如 DeepSeek 已于 2026-07-24 停用 deepseek-chat），
+ * 所以这里只是起点，用户随时可以手改。
+ */
+const PRESETS = [
+  {
+    id: 'deepseek',
+    label: 'DeepSeek',
+    baseUrl: 'https://api.deepseek.com',
+    model: 'deepseek-flash',
+  },
+  {
+    id: 'openai',
+    label: 'OpenAI',
+    baseUrl: 'https://api.openai.com/v1',
+    model: 'gpt-6-luna',
+  },
+] as const;
+
 export default function Settings({
   onClose,
   onSaved,
@@ -32,6 +52,25 @@ export default function Settings({
       returnFocus?.focus();
     };
   }, []);
+
+  // 当前配置与某个预设完全一致才算命中；否则视为自定义
+  const activePreset = PRESETS.find(
+    (preset) => preset.baseUrl === config.baseUrl && preset.model === config.model,
+  );
+
+  function applyPreset(preset: (typeof PRESETS)[number]) {
+    /*
+     * ========================================================================
+     * 步骤1：套用预设供应商
+     * ========================================================================
+     * 数据源：预设表；操作：1) 覆盖 Base URL 与 Model 2) 保留已填的密钥
+     */
+    logger.info('开始套用预设供应商');
+    // 1.1 不动 apiKey，避免用户重新粘贴
+    setConfig((current) => ({ ...current, baseUrl: preset.baseUrl, model: preset.model }));
+    setError('');
+    logger.info('预设供应商套用完成');
+  }
 
   function save(event: FormEvent) {
     event.preventDefault();
@@ -76,6 +115,26 @@ export default function Settings({
             </svg>
           </button>
         </div>
+        <div className="field">
+          预设供应商
+          <div className="preset-row" role="group" aria-label="预设供应商">
+            {PRESETS.map((preset) => (
+              <button
+                key={preset.id}
+                type="button"
+                className={`preset-chip${activePreset?.id === preset.id ? ' active' : ''}`}
+                aria-pressed={activePreset?.id === preset.id}
+                onClick={() => applyPreset(preset)}
+              >
+                {preset.label}
+              </button>
+            ))}
+            {!activePreset && <span className="preset-chip active">自定义</span>}
+          </div>
+          <span className="field-hint">
+            选一个就自动填好下面两项；用别的服务商时直接手动填写即可。
+          </span>
+        </div>
         <label className="field">
           API Key
           <input
@@ -87,6 +146,7 @@ export default function Settings({
             placeholder="输入你的 API Key"
             onChange={(e) => setConfig({ ...config, apiKey: e.target.value })}
           />
+          <span className="field-hint">只保存在此浏览器，不会上传到任何地方。</span>
         </label>
         <label className="field">
           Base URL
@@ -97,9 +157,12 @@ export default function Settings({
             autoComplete="off"
             required
             value={config.baseUrl}
-            placeholder="https://api.deepseek.com/v1"
+            placeholder="https://api.deepseek.com"
             onChange={(e) => setConfig({ ...config, baseUrl: e.target.value })}
           />
+          <span className="field-hint">
+            API 根地址，不含 /chat/completions；本机服务可以填 http://。
+          </span>
         </label>
         <label className="field">
           Model
@@ -109,13 +172,14 @@ export default function Settings({
             autoComplete="off"
             required
             value={config.model}
-            placeholder="deepseek-chat"
+            placeholder="deepseek-flash"
             onChange={(e) => setConfig({ ...config, model: e.target.value })}
           />
+          <span className="field-hint">填服务商当前的模型名；填了已下线的名字会返回 400。</span>
         </label>
         <p className="muted text-sm leading-relaxed">
-          默认使用 DeepSeek。兼容 OpenAI 风格的 API，服务需支持浏览器跨域请求和 JSON
-          输出。密钥仅保存在此浏览器中，请使用自己的密钥。
+          兼容 OpenAI 风格的 <code>/chat/completions</code>
+          ；服务需支持浏览器跨域请求和 JSON 输出。
         </p>
         {error && (
           <p className="error" role="alert">

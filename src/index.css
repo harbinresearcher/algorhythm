@@ -1281,3 +1281,39 @@ button:active:not(:disabled) {
     animation: none !important;
   }
 }
+
+/* AI 设置：预设供应商与字段说明 */
+.preset-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+.preset-chip {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text);
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  transition:
+    border-color 140ms var(--ease-out),
+    background 140ms var(--ease-out);
+}
+.preset-chip:hover {
+  border-color: var(--accent);
+}
+.preset-chip.active {
+  border-color: var(--accent);
+  background: var(--accent-light);
+  color: var(--accent);
+}
+.field-hint {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--muted);
+}

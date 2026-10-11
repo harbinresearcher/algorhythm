@@ -4,8 +4,8 @@ import { logger } from './logger';
 
 const defaults: AIConfig = {
   apiKey: '',
-  baseUrl: 'https://api.deepseek.com/v1',
-  model: 'deepseek-chat',
+  baseUrl: 'https://api.deepseek.com',
+  model: 'deepseek-flash',
 };
 const stringList = (value: unknown): string[] =>
   Array.isArray(value)
