@@ -2,12 +2,38 @@ import Dexie, { type Table } from 'dexie';
 import type { Problem } from './types';
 import { review, type Grade } from './fsrs';
 import { logger } from './logger';
+import type {
+  PracticeSession,
+  PracticeAttempt,
+  PracticeRequest,
+  CoachFeedback,
+} from './practice-types';
 
 export class AlgoRhythmDB extends Dexie {
   problems!: Table<Problem, string>;
+  practiceSessions!: Table<PracticeSession, string>;
+  practiceAttempts!: Table<PracticeAttempt, string>;
+  practiceRequests!: Table<PracticeRequest, string>;
+  practiceFeedback!: Table<CoachFeedback, string>;
   constructor(name = 'algorhythm') {
     super(name);
     this.version(1).stores({ problems: 'id, primaryPatternId, createdAt, fsrsCard.due' });
+    /*
+     * ========================================================================
+     * 步骤1：声明练习存储升级
+     * ========================================================================
+     * 目标表：四张练习表；操作：1) 保留原题索引 2) 只新增表，不改旧数据
+     */
+    logger.info('开始声明练习存储');
+    // 1.1 Dexie 自动增加空表，保留 v1 题库与 Date/FSRS 原值
+    this.version(2).stores({
+      problems: 'id, primaryPatternId, createdAt, fsrsCard.due',
+      practiceSessions: 'id, problemId, status, updatedAt',
+      practiceAttempts: 'id, sessionId',
+      practiceRequests: 'id, sessionId',
+      practiceFeedback: 'id, sessionId, &requestId',
+    });
+    logger.info('练习存储声明完成');
   }
 }
 export const db = new AlgoRhythmDB();
