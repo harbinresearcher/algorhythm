@@ -1,8 +1,0 @@
-node_modules/
-dist/
-.npm-cache/
-.tmp/
-.browsers/
-docs/phase-1-plan.md
-docs/screenshots/
-package-lock.json
