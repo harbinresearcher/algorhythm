@@ -1,11 +1,6 @@
 version: 2
 updates:
-  - package-ecosystem: "npm"
-    directory: "/"
+  - package-ecosystem: github-actions
+    directory: /
     schedule:
       interval: weekly
-    groups:
-      dependencies:
-        dependency-type: production
-      devDependencies:
-        dependency-type: development

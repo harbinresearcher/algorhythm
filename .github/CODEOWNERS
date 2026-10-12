@@ -1,27 +1,2 @@
-# 代码所有者
-#
-# 匹配到规则的改动会自动向对应所有者请求评审。
-# 语法：<模式> <所有者...>；越靠后的匹配规则优先级越高。
-# 文档：https://docs.github.com/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
-
-# 默认：所有改动都需要仓库所有者评审
-*                       @harbinresearcher
-
-# 核心逻辑：AI 边界、存储与排期算法
-/src/ai.ts              @harbinresearcher
-/src/db.ts              @harbinresearcher
-/src/fsrs.ts            @harbinresearcher
-/src/patterns.ts        @harbinresearcher
-
-# 依赖与构建配置：改动影响供应链与产物
-/package.json           @harbinresearcher
-/package-lock.json      @harbinresearcher
-/vite.config.ts         @harbinresearcher
-/tsconfig.json          @harbinresearcher
-
-# 协作、安全与许可
-/.github/               @harbinresearcher
-/SECURITY.md            @harbinresearcher
-/CODE_OF_CONDUCT.md     @harbinresearcher
-/CONTRIBUTING.md        @harbinresearcher
-/LICENSE                @harbinresearcher
+# 默认评审者；新模块加入后再增加具体目录规则。
+* @harbinresearcher

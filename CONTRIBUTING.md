@@ -1,69 +1,26 @@
 # 贡献指南
 
-开始前先读 [当前进度](docs/STATUS.md)、[路线图](docs/ROADMAP.md) 和 [架构](docs/ARCHITECTURE.md)。Agent 还必须遵守 [AGENTS.md](AGENTS.md)。
+先读 [续接入口](docs/CONTINUITY.md)、[当前进度](docs/STATUS.md) 和 [Agent 约束](AGENTS.md)。项目已进入重新设计阶段，当前没有可运行的前端或后端。
 
-参与本项目即表示你同意遵守[贡献者行为准则](CODE_OF_CONDUCT.md)。安全漏洞**不要**用公开 Issue 报告，见 [SECURITY.md](SECURITY.md)；提问与求助渠道见 [SUPPORT.md](SUPPORT.md)。
-
-## 开发环境
-
-Node.js 22.13+（22.x）、24.x 或 26+，使用 npm。仓库公开，克隆即可开始。
+## 环境与检查
 
 ```sh
 git clone https://github.com/harbinresearcher/algorhythm.git
 cd algorhythm
-npm install && npm run dev
+node scripts/check-docs.mjs
 ```
 
-访问 http://127.0.0.1:5173。已有 lockfile，重复安装和验证建议用 `npm ci`；不要提交 node_modules、Key 或个人浏览器数据库。
+检查脚本使用 Node.js 24 标准库，无 npm 依赖。提交前还需运行 `git diff --check`。修改检查脚本时验证有效文档和故意损坏的引用，不能只看脚本能启动。
 
-## 分支策略
+## 协作
 
-- `main`：可运行的基线，第一阶段已交付功能。已启用分支保护：要求通过 PR 合入，禁止强推与删除；仓库所有者保留应急直接推送的旁路。
-- `feature/<简短描述>`：从最新 main 创建，完成单一功能或修复后通过 PR 合入。
-- `dev`：多人协作需要集成分支时再引入；目前不创建长期 dev 分支，避免两条基线漂移。
+- 从最新主分支创建小范围工作分支；不要覆盖其他会话未提交内容。
+- 共享 schema、数据库和跨端协议先定契约，再安排前端与核心接入。
+- 每项交付引用规格条款与验收编号，记录实际结果和未验证边界。
+- 更新 STATUS；设计结论放对应规格，续接入口只留短指针。
+- 提交使用 `feat:`、`fix:`、`docs:` 或 `chore:`。PR 写清为什么改、怎么验证。
+- 后续增加源码时同时增加对应的类型、测试、构建和浏览器验证；当前文档检查不能代替它们。
 
-Agent 的明确授权直接提交例外，以当前任务指令为准。不要覆盖他人未提交内容，不强制推送共享分支。
+旧版本只在 [退役记录](docs/DEMO-RETIREMENT.md) 指向的 Git 历史中追溯，不继续派发原 demo 的开发任务。
 
-## 代码规范
-
-ESLint 检查 TypeScript 和 Hooks 调用位置；Prettier 统一缩进、引号和换行。使用当前 flat config `eslint.config.js`，不添加旧式 `.eslintrc.cjs`。
-
-```sh
-npm run lint
-npm run format
-npm run format:check
-npm test
-npm run build
-```
-
-- 只修改任务所需内容，类型清晰，不用 any 掩盖边界错误。
-- 核心逻辑不依赖 React，UI 不直接编写排期算法。
-- 主要逻辑使用现有步骤块注释、子步骤注释和开始/结束 logger.info。日志只记录动作，不含 Key、请求头或题目全文。
-- 新功能或修复先定义验收方式；行为改动需相应测试，纯文档改动检查链接与事实即可。
-- UI 改动检查桌面和移动尺寸；截图不得包含密钥或个人题库。
-- 固定 16 种模式，FSRS 默认参数 + fuzz；路线图未授权功能不得自行实现。
-
-## 提交信息
-
-采用 `类型: 简短说明`，例如：
-
-```text
-feat: add pattern filter
-fix: prevent duplicate review ratings
-docs: update MVP status
-chore: configure lint and formatting
-```
-
-每次结束必须更新 docs/STATUS.md，写明已完成内容、验证结果、已知问题和下一步。仅在需要保留详细交接背景时更新 docs/HANDOFF.md。
-
-不要提交 API Key、`.env`、个人题库或浏览器配置。仓库启用了密钥扫描的推送保护：一旦提交中出现疑似密钥，`git push` 会被服务端直接拒绝。遇到拦截时请删除密钥并到对应服务商处轮换，**不要**用 `--no-verify` 或其他方式绕过。
-
-## PR 流程
-
-1. 先读 STATUS 和 ROADMAP；新功能先确认范围，Bug 提供复现步骤。
-2. 创建短期 feature 分支，保持单一目的。
-3. 运行 lint、format:check、test、build，记录实际结果；UI 改动附截图。
-4. 填写 PR 模板，说明问题、改动、验证方式和关联 Issue。
-5. 根据评审修改后重复受影响检查，再合入 main。
-
-MVP 阶段手动验证，暂不启用 GitHub Actions（代码扫描使用 GitHub 托管的 CodeQL 默认配置）。测试替身只能证明交互与数据流程，不能当作真实 AI 分类验收。许可证为 MIT，提交前确认新增代码和素材允许以此方式分发。
+遵守 [行为准则](CODE_OF_CONDUCT.md)。不要公开提交 Key、个人题库、Cookie 或完整请求日志。安全报告见 [SECURITY](SECURITY.md)。所有贡献须允许按 [MIT](LICENSE) 分发。

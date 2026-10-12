@@ -2,7 +2,9 @@
 
 日期：2026-10-11。来源：总架构会话中的产品讨论与用户逐项确认。
 
-历史说明：本初稿保留讨论来源。2026-10-12 后续确认的讲解模式、Python 首版支持范围与工程评审结论已并入四份设计基线，最新入口见 [CONTINUITY](../../CONTINUITY.md)。遇到差异以新设计条款为准；现有代码接口仍需单独变更和验证。
+历史说明：本初稿保留讨论来源。2026-10-12 后续确认的讲解模式、Python 首版支持范围与工程评审结论已并入四份设计基线，最新入口见 [CONTINUITY](../../CONTINUITY.md)。遇到差异以新设计条款为准。
+
+2026-10-13 退役说明：用户后续明确要求清除旧 demo。本文件下文对“已有实现”“尚未决定重写”的描述属于历史，不是当前状态；新基线见 [退役记录](../../DEMO-RETIREMENT.md) 和 [扩展工作台场景](2026-10-12-extension-workspace-design.md)。
 
 本文保存已确认的产品方向、体验样例与待验证事项。它是后续需求细化的依据，尚不是可直接编码的完整规格，也不代表这些能力已经交付。接口、数据库变更、技术选型和任务分工仍需结合现有实现另行确定。
 
@@ -118,10 +120,10 @@
 
 ## 8. 与仓库现状及其他会话的关系
 
-本轮文档基于抓取后的 `origin/main`：`409aefd`，其提交标题记录教练核心通过 PR #10 合入。已有核心契约见 [教练核心规格](2026-10-11-coach-core-design.md)。本文不修改该契约，不宣称侧栏接入、真实模型教学质量或完整学习体验已经验收。
+本轮文档基于抓取后的 `origin/main`：`409aefd`，其提交标题记录教练核心通过 PR #10 合入。旧核心契约见 [归档教练规格](https://github.com/harbinresearcher/algorhythm/blob/82a34f69df3d4bb7e070e152b55a17bb55473de9/docs/superpowers/specs/2026-10-11-coach-core-design.md)。本文不宣称侧栏接入、真实模型教学质量或完整学习体验已经验收。
 
 本轮仅维护产品定义与进度入口。总架构继续细化需求、边界和验收；编码与前端会话依据后续明确的实现任务工作。GitHub 合并和仓库策略仍按具体授权处理。
 
-当前实现说明见 [PRODUCT.md](../../../PRODUCT.md)，工作进度见 [STATUS.md](../../STATUS.md)。旧路线图与本轮讨论涉及不同阶段，不能直接把产品愿景当成待开发清单。
+旧实现说明见 [归档 PRODUCT.md](https://github.com/harbinresearcher/algorhythm/blob/82a34f69df3d4bb7e070e152b55a17bb55473de9/PRODUCT.md)，当前进度见 [STATUS.md](../../STATUS.md)。不能直接把产品愿景当成待开发清单。
 
 教学与评估参考：[IES 学习与教学指南](https://ies.ed.gov/ncee/wwc/PracticeGuide/1)、[Anthropic Agent 评估指南](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)。这些资料提供设计参考，不是本产品学习效果的验证结果。

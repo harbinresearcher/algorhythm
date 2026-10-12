@@ -3,19 +3,7 @@ name: CI
 on:
   push:
     branches: [main]
-    paths-ignore:
-      - '**/*.md'
-      - 'docs/**'
-      - 'LICENSE'
-      - '.gitignore'
-      - '.editorconfig'
   pull_request:
-    paths-ignore:
-      - '**/*.md'
-      - 'docs/**'
-      - 'LICENSE'
-      - '.gitignore'
-      - '.editorconfig'
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -26,17 +14,19 @@ permissions:
 
 jobs:
   verify:
-    name: lint / format / test / build
+    name: documentation integrity
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 24
-          cache: npm
-      - run: npm ci
-      - run: npm run lint
-      - run: npm run format:check
-      - run: npm test
-      - run: npm run build
+      - run: node --check scripts/check-docs.mjs
+      - run: node scripts/check-docs.mjs
+      - name: Check changed commits for whitespace errors
+        env:
+          CHANGE_BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: git diff --check "$CHANGE_BASE" HEAD
