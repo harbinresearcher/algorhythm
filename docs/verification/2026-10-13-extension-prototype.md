@@ -2,6 +2,8 @@
 
 日期：2026-10-13。分支 `feat/extension-storage-prototype`。依据 [SC-01 至 SC-11](../superpowers/specs/2026-10-12-extension-workspace-design.md)。以下为实际执行证据，未测边界另列。
 
+本记录保留首次原型验收的历史证据与当时未测边界。本轮复验及 Chrome 稳定版结果另见[后续验收记录](2026-10-13-prototype-acceptance-followup.md)，不以旧通过数代替本轮结果。
+
 ## 已执行
 
 - 空存储实现先使 11 项断言失败，补齐实现后通过。

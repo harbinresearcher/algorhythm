@@ -1,6 +1,6 @@
 # 场景设计：关掉主页面，仍能在力扣继续练习
 
-日期：2026-10-12。状态：总架构依据用户授权作出的首版设计选择，尚未实现或完成浏览器验收。对应 S-01、D-02、AC-02、AC-03、AC-07。
+日期：2026-10-12。状态：首版设计已批准；合成存储切片已实现，并取得 Chromium 浏览器证据。完整学习流程、Chrome 稳定版及逐条未测边界见[分层验收记录](../../verification/2026-10-13-extension-prototype.md)，本轮复验见[后续验收记录](../../verification/2026-10-13-prototype-acceptance-followup.md)。对应 S-01、D-02、AC-02、AC-03、AC-07。
 
 ## 用户看到什么
 
@@ -86,7 +86,7 @@ Chrome 官方文档说明，扩展页面、侧栏和 service worker 共享扩展
 
 ## 验收场景
 
-以下均是待执行用例，不是已通过结果。第一轮使用合成题目和代码，Chrome 稳定版/Windows 11，记录确切版本与扩展 ID。真实接入候选站点为 leetcode.cn，另行核查许可和采集可行性。
+以下为验收清单，逐项状态以[分层验收记录](../../verification/2026-10-13-extension-prototype.md)及[后续验收记录](../../verification/2026-10-13-prototype-acceptance-followup.md)为准，不统一视作已通过。验证使用合成题目和代码；目标环境为 Chrome 稳定版/Windows 11，记录确切版本与扩展 ID。既有 Chromium 证据不能代替稳定版验收。真实接入候选站点为 leetcode.cn，另行核查许可和采集可行性。
 
 - SC-01：工作台开始会话，关闭工作台，侧栏保存尝试；重开工作台读取相同记录与 revision。
 - SC-02：强制停止后台再保存；后台重新唤醒，从数据库取回会话，不产生重复记录。
