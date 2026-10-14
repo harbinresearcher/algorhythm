@@ -14,9 +14,9 @@ permissions:
 
 jobs:
   verify:
-    name: documentation integrity
+    name: documentation and extension
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
         with:
@@ -26,6 +26,12 @@ jobs:
           node-version: 24
       - run: node --check scripts/check-docs.mjs
       - run: node scripts/check-docs.mjs
+      - run: npm ci
+        working-directory: apps/extension
+      - run: npm test
+        working-directory: apps/extension
+      - run: npm run build
+        working-directory: apps/extension
       - name: Check changed commits for whitespace errors
         env:
           CHANGE_BASE: ${{ github.event.pull_request.base.sha || github.event.before }}

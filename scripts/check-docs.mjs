@@ -19,7 +19,7 @@ logger.info('开始检查设计基线');
 for (const file of ['README.md', 'AGENTS.md', 'LICENSE', 'docs/CONTINUITY.md', 'docs/STATUS.md', 'docs/ARCHITECTURE.md']) {
   if (!existsSync(resolve(root, file))) failures.push(`Missing required file: ${file}`);
 }
-// 1.2 当前是文档阶段；首次加入新工程时需同步替换本门禁。
+// 1.2 新原型位于 apps/extension；根目录旧 demo 入口继续禁止。
 for (const file of ['src/App.tsx', 'src/ai.ts', 'tests/core.test.ts', 'index.html', 'package.json', 'package-lock.json']) {
   if (existsSync(resolve(root, file))) failures.push(`Retired application entry found: ${file}`);
 }
@@ -37,7 +37,7 @@ logger.info('设计基线检查完成');
 logger.info('开始检查本地文档引用');
 const documents = [];
 const pending = [root];
-const excluded = new Set(['.git', 'node_modules', 'dist', '.tmp', '.browsers', '.npm-cache']);
+const excluded = new Set(['.git', 'node_modules', 'dist', '.tmp', '.browsers', '.npm-cache', 'output']);
 // 2.1 只遍历普通目录和文件，不跟随符号链接。
 while (pending.length) {
   const directory = pending.pop();
