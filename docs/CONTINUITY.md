@@ -6,7 +6,7 @@
 
 当前[程序员任务 02](superpowers/plans/2026-10-14-programmer-02-backup-restore.md)已按[备份恢复 RFC-01](superpowers/specs/2026-10-14-prototype-backup-restore-design.md)和[ADR-0001](adr/0001-prototype-backup-restore.md)完成合成原型四表备份与非覆盖恢复，本轮[分层验收](verification/2026-10-14-backup-restore.md)已记录。交回总架构审查，不自动启动下一功能。任务 01 的[总架构验收](verification/2026-10-14-task01-architect-review.md)原样保留。
 
-当前工作分支：`feat/prototype-backup-restore`，从 `f2f3e3f` 创建独立工作树。PR #14 尚未合并时，新 PR 临时以 `feat/extension-storage-prototype` 为 base，保持其范围不变。最新提交与集成状态见 STATUS。先核对工作区、分支和未提交改动；不能把历史分支里的 demo 恢复到新基线。
+当前工作分支：`feat/prototype-backup-restore`，从 `f2f3e3f` 创建独立工作树。[PR #15](https://github.com/harbinresearcher/algorhythm/pull/15) 已交回审查，依赖未合并的 #14，暂以 `feat/extension-storage-prototype` 为 base。最新提交与集成状态见 STATUS。先核对工作区、分支和未提交改动；不能把历史分支里的 demo 恢复到新基线。
 
 ## 已冻结的方向
 

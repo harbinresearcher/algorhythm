@@ -2,13 +2,15 @@
 
 更新：2026-10-24。续接先读 [CONTINUITY](CONTINUITY.md)。
 
-## 任务 02：备份与恢复（完成本轮验收，待交回审查）
+## 任务 02：备份与恢复（已交回审查）
 
 基准 `f2f3e3f`；新工作树和分支 `feat/prototype-backup-restore`。按[程序员任务 02](superpowers/plans/2026-10-14-programmer-02-backup-restore.md)、[RFC-01](superpowers/specs/2026-10-14-prototype-backup-restore-design.md)与[ADR-0001](adr/0001-prototype-backup-restore.md)实现。三份架构文件及[任务 01 总架构验收](verification/2026-10-14-task01-architect-review.md)均从总架构目录原样复制，其余未提交文件保留。
 
+实现提交 `bca1089d6afe74ae2bc191e1a215e38b1d22dccc` 已推送；[PR #15](https://github.com/harbinresearcher/algorhythm/pull/15) 已建立，OPEN、非草稿、未合并。因 #14 尚未合并，base 为 `feat/extension-storage-prototype`，依赖 #14。本条交回元数据以独立 docs 提交保存；最新 head 与远端检查以 PR 实时状态为准，本地通过不代替远端检查。编码会话等待总架构审查及下一张任务单。
+
 2026-10-14 先按锁文件安装依赖，重新运行原 19 项测试和构建。2026-10-15 完成各阶段 RED/GREEN；2026-10-24 最终全量 7 个文件、179 项测试通过，类型检查与生产构建通过。原型回归 13 项、新增 Chromium 主检查 13 项及其串行 UI 边界 10 项、Chrome 稳定版主检查 10 项均通过，页面异常 0。实际版本 Chromium 156.0.8078.4 / Chrome 155.0.8059.85；稳定版从官方页面加载，保留沙箱。日志在 `apps/extension/output/task02/*2026-10-24.log`，分层范围、失败尝试及未测项见[任务 02 验收](verification/2026-10-14-backup-restore.md)。
 
-本任务只授权文件契约、持久化导入回执、数据库 1→2 加表迁移和工作台入口；不变更学习协议语义、权限、覆盖策略或依赖。不接力扣、模型、FSRS。旧 Dexie 对 VersionError 的自动重开行为将分别实测并记录，不预设旧 v1 一定拒绝 v2，也不增加清库或强制回退兜底。完成后建立独立 PR 交回总架构，不合并。
+本任务只授权文件契约、持久化导入回执、数据库 1→2 加表迁移和工作台入口；不变更学习协议语义、权限、覆盖策略或依赖。不接力扣、模型、FSRS。旧 Dexie 对 VersionError 的自动重开行为已分别记录模拟与真实原生检查范围，不宣称旧 v1 一定拒绝 v2，也不增加清库或强制回退兜底。已交独立 PR，不合并。
 
 独立审查发现两份合法文件合并后可能破坏快照独占或会话事件链。已补行为失败用例并在同一事务内复核受影响关系；核心最终 99 项通过，179 项全量已包含该修复。独立浏览器复核与本次 Chromium 最终流程均确认两种跨 ID 关系冲突整份拒绝、五表不变、之后仍能导出。初轮 175 项仅作过程记录。
 
