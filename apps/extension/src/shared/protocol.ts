@@ -5,7 +5,7 @@ export const MAX_DRAFT_LENGTH = 32_000;
 const id = z.uuid();
 const revision = z.number().int().nonnegative();
 export const problemKeySchema = z.enum(['unique', 'pair']);
-const envelope = z.strictObject({ protocolVersion: z.literal(PROTOCOL_VERSION), extensionId: z.string().min(1).max(64), actionId: id });
+export const envelope = z.strictObject({ protocolVersion: z.literal(PROTOCOL_VERSION), extensionId: z.string().min(1).max(64), actionId: id });
 const scoped = envelope.extend({ sessionId: id, problemSnapshotId: id, expectedRevision: revision });
 export const commandSchema = z.discriminatedUnion('type', [
   envelope.extend({ type: z.literal('start'), sessionId: id, problemSnapshotId: id, problemKey: problemKeySchema }),

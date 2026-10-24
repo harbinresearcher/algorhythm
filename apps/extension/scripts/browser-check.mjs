@@ -11,7 +11,7 @@ const profile = await mkdtemp(join(tmpdir(), 'algorhythm-prototype-'));
 await mkdir(artifactDir, { recursive: true });
 const options = { channel: 'chromium', headless: true, args: [`--disable-extensions-except=${extensionPath}`, `--load-extension=${extensionPath}`], viewport: { width: 1360, height: 1000 } };
 let context;
-const evidence = { date: '2026-10-13', profile: 'isolated temporary profile', results: [], errors: [] };
+const evidence = { date: new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Shanghai' }).format(new Date()), profile: 'isolated temporary profile', results: [], errors: [] };
 const record = (name) => { evidence.results.push(name); logger.info('通过', name); };
 async function openContext() {
   const next = await chromium.launchPersistentContext(profile, options);
