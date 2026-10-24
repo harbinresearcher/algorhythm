@@ -1,0 +1,12 @@
+{
+  "manifest_version": 3,
+  "name": "AlgoRhythm · 存储原型",
+  "version": "0.1.0",
+  "description": "合成题目的练习记录原型。工作台与侧栏共用本地数据，不采集网站或调用模型。",
+  "minimum_chrome_version": "116",
+  "permissions": ["sidePanel"],
+  "background": { "service_worker": "background.js", "type": "module" },
+  "action": { "default_title": "打开 AlgoRhythm 工作台" },
+  "side_panel": { "default_path": "sidepanel.html" },
+  "content_security_policy": { "extension_pages": "script-src 'self'; object-src 'none'; connect-src 'none'; frame-src 'none'" }
+}

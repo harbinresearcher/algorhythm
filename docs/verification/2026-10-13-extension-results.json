@@ -1,0 +1,43 @@
+{
+  "date": "2026-10-13",
+  "profile": "isolated temporary profile",
+  "results": [
+    "生产扩展工作台：创建、保存、尝试记录",
+    "SC-01 原生：Chrome SIDE_PANEL 上下文内保存草稿和尝试，关闭工作台不影响；历史按 revision 排序",
+    "SC-01 页面级：关闭工作台后侧栏页面继续保存，重开一致",
+    "360px 无横向溢出，编辑区可用键盘进入动作按钮",
+    "SC-03：忽略首次回执后查询与重放均返回原提交，只有一条事件",
+    "SC-05：过期 revision 被拒绝",
+    "SC-10：协议和扩展实例不一致明确拒绝",
+    "SC-02：CDP 确认后台 stopped 后，保存消息唤醒后台且原数据保留",
+    "暂停保留输入，恢复后可继续",
+    "SC-07：同一隔离配置重启浏览器后，草稿与尝试恢复",
+    "SC-05 UI：另一窗口保存后，本地冲突文本保留且显示恢复入口",
+    "SC-11 UI：迟到 A 确认不会把 B 标为已保存，B 确认后才显示保存",
+    "SC-06 UI：切题前保存并等待，新旧题草稿分别归属"
+  ],
+  "errors": [],
+  "extensionId": "objgpmalcfljdnfkkifjbhofkcahcbhh",
+  "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.0.0 Safari/537.36",
+  "browserVersion": "156.0.8078.4",
+  "os": "Windows 11 Home China",
+  "nativePanelTargets": [
+    {
+      "type": "page",
+      "url": "chrome-extension://objgpmalcfljdnfkkifjbhofkcahcbhh/sidepanel.html"
+    }
+  ],
+  "nativePanelContexts": [
+    {
+      "contextId": "047d16af-427b-4c63-af20-aea621acf5ac",
+      "contextType": "SIDE_PANEL",
+      "documentId": "C275E80F5587438ECD171FD8E8396134",
+      "documentOrigin": "chrome-extension://objgpmalcfljdnfkkifjbhofkcahcbhh",
+      "documentUrl": "chrome-extension://objgpmalcfljdnfkkifjbhofkcahcbhh/sidepanel.html",
+      "frameId": 0,
+      "incognito": false,
+      "tabId": -1,
+      "windowId": -1
+    }
+  ]
+}

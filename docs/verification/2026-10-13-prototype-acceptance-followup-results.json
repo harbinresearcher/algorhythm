@@ -1,0 +1,168 @@
+{
+  "date": "2026-10-13",
+  "baselineCommit": "a2d97f76acea70825a616c51c23b51afbc49a434",
+  "applicationSourceChanged": false,
+  "nodeVersion": "26.3.0",
+  "npmVersion": "12.0.1",
+  "playwrightVersion": "1.64.0",
+  "unitTests": {
+    "exitCode": 0,
+    "filesPassed": 2,
+    "testsPassed": 19
+  },
+  "build": {
+    "exitCode": 0,
+    "typecheckIncluded": true,
+    "files": [
+      {
+        "path": "apps/extension/dist/workspace.html",
+        "sha256": "791c26b793995b0fb1738a7ddccb25527ff66d351e168823fbf4a2f4b5f73efe"
+      },
+      {
+        "path": "apps/extension/dist/background.js",
+        "sha256": "fb70b2c6548fd19a71cccd1a9f90f46560aa2f0b30dc5503465fed2ce5794a5e"
+      },
+      {
+        "path": "apps/extension/dist/sidepanel.html",
+        "sha256": "4264da191f084d3a28b76ab826cda588ae27cf6fd340b251505b57c742c7c181"
+      },
+      {
+        "path": "apps/extension/dist/manifest.json",
+        "sha256": "b3f2df11e1e8ca5af610998f265668fd059f957ebb28bf6c5712e0680f99ed3f"
+      },
+      {
+        "path": "apps/extension/dist/assets/protocol-BLay5Lpi.js",
+        "sha256": "4c716c759fde32d82253e28374d728c9b9100c9fa88cc1431ff1c5f98a7788f1"
+      },
+      {
+        "path": "apps/extension/dist/assets/main-BV5gXkoT.js",
+        "sha256": "ec98e7f9877b15007b1788b394f6bb17254c7f7d2cfd009a13037c17f31e3d22"
+      },
+      {
+        "path": "apps/extension/dist/assets/main-Buu_P0OQ.css",
+        "sha256": "424f69e4b27c67206344838d9afe4c6fd70d74804edc6b516a576e92949376e1"
+      }
+    ]
+  },
+  "chromium": {
+    "exitCode": 0,
+    "result": {
+      "date": "2026-10-13",
+      "profile": "isolated temporary profile",
+      "results": [
+        "生产扩展工作台：创建、保存、尝试记录",
+        "SC-01 原生：Chrome SIDE_PANEL 上下文内保存草稿和尝试，关闭工作台不影响；历史按 revision 排序",
+        "SC-01 页面级：关闭工作台后侧栏页面继续保存，重开一致",
+        "360px 无横向溢出，编辑区可用键盘进入动作按钮",
+        "SC-03：忽略首次回执后查询与重放均返回原提交，只有一条事件",
+        "SC-05：过期 revision 被拒绝",
+        "SC-10：协议和扩展实例不一致明确拒绝",
+        "SC-02：CDP 确认后台 stopped 后，保存消息唤醒后台且原数据保留",
+        "暂停保留输入，恢复后可继续",
+        "SC-07：同一隔离配置重启浏览器后，草稿与尝试恢复",
+        "SC-05 UI：另一窗口保存后，本地冲突文本保留且显示恢复入口",
+        "SC-11 UI：迟到 A 确认不会把 B 标为已保存，B 确认后才显示保存",
+        "SC-06 UI：切题前保存并等待，新旧题草稿分别归属"
+      ],
+      "errors": [],
+      "extensionId": "objgpmalcfljdnfkkifjbhofkcahcbhh",
+      "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.0.0 Safari/537.36",
+      "browserVersion": "156.0.8078.4",
+      "os": "Windows 11 Home China",
+      "nativePanelTargets": [
+        {
+          "type": "page",
+          "url": "chrome-extension://objgpmalcfljdnfkkifjbhofkcahcbhh/sidepanel.html"
+        }
+      ],
+      "nativePanelContexts": [
+        {
+          "contextId": "ed220ed3-61dc-4ad7-ac11-7e9b80529230",
+          "contextType": "SIDE_PANEL",
+          "documentId": "2A0F311C20895D3A053C551C011ECBA0",
+          "documentOrigin": "chrome-extension://objgpmalcfljdnfkkifjbhofkcahcbhh",
+          "documentUrl": "chrome-extension://objgpmalcfljdnfkkifjbhofkcahcbhh/sidepanel.html",
+          "frameId": 0,
+          "incognito": false,
+          "tabId": -1,
+          "windowId": -1
+        }
+      ]
+    }
+  },
+  "chromeStable": {
+    "exitCode": 0,
+    "channel": "Stable",
+    "channelEvidence": "chrome://version: 155.0.8059.40 (正式版本) (cohort: Stable)",
+    "executablePath": "C:/Program Files/Google/Chrome/Application/chrome.exe",
+    "chromiumSandbox": true,
+    "installation": "Official chrome://extensions developer mode, native folder chooser, Windows UI Automation in PowerShell 7.6.5",
+    "result": {
+      "date": "2026-10-13",
+      "profile": "isolated temporary profile",
+      "target": "Google Chrome Stable",
+      "installation": "chrome://extensions developer mode and Load unpacked",
+      "results": [
+        "生产扩展工作台：创建、保存、尝试记录",
+        "SC-01 原生：Chrome SIDE_PANEL 上下文内保存草稿和尝试，关闭工作台不影响；历史按 revision 排序",
+        "SC-01 页面级：关闭工作台后侧栏页面继续保存，重开一致",
+        "360px 无横向溢出，编辑区可用键盘进入动作按钮",
+        "SC-03：忽略首次回执后查询与重放均返回原提交，只有一条事件",
+        "SC-05：过期 revision 被拒绝",
+        "SC-10：协议和扩展实例不一致明确拒绝",
+        "SC-02：CDP 确认后台 stopped 后，保存消息唤醒后台且原数据保留",
+        "暂停保留输入，恢复后可继续",
+        "SC-07：同一隔离配置重启浏览器后，草稿与尝试恢复",
+        "SC-05 UI：另一窗口保存后，本地冲突文本保留且显示恢复入口",
+        "SC-11 UI：迟到 A 确认不会把 B 标为已保存，B 确认后才显示保存",
+        "SC-06 UI：切题前保存并等待，新旧题草稿分别归属"
+      ],
+      "errors": [],
+      "extensionId": "objgpmalcfljdnfkkifjbhofkcahcbhh",
+      "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+      "browserVersion": "155.0.8059.40",
+      "os": "Windows 11 Home China",
+      "nativePanelTargets": [
+        {
+          "type": "page",
+          "url": "chrome-extension://objgpmalcfljdnfkkifjbhofkcahcbhh/sidepanel.html"
+        }
+      ],
+      "nativePanelContexts": [
+        {
+          "contextId": "9feb2065-59de-4ef1-9566-18782dd853ca",
+          "contextType": "SIDE_PANEL",
+          "documentId": "CCFBA97704088CBC6B3A1540604609E2",
+          "documentOrigin": "chrome-extension://objgpmalcfljdnfkkifjbhofkcahcbhh",
+          "documentUrl": "chrome-extension://objgpmalcfljdnfkkifjbhofkcahcbhh/sidepanel.html",
+          "frameId": 0,
+          "incognito": false,
+          "tabId": -1,
+          "windowId": -1
+        }
+      ]
+    },
+    "installInfo": {
+      "browserVersion": "155.0.8059.40",
+      "id": "objgpmalcfljdnfkkifjbhofkcahcbhh",
+      "name": "AlgoRhythm · 存储原型",
+      "state": "ENABLED",
+      "manifestErrors": [],
+      "runtimeErrors": [],
+      "installWarnings": [],
+      "runtimeWarnings": []
+    }
+  },
+  "commandLineLoadAttempt": {
+    "target": "installed Google Chrome",
+    "executablePath": "C:/Program Files/Google/Chrome/Application/chrome.exe",
+    "method": "--load-extension",
+    "profile": "isolated temporary profile",
+    "browserVersion": "155.0.8059.40",
+    "versionDisplay": [
+      "Google Chrome\t155.0.8059.40 (正式版本) （64 位） (cohort: Stable) "
+    ],
+    "workers": [],
+    "loaded": false
+  }
+}
