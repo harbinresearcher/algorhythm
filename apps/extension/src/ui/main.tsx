@@ -1,13 +1,15 @@
-import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { createRoot } from 'react-dom/client';
 import { DraftController } from '../client/draft';
 import { ClientError, createClient } from '../client/transport';
 import { MAX_DRAFT_LENGTH, SYNTHETIC_PROBLEMS, type Session, type Snapshot, type WriteCommand } from '../shared/protocol';
+import { formatTime, timeDateTime } from './time';
 import './style.css';
 
 const logger = console;
 const client = createClient(chrome.runtime.id, (command) => chrome.runtime.sendMessage(command));
 const isPanel = location.pathname === '/sidepanel.html';
+const BackupPanel = lazy(() => import('./BackupPanel'));
 const errors: Record<string, string> = {
   REVISION_CONFLICT: '另一窗口已经保存了新内容。你的输入仍在这里；请先导出，再读取已保存版本。',
   OUTCOME_UNKNOWN: '连接中断，暂时无法确认是否已保存。保留此页面，点击重试核实结果。',
@@ -21,7 +23,6 @@ const errors: Record<string, string> = {
   INVALID_RESPONSE: '后台返回内容不符合协议，请重新连接。',
 };
 const messageFor = (error: unknown) => error instanceof ClientError ? errors[error.code] ?? `操作未完成（${error.code}）。` : '连接失败，请保留输入并重试。';
-const formatTime = (timestamp: number) => new Intl.DateTimeFormat('zh-CN', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }).format(timestamp);
 
 function downloadDraft(text: string) {
   const url = URL.createObjectURL(new Blob([text], { type: 'text/plain;charset=utf-8' }));
@@ -63,23 +64,36 @@ function App() {
   const [active, setActive] = useState<Session | null>(null);
   const [epoch, setEpoch] = useState(0);
   const [busy, setBusy] = useState(false);
+  const [backupPending, setBackupPending] = useState(false);
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
   const [pending, setPending] = useState<WriteCommand | null>(null);
   const [windowId, setWindowId] = useState<number>();
   const controller = useRef<DraftController | null>(null);
   const lock = useRef(false);
+  const backupLock = useRef(false);
   // 稳定注册函数避免每次输入重建编辑器。
   const [register] = useState(() => (value: DraftController | null) => { controller.current = value; });
 
-  async function load(selectedId?: string) {
-    const next = await client.read(); setSnapshot(next);
-    const selected = next.sessions.find((item) => item.id === selectedId) ?? next.sessions[0] ?? null;
-    setActive(selected); setEpoch((value) => value + 1);
-    return next;
+  async function load(selectedId?: string, preserveSelection = false) {
+    /*
+     * ========================================================================
+     * 步骤1：更新已保存记录与选中会话
+     * ========================================================================
+     * 数据源：后台快照与操作开始时的会话ID。
+     * 操作：1) 保留原学习读取规则。2) 导入后不自动选中新增会话。
+     */
+    logger.info('开始更新工作台记录');
+    try {
+      // 1.1 导入后的空选择保持为空，选中会话按原ID重新读取。
+      const next = await client.read(); setSnapshot(next);
+      const selected = next.sessions.find((item) => item.id === selectedId) ?? (preserveSelection ? null : next.sessions[0] ?? null);
+      setActive(selected); setEpoch((value) => value + 1);
+      return next;
+    } finally { logger.info('工作台记录更新结束'); }
   }
   async function guarded(task: () => Promise<void>) {
-    if (lock.current) return;
+    if (lock.current || backupLock.current) return;
     /*
      * ========================================================================
      * 步骤1：串行处理界面动作
@@ -92,6 +106,35 @@ function App() {
     lock.current = true; setBusy(true); setError(''); setNotice('');
     try { await task(); } catch (failure) { setError(messageFor(failure)); }
     finally { lock.current = false; setBusy(false); logger.info('界面动作结束'); }
+  }
+  async function runBackup<T,>(task: () => Promise<T>): Promise<T> {
+    /*
+     * ========================================================================
+     * 步骤1：协调备份与当前学习动作
+     * ========================================================================
+     * 数据源：已有界面互斥锁、待确认学习命令与当前草稿控制器。
+     * 操作：1) 等当前草稿确认。2) 备份恢复可复用锁，失败保留草稿导出渠道。
+     */
+    if (lock.current || pending !== null) throw new ClientError('INVALID_STATE');
+    logger.info('开始处理工作台备份动作');
+    // 1.1 同步互斥防止重复确认或导入期间换题，未知导入仍允许核实原请求。
+    lock.current = true; setBusy(true);
+    try { await controller.current?.flush(); return await task(); }
+    finally { lock.current = false; setBusy(false); logger.info('工作台备份动作结束'); }
+  }
+  function changeBackupPending(value: boolean) {
+    /*
+     * ========================================================================
+     * 步骤1：保留跨响应等待的导入锁
+     * ========================================================================
+     * 数据源：已确认导入的回执状态。
+     * 操作：1) 同步阻止其他学习动作。2) 同步界面禁用状态。
+     */
+    logger.info('开始更新备份等待状态');
+    try {
+      // 1.1 此锁只保护当前页面；后台事务仍负责跨页面冲突。
+      backupLock.current = value; setBackupPending(value);
+    } finally { logger.info('备份等待状态更新结束'); }
   }
   useEffect(() => {
     void guarded(async () => { setWindowId((await chrome.windows.getCurrent()).id); await load(location.hash.slice(1)); });
@@ -128,7 +171,7 @@ function App() {
       await mutate({ ...client.envelope(), type, sessionId: session.id, problemSnapshotId: session.problemSnapshotId, expectedRevision: session.revision });
     });
   }
-  const disabled = busy || pending !== null;
+  const disabled = busy || pending !== null || backupPending;
   const problem = snapshot?.problems.find((item) => item.id === active?.problemSnapshotId);
   const attempts = snapshot?.events.filter((item) => item.sessionId === active?.id && item.kind === 'attempt').sort((a, b) => b.revision - a.revision) ?? [];
   return <div className={isPanel ? 'app panel' : 'app'}>
@@ -153,10 +196,12 @@ function App() {
         <section className="problem"><h1>{problem.title}</h1><p className="statement">{problem.statement}</p><p className="muted hint">原创合成题 · Python · 无自动判题</p></section>
         <Editor key={`${active.id}:${epoch}`} session={active} busy={disabled} register={register} onAction={action}
           reload={() => { void guarded(async () => { await load(active.id); }); }} />
-        <section className="history"><h2>这次练习留下的尝试</h2>{attempts.length ? <ol>{attempts.map((attempt) => <li key={attempt.id}><time dateTime={new Date(attempt.at).toISOString()}>{formatTime(attempt.at)}</time><pre>{attempt.text}</pre></li>)}</ol> : <p className="muted">草稿会自动保存。点击“记录这次尝试”，才会在这里留下当时的思路或代码。</p>}</section>
+        <section className="history"><h2>这次练习留下的尝试</h2>{attempts.length ? <ol>{attempts.map((attempt) => <li key={attempt.id}><time dateTime={timeDateTime(attempt.at)}>{formatTime(attempt.at)}</time><pre>{attempt.text}</pre></li>)}</ol> : <p className="muted">草稿会自动保存。点击“记录这次尝试”，才会在这里留下当时的思路或代码。</p>}</section>
       </> : <section className="empty"><h1>先留下你的思路。</h1><p>选择一道合成练习，写几行想法，再从侧栏接着写。</p><p className="muted">工作台关掉后，侧栏仍能保存。重新打开时，可以继续上次练习。</p></section>}</main>
     </div>
-    <footer><details><summary>本地数据说明</summary><p>记录仅属于当前浏览器配置与扩展 ID。更换 ID、浏览器配置或卸载扩展不会自动迁移。原型尚无完整备份；“导出草稿”只保存当前文本。</p><code>扩展 ID：{chrome.runtime.id}</code></details></footer>
+    {!isPanel && <Suspense fallback={<p className="muted hint">正在载入备份工具…</p>}><BackupPanel busy={busy} blocked={pending !== null}
+      run={runBackup} onPendingChange={changeBackupPending} onImported={async () => { await load(active?.id, true); }} /></Suspense>}
+    <footer><details><summary>本地数据说明</summary><p>记录仅属于当前浏览器配置与扩展 ID。更换 ID、浏览器配置或卸载扩展不会自动迁移。工作台可备份本合成原型四表的已保存数据；“导出草稿”只保存当前文本。</p><code>扩展 ID：{chrome.runtime.id}</code></details></footer>
   </div>;
 }
 

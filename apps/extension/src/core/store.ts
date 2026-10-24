@@ -1,12 +1,14 @@
 import Dexie, { type Table } from 'dexie';
 import { z } from 'zod';
+import type { BackupImportReceipt } from '../shared/backup';
+import { isAllowedSource, type Sender } from './source';
 import {
   commandSchema, PROTOCOL_VERSION, SYNTHETIC_PROBLEMS,
   type ActionRecord, type Command, type Committed, type Diagnostic, type ErrorCode,
   type LearningEvent, type Problem, type Response, type Session, type WriteCommand,
 } from '../shared/protocol';
 
-export type Sender = { id?: string; url?: string; frameId?: number; origin?: string };
+export type { Sender } from './source';
 const logger = console;
 class Database extends Dexie {
   sessions!: Table<Session, string>;
@@ -14,9 +16,23 @@ class Database extends Dexie {
   events!: Table<LearningEvent, string>;
   actions!: Table<ActionRecord, string>;
   diagnostics!: Table<Diagnostic, string>;
+  backupImports!: Table<BackupImportReceipt, string>;
   constructor(name: string) {
     super(name);
-    this.version(1).stores({ sessions: 'id,updatedAt', problems: 'id', events: 'id,sessionId,kind', actions: 'id', diagnostics: 'id,at' });
+    /*
+     * ========================================================================
+     * 步骤1：声明数据库的兼容加表版本
+     * ========================================================================
+     * 数据源：原型 v1 的五表定义与独立导入回执。
+     * 操作：1) 保留旧表字段和索引。2) v2 仅增加 backupImports，不删除或重建数据库。
+     */
+    logger.info('开始注册原型数据库版本');
+    try {
+      // 1.1 原有学习表和 diagnostics 定义保持不变。
+      this.version(1).stores({ sessions: 'id,updatedAt', problems: 'id', events: 'id,sessionId,kind', actions: 'id', diagnostics: 'id,at' });
+      // 1.2 导入回执以 backupId 为主键，升级不改写旧数据。
+      this.version(2).stores({ backupImports: 'backupId' });
+    } finally { logger.info('注册原型数据库版本结束'); }
   }
 }
 class Rejection extends Error {
@@ -46,13 +62,7 @@ export class Store {
     const raw = input && typeof input === 'object' ? input as Record<string, unknown> : {};
     const actionId = z.uuid().safeParse(raw.actionId).success ? raw.actionId as string : null;
     try {
-      let url: URL;
-      try { url = new URL(sender.url ?? ''); } catch { throw new Rejection('FORBIDDEN'); }
-      // 原生侧栏无 tab 时不提供 frameId；仍严格核验扩展 ID、页面和 origin。
-      if (sender.id !== this.extensionId || (sender.frameId !== undefined && sender.frameId !== 0) ||
-          url.protocol !== 'chrome-extension:' || url.hostname !== this.extensionId ||
-          !['/workspace.html', '/sidepanel.html'].includes(url.pathname) ||
-          (sender.origin !== undefined && sender.origin !== `chrome-extension://${this.extensionId}`)) throw new Rejection('FORBIDDEN');
+      if (!isAllowedSource(sender, this.extensionId)) throw new Rejection('FORBIDDEN');
       // 1.2 先区分版本与数据空间，再解析完整命令。
       if (raw.protocolVersion !== PROTOCOL_VERSION) throw new Rejection('PROTOCOL_MISMATCH');
       if (raw.extensionId !== this.extensionId) throw new Rejection('INSTANCE_MISMATCH');

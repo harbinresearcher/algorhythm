@@ -1,0 +1,357 @@
+{
+  "taskDate": "2026-10-14",
+  "verifiedDate": "2026-10-24",
+  "implementationDates": [
+    "2026-10-14",
+    "2026-10-15"
+  ],
+  "baselineCommit": "f2f3e3f1a4a999803a1ce1a67336628980a7ac68",
+  "branch": "feat/prototype-backup-restore",
+  "databaseVersion": 2,
+  "nativeDatabaseVersion": 20,
+  "backupFormatVersion": 1,
+  "scope": "prototype-storage-v1",
+  "learningProtocolVersion": 1,
+  "nodeVersion": "26.3.0",
+  "npmVersion": "12.0.1",
+  "playwrightVersion": "1.64.0",
+  "applicationSourceChanged": true,
+  "manifestChanged": false,
+  "dependencyLockChanged": false,
+  "unitTests": {
+    "exitCode": 0,
+    "filesPassed": 7,
+    "testsPassed": 179,
+    "originalTests": 19,
+    "addedTests": 160,
+    "coreTests": 99
+  },
+  "build": {
+    "exitCode": 0,
+    "typecheckIncluded": true,
+    "files": [
+      {
+        "path": "apps/extension/dist/assets/backup-xkutKjj0.js",
+        "sha256": "254f27b230812e782297ce6366a5e3f691eb48818e3549650206f0229f1fbd8d"
+      },
+      {
+        "path": "apps/extension/dist/assets/BackupPanel-c61gYrFq.js",
+        "sha256": "80a9484931bc2edb90e10f4d8ac4fd43157c0d19f326206b9dbeecc80b3359c0"
+      },
+      {
+        "path": "apps/extension/dist/assets/main-BxHkmagV.js",
+        "sha256": "2ab2f85e6eabbc40e3939b0033cea33ff72a998d7b81dc9de60d2666ee26ae1b"
+      },
+      {
+        "path": "apps/extension/dist/assets/main-Dt-FHybv.css",
+        "sha256": "5b34ce0d281086af89393d7e0fb4829abf6fd97e30f313f203383b1c00d70b01"
+      },
+      {
+        "path": "apps/extension/dist/assets/protocol-DNOiDeMq.js",
+        "sha256": "2b0fba24754340498474be9bd9219b904fa9c0e0d1eb3b12d0002b232498b34a"
+      },
+      {
+        "path": "apps/extension/dist/background.js",
+        "sha256": "e8c02ddde400d2cabbb49fa11fae5be0b0b2968c31f588e3073828db06436447"
+      },
+      {
+        "path": "apps/extension/dist/manifest.json",
+        "sha256": "b3f2df11e1e8ca5af610998f265668fd059f957ebb28bf6c5712e0680f99ed3f"
+      },
+      {
+        "path": "apps/extension/dist/sidepanel.html",
+        "sha256": "7f49081c2a08bc88ffec8dd32d259bc177deb0765653b4d909e286a63497a916"
+      },
+      {
+        "path": "apps/extension/dist/workspace.html",
+        "sha256": "a8ecabb958a6fd6f4be0102c6e644787619fd4547d1214572369411a1ba25f82"
+      }
+    ]
+  },
+  "originalBrowser": {
+    "exitCode": 0,
+    "result": {
+      "date": "2026-10-24",
+      "profile": "isolated temporary profile",
+      "results": [
+        "生产扩展工作台：创建、保存、尝试记录",
+        "SC-01 原生：Chrome SIDE_PANEL 上下文内保存草稿和尝试，关闭工作台不影响；历史按 revision 排序",
+        "SC-01 页面级：关闭工作台后侧栏页面继续保存，重开一致",
+        "360px 无横向溢出，编辑区可用键盘进入动作按钮",
+        "SC-03：忽略首次回执后查询与重放均返回原提交，只有一条事件",
+        "SC-05：过期 revision 被拒绝",
+        "SC-10：协议和扩展实例不一致明确拒绝",
+        "SC-02：CDP 确认后台 stopped 后，保存消息唤醒后台且原数据保留",
+        "暂停保留输入，恢复后可继续",
+        "SC-07：同一隔离配置重启浏览器后，草稿与尝试恢复",
+        "SC-05 UI：另一窗口保存后，本地冲突文本保留且显示恢复入口",
+        "SC-11 UI：迟到 A 确认不会把 B 标为已保存，B 确认后才显示保存",
+        "SC-06 UI：切题前保存并等待，新旧题草稿分别归属"
+      ],
+      "errors": [],
+      "extensionId": "bkpafkpacgecllkimmanmmmlikkomlhl",
+      "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.0.0 Safari/537.36",
+      "browserVersion": "156.0.8078.4",
+      "os": "Windows 11 Home China",
+      "nativePanelTargets": [
+        {
+          "type": "page",
+          "url": "chrome-extension://bkpafkpacgecllkimmanmmmlikkomlhl/sidepanel.html"
+        }
+      ],
+      "nativePanelContexts": [
+        {
+          "contextId": "505e3566-fe93-4c19-8083-5c7aeca15185",
+          "contextType": "SIDE_PANEL",
+          "documentId": "87D7897118AB21AA54327A78D3991B53",
+          "documentOrigin": "chrome-extension://bkpafkpacgecllkimmanmmmlikkomlhl",
+          "documentUrl": "chrome-extension://bkpafkpacgecllkimmanmmmlikkomlhl/sidepanel.html",
+          "frameId": 0,
+          "incognito": false,
+          "tabId": -1,
+          "windowId": -1
+        }
+      ]
+    }
+  },
+  "chromium": {
+    "exitCode": 0,
+    "result": {
+      "date": "2026-10-24T02:15:11.817Z",
+      "mode": "chromium",
+      "os": "Windows 11 Home China",
+      "results": [
+        {
+          "id": "BK-01/07/10",
+          "name": "真实下载含多会话、中文、Python、尝试和确认草稿，系统哨兵未导出"
+        },
+        {
+          "id": "BK-11",
+          "name": "原生 SIDE_PANEL 拒绝三个备份消息，学习保存仍可用"
+        },
+        {
+          "id": "BK-11",
+          "name": "普通网页无备份授权，工作台子框架不能发送管理消息",
+          "detail": "实际装载子框架的三个备份消息均收到 FORBIDDEN，五表不变"
+        },
+        {
+          "id": "BK-01/06/08",
+          "name": "另一空配置跨扩展 ID 恢复；模拟丢 ACK 后只查询一次，没有自动重发",
+          "detail": "真实 IndexedDB 提交，传输异常由测试页面模拟"
+        },
+        {
+          "id": "BK-01/08",
+          "name": "实际回导四表一致，历史动作可查询去重，旧实例与篡改命令仍拒绝"
+        },
+        {
+          "id": "BK-03/04",
+          "name": "共享题目快照的新会话整份拒绝且五表不变，之后仍可导出"
+        },
+        {
+          "id": "BK-03/04",
+          "name": "同会话另一套事件历史整份拒绝且五表不变，之后仍可导出"
+        },
+        {
+          "id": "BK-02/06/10",
+          "name": "续练后重复导入不覆盖，刷新与真实 worker 停启后原回执保留"
+        },
+        {
+          "id": "BK-03",
+          "name": "同 ID 冲突整份拒绝，独立新会话、原事实及回执均不变"
+        },
+        {
+          "id": "BK-04/10",
+          "name": "预览取消、非法 JSON 及未知版本均无学习写入或成功回执"
+        },
+        {
+          "id": "BK-06/10",
+          "name": "整个目标浏览器关闭并重开后，续练草稿与回执保留"
+        },
+        {
+          "id": "BK-09",
+          "name": "真实 v1 工具快照→升级中断保留→后台重启升级 v2→按钮下载四表一致",
+          "detail": "升级前快照由测试工具读取，旧应用没有导出按钮；原生低版本请求不清库"
+        },
+        {
+          "id": "BK-04/06/10",
+          "name": "串行 UI 边界脚本10项通过",
+          "detail": "页面范围模拟：flush、未知恢复、迟到文件/摘要、读取失败、超Date时间"
+        }
+      ],
+      "errors": [],
+      "files": [
+        {
+          "name": "source-backup.json",
+          "bytes": 11323,
+          "sha256": "9118d9693fef829f2b4a8c8f416659a9513611e21bc29d7f060011a27dcbf457"
+        },
+        {
+          "name": "target-round-trip.json",
+          "bytes": 11323,
+          "sha256": "0b6eae943a65b446b5091dc978c47cfc675f14a7cf978de67bd44880d5764830"
+        },
+        {
+          "name": "migration-v2-backup.json",
+          "bytes": 15824,
+          "sha256": "74749f81ece6e7cff10e3a948f9014d896ac6265d939fb9626a31e31571ff1a6"
+        }
+      ],
+      "notes": [
+        "旧 Dexie 4.4.6 可不指定版本重开仅加表的 v2，模拟测试已如实表征；不宣称旧二进制必被拒绝。",
+        "未制造真实配额耗尽、事务中途杀浏览器或真实连接中断；ACK 丢失及升级 abort 为测试注入，持久化为真实 IndexedDB。"
+      ],
+      "browserVersion": "156.0.8078.4",
+      "sourceExtensionId": "bkpafkpacgecllkimmanmmmlikkomlhl",
+      "targetExtensionId": "eihjhlbhcmebabjbppoejebhioblemoo"
+    }
+  },
+  "uiBoundaries": {
+    "exitCode": 0,
+    "result": {
+      "date": "2026-10-24T02:15:22.898Z",
+      "profile": "separate temporary synthetic profiles per scenario",
+      "mode": "production Chromium; page-limited simulated transport, File.text and digest delays",
+      "results": [
+        "BK-10 真实后台：未等debounce的当前输入先flush，再导出且下载文件含新草稿",
+        "BK-10 模拟保存失败：不发backup.export、不下载完整文件，保留导出草稿",
+        "BK-06/10 模拟传输丢失：unknown锁住原文件与切题；手动恢复先query，null后同文件摘要导入",
+        "BK-10 真实导入+模拟read失败：成功notice和回执保留，只有更新失败提示，不变成unknown",
+        "BK-10 模拟text迟到：cancel后旧结果不恢复预览",
+        "BK-10 模拟text迟到：replace后旧结果不恢复预览",
+        "BK-10 模拟hash迟到：cancel后旧结果不恢复预览",
+        "BK-10 模拟hash迟到：replace后旧结果不恢复预览",
+        "BK-04/10 超10MiB文件在File.text前拒绝，预览与取消均不发备份写消息",
+        "BK-04/10 真实事务：MAX_SAFE_INTEGER时间预览、导入、手动选题及历史读取均通过；空选择保持为空"
+      ],
+      "errors": [],
+      "browserVersion": "156.0.8078.4"
+    }
+  },
+  "chromeStable": {
+    "exitCode": 0,
+    "result": {
+      "date": "2026-10-24T02:11:10.515Z",
+      "mode": "chrome-stable",
+      "os": "Windows 11 Home China",
+      "results": [
+        {
+          "id": "BK-01/07/10",
+          "name": "真实下载含多会话、中文、Python、尝试和确认草稿，系统哨兵未导出"
+        },
+        {
+          "id": "BK-11",
+          "name": "原生 SIDE_PANEL 拒绝三个备份消息，学习保存仍可用"
+        },
+        {
+          "id": "BK-11",
+          "name": "普通网页无备份授权，工作台子框架不能发送管理消息",
+          "detail": "实际装载子框架的三个备份消息均收到 FORBIDDEN，五表不变"
+        },
+        {
+          "id": "BK-01/06/08",
+          "name": "另一空配置跨扩展 ID 恢复；模拟丢 ACK 后只查询一次，没有自动重发",
+          "detail": "真实 IndexedDB 提交，传输异常由测试页面模拟"
+        },
+        {
+          "id": "BK-01/08",
+          "name": "实际回导四表一致，历史动作可查询去重，旧实例与篡改命令仍拒绝"
+        },
+        {
+          "id": "BK-02/06/10",
+          "name": "续练后重复导入不覆盖，刷新与真实 worker 停启后原回执保留"
+        },
+        {
+          "id": "BK-03",
+          "name": "同 ID 冲突整份拒绝，独立新会话、原事实及回执均不变"
+        },
+        {
+          "id": "BK-04/10",
+          "name": "预览取消、非法 JSON 及未知版本均无学习写入或成功回执"
+        },
+        {
+          "id": "BK-06/10",
+          "name": "整个目标浏览器关闭并重开后，续练草稿与回执保留"
+        },
+        {
+          "id": "BK-09",
+          "name": "真实 v1 工具快照→升级中断保留→后台重启升级 v2→按钮下载四表一致",
+          "detail": "升级前快照由测试工具读取，旧应用没有导出按钮；原生低版本请求不清库"
+        }
+      ],
+      "errors": [],
+      "files": [
+        {
+          "name": "source-backup.json",
+          "bytes": 11323,
+          "sha256": "41bbe231d6ad47361f1298bb0281a1cdde5ff9905080a80027e667a6d2f214cf"
+        },
+        {
+          "name": "target-round-trip.json",
+          "bytes": 11323,
+          "sha256": "85da9b4baf5f49a2f98f517c52712001feaff1ec32ff4bda4173f9c9d00ccace"
+        },
+        {
+          "name": "migration-v2-backup.json",
+          "bytes": 15824,
+          "sha256": "6bece97e3a16238f20d053ff9ed6e37b131bb8b7e3bb604ddf79c7a108b35038"
+        }
+      ],
+      "notes": [
+        "旧 Dexie 4.4.6 可不指定版本重开仅加表的 v2，模拟测试已如实表征；不宣称旧二进制必被拒绝。",
+        "未制造真实配额耗尽、事务中途杀浏览器或真实连接中断；ACK 丢失及升级 abort 为测试注入，持久化为真实 IndexedDB。"
+      ],
+      "browserVersion": "155.0.8059.85",
+      "sourceExtensionId": "bkpafkpacgecllkimmanmmmlikkomlhl",
+      "targetExtensionId": "jboplecaloegahmpbjlmfpffigooodkj"
+    },
+    "installation": {
+      "date": "2026-10-24T02:13:34.916Z",
+      "browserVersion": "155.0.8059.85",
+      "id": "jboplecaloegahmpbjlmfpffigooodkj",
+      "name": "AlgoRhythm · 存储原型",
+      "version": "0.1.0",
+      "state": "ENABLED",
+      "manifestErrors": [],
+      "runtimeErrors": [],
+      "installWarnings": [],
+      "runtimeWarnings": []
+    }
+  },
+  "review": {
+    "importantFindingFixed": "Cross-file snapshot owner and session history identity conflicts now reject the whole transaction.",
+    "independentReview": true
+  },
+  "stableAttempts": [
+    {
+      "attempt": 1,
+      "exitCode": 1,
+      "phase": "official directory chooser",
+      "reason": "Test chooser not found by UI Automation; no product flow started."
+    },
+    {
+      "attempt": 2,
+      "exitCode": 1,
+      "phase": "official directory chooser",
+      "reason": "Same intermittent chooser discovery failure; root cause not established."
+    },
+    {
+      "attempt": 3,
+      "exitCode": 1,
+      "phase": "reopen target profile",
+      "reason": "Driver waited for idle worker before opening workspace; minimum restore flow had passed."
+    },
+    {
+      "attempt": 4,
+      "exitCode": 0,
+      "phase": "complete stable flow",
+      "reason": "Official load, download, restore, restart, conflict and native IndexedDB migration passed."
+    }
+  ],
+  "limitations": [
+    "QuotaExceededError, SecurityError, lost ACK and upgrade abort were test injections, not actual disk exhaustion, permission removal or physical connection failure.",
+    "No browser process killed during a live transaction; no personal data, incognito, Chrome 116 or full screen-reader matrix tested.",
+    "Real source checks cover workspace, native sidebar, ordinary local web page and child workspace frame; foreign extensions and future content scripts remain simulated.",
+    "Dexie 4.4.6 can reopen add-table v2 with a v1 definition; no automatic downgrade or old-binary rejection guarantee.",
+    "Only four synthetic learning tables; no real LeetCode, model, FSRS, formal backup or learning-effect acceptance."
+  ]
+}

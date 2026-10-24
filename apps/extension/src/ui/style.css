@@ -52,6 +52,14 @@ textarea:disabled { color: var(--muted); }
 .history ol { padding-left: 20px; }
 .history li { padding: 12px 0; }
 .history time { color: var(--muted); font-size: 13px; }
+.backup-panel { border-top: 1px solid var(--line); margin-top: 40px; padding-top: 24px; }
+.backup-file-label { display: block; margin-top: 24px; font-size: 14px; font-weight: 600; }
+.backup-panel input[type="file"] { display: block; max-width: 100%; min-height: 44px; padding: 8px 0; color: inherit; font: inherit; font-size: 14px; }
+.backup-panel input[type="file"]::file-selector-button { min-height: 36px; margin-right: 12px; padding: 4px 12px; color: inherit; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; cursor: pointer; }
+.backup-preview { max-width: 760px; }
+.backup-preview dl { display: grid; grid-template-columns: minmax(90px, 130px) minmax(0, 1fr); gap: 6px 16px; margin: 20px 0; font-size: 14px; }
+.backup-preview dt { color: var(--muted); }
+.backup-preview dd { margin: 0; overflow-wrap: anywhere; }
 pre { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 14px; font-family: Consolas, "Microsoft YaHei", monospace; margin: 8px 0; }
 .empty { padding: 70px 0; max-width: 580px; }
 footer { border-top: 1px solid var(--line); margin-top: 40px; padding-top: 16px; color: var(--muted); font-size: 12px; }
