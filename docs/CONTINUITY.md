@@ -4,9 +4,9 @@
 
 ## 当前任务
 
-当前[程序员任务 02](superpowers/plans/2026-10-14-programmer-02-backup-restore.md)已按[备份恢复 RFC-01](superpowers/specs/2026-10-14-prototype-backup-restore-design.md)和[ADR-0001](adr/0001-prototype-backup-restore.md)完成合成原型四表备份与非覆盖恢复，本轮[分层验收](verification/2026-10-14-backup-restore.md)已记录。交回总架构审查，不自动启动下一功能。任务 01 的[总架构验收](verification/2026-10-14-task01-architect-review.md)原样保留。
+当前[程序员任务 02](superpowers/plans/2026-10-14-programmer-02-backup-restore.md)已按[备份恢复 RFC-01](superpowers/specs/2026-10-14-prototype-backup-restore-design.md)和[ADR-0001](adr/0001-prototype-backup-restore.md)完成合成原型四表备份与非覆盖恢复，[分层验收](verification/2026-10-14-backup-restore.md)已记录，已完成范围审查和实现集成。不自动启动下一功能。任务 01 的[总架构验收](verification/2026-10-14-task01-architect-review.md)原样保留。
 
-当前工作分支：`feat/prototype-backup-restore`，从 `f2f3e3f` 创建独立工作树。[PR #15](https://github.com/harbinresearcher/algorhythm/pull/15) 已交回审查，依赖未合并的 #14，暂以 `feat/extension-storage-prototype` 为 base。最新提交与集成状态见 STATUS。先核对工作区、分支和未提交改动；不能把历史分支里的 demo 恢复到新基线。
+2026-10-24 用户授权后，PR #14、#15 已合并，main 为 `605d619`；任务 02 已通过[总架构范围验收](verification/2026-10-24-task02-architect-review.md)。[集成记录](verification/2026-10-24-integration-01.md)说明验证与保留边界。当前文档交接分支 `codex/integration-01-handoff`，应用代码未改。新任务从集成后的 main 起步；先核对工作区、分支和未提交改动，不能恢复旧 demo。
 
 ## 已冻结的方向
 
@@ -33,7 +33,7 @@
 
 ## 下一步从这里继续
 
-交回总架构审查任务 02 的独立 PR、证据和边界；编码会话等待下一张任务单。备份文件 v1 只覆盖 problems、sessions、events、actions；数据库升到 v2 只增加 backupImports。导出四表一致快照，事务外校验与哈希；导入先查持久回执，再在同一五表事务内核对同 ID 内容和受影响关系，补入缺失行。跨扩展恢复只转换动作指纹中的 extensionId，学习协议 v1 与原始事实不变。
+实现已集成，文档交接 PR 单独待审；编码会话等待任务 03。下一阶段先明确真实力扣接入的许可边界及题目—代码—判题关联证据，不自动启动采集。备份文件 v1 只覆盖 problems、sessions、events、actions；数据库升到 v2 只增加 backupImports。导出四表一致快照，事务外校验与哈希；导入先查持久回执，再在同一五表事务内核对同 ID 内容和受影响关系，补入缺失行。跨扩展恢复只转换动作指纹中的 extensionId，学习协议 v1 与原始事实不变。
 
 备份只允许工作台发起，侧栏仍走原学习命令。先等当前草稿确认，再下载或确认导入；其他页面未确认输入不在文件中。选择文件只作本地预览，不写库。相同记录跳过，同 ID 不同内容整份拒绝，不提供强制覆盖或清空库。
 
@@ -50,6 +50,6 @@
 - 当前进度与实际检查只维护在 [STATUS.md](STATUS.md)；本页只保留方向、入口和下一动作。
 - 每完成一段工作，更新相应规格、STATUS 和必要的续接指针；记录决定、理由、替代方案、证据边界。
 - 新决定引用规格条款或验收编号；旧决定被替代时注明原因，不让两份冲突说明同时有效。
-- 文档与代码按仓库规则检查、提交、推送；当前授权为程序员任务 02 的合成原型备份与恢复，完成后交回审查，不合并 PR、不改仓库设置，不扩展到采集、模型、FSRS、云端或付费调用。后续功能等待独立任务。
+- 文档与代码按仓库规则检查、提交、推送；用户对 #14、#15 的合并授权已完成，不延伸到文档 PR、仓库设置或后续功能。不扩展到采集、模型、FSRS、云端或付费调用，后续功能等待独立任务。
 - 给用户解释时用具体使用过程和短句；工程细节留在规格，不再要求用户逐条裁决技术问题。
 - 本地记忆只保存本入口与偏好等短索引；仓库文件是其他 Agent 也能读取的持久依据。不能承诺所有新会话自动加载本地记忆。
