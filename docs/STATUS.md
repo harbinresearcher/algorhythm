@@ -2,6 +2,12 @@
 
 更新：2026-10-25。续接先读 [CONTINUITY](CONTINUITY.md)。
 
+## 任务 04 已定义，尚未实现
+
+新增 [RFC-03](superpowers/specs/2026-10-25-manual-practice-design.md)及[程序员任务 04](superpowers/plans/2026-10-25-programmer-04-manual-practice.md)：用户自定标题、可选原题链接，沿用两端会话记录思路和代码；协议 v2、新备份 v2及旧 v1 导入兼容先于 UI 开放。无采集、模型、判题或 FSRS，不另建笔记表。本轮仅设计，没有应用测试或 MP 用例通过结论。
+
+任务 03 已获[总架构范围验收](verification/2026-10-25-task03-architect-review.md)，独立复跑 272 项通过，发布包 9 个文件与基线一致。#21/#22/#23 仍 OPEN；[依赖集成准备](superpowers/plans/2026-10-25-repository-integration-02.md)已写明顺序及授权边界。下面“交回审查”为历史交付状态。
+
 ## 任务 03：离线提交关联（2026-10-25，已交回审查）
 
 按[程序员任务 03](superpowers/plans/2026-10-25-programmer-03-submission-correlation.md)、[RFC-02](superpowers/specs/2026-10-25-submission-correlation-design.md)和[接入来源核查](research/2026-10-25-leetcode-access-boundary.md)完成单源严格 schema、精确 UTF-8 摘要与离线纯关联。独立工作树 `submission-correlation`，分支 `codex/task-03-submission-correlation`，基准 `c1423b3`。没有改生产入口、权限、数据库、备份或 UI；真实采集准入仍 unresolved。

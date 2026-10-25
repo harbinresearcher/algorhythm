@@ -2,6 +2,8 @@
 
 当前事实见 [STATUS](STATUS.md)，新会话从 [CONTINUITY](CONTINUITY.md) 开始。勾选只表示相应交付完成，不把设计当作功能。
 
+- [ ] [程序员任务 04](superpowers/plans/2026-10-25-programmer-04-manual-practice.md)：手动建题、两端练习和完整备份；已定义未实现，不替代真实采集验收。
+
 - [x] 明确服务对象、学习过程与首版范围。
 - [x] 保存四份产品设计基线和 12 类验收条款。
 - [x] 按用户要求退役旧 demo，保留 Git 历史。
