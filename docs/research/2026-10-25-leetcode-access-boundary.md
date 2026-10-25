@@ -27,3 +27,23 @@
 ## 尚未验证
 
 没有登录真实账号、读取用户提交、验证页面选择器、抓取接口、证明官方公开 API 可用，或实测 Chrome 的站点采集。不得把下游合成 fixture 称为真实 DOM/响应回放。
+
+## 任务 03 实施复核（2026-10-25）
+
+本轮直接重读上述三份官方页面，原条款摘要与当前正文相符，未改原事实与核查日期。agent-reach 的 Jina 网页路由三次连接均超时（curl 28），随后用可用网页工具直接读取官网。未读取条款之外的平台数据，没有联络平台。
+
+事实补充：[中国站协议](https://leetcode.cn/terms/)第 3.1.7 条针对未经授权工具对服务运行的影响，不能概括成“任何插件一概禁止”。第 5.2 条的权属表述不能概括成所有用户原创代码归平台；第 5.3 条涉及公开上传内容授予平台的权利，第 5.5 条涉及运营数据权益，均不是向本扩展发放采集许可。[国际站条款](https://leetcode.com/terms/)的 USE OF SERVICES 单独限制 crawling/scraping/spidering，不用它替代中国站判断。
+
+[Chrome activeTab](https://developer.chrome.com/docs/extensions/develop/concepts/activeTab)说明用户触发的临时技术权限及同源延续、跨源或关闭撤销；脚本注入还需 scripting。工程判断：权限能力不构成网站内容许可，也不能替代提交宿主绑定。此次不增加这些权限。
+
+以下“读取”指扩展自动提取，“缓存”指产品留存。每项的五种操作分别核查；unresolved 表示没有找到覆盖该用途的适用许可，不作一概违法认定：
+
+- 题目元数据：读取 unresolved；缓存 unresolved；发送模型 unresolved；导出 unresolved；分发 unresolved。标题、slug、难度未见可供本项目采用的单独许可。
+- 题干：读取 unresolved；缓存 unresolved；发送模型 unresolved；导出 unresolved；分发 unresolved。页面公开可见不构成本项目的授权依据。
+- 题解：读取 unresolved；缓存 unresolved；发送模型 unresolved；导出 unresolved；分发 unresolved。须区分官方与社区作者及其单独授权。
+- 测试用例：读取 unresolved；缓存 unresolved；发送模型 unresolved；导出 unresolved；分发 unresolved。可见示例不能代表隐藏判题数据。
+- 用户原创代码：从平台读取 unresolved；缓存 unresolved；发送模型 unresolved；导出 unresolved；分发 unresolved。本任务只使用独立创作的本地样本，不能以代码原创性推导平台读取方式获准。
+- 提交标识：读取 unresolved；缓存 unresolved；发送模型 unresolved；导出 unresolved；分发 unresolved。账户关联、保留与外发范围尚无适用授权依据。
+- 判题结果：读取 unresolved；缓存 unresolved；发送模型 unresolved；导出 unresolved；分发 unresolved。没有把状态、耗时或内存视作默认可复用数据。
+
+准入继续为 **unresolved，不开启真实接入**。没有验证真实接口、DOM、账号、平台样本或正式数据引用。下一步仅建议总架构决定取得明确授权后另发接入实验，或另行定义手动输入路线；本任务不自行启用任一路线。

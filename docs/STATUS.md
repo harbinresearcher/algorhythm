@@ -2,11 +2,13 @@
 
 更新：2026-10-25。续接先读 [CONTINUITY](CONTINUITY.md)。
 
-## 任务 03 已定义，尚未实现（2026-10-25）
+## 任务 03：离线提交关联（2026-10-25，待交回审查）
 
-新增[程序员任务 03](superpowers/plans/2026-10-25-programmer-03-submission-correlation.md)、[RFC-02](superpowers/specs/2026-10-25-submission-correlation-design.md)与[接入来源核查](research/2026-10-25-leetcode-access-boundary.md)。本次只定义许可边界、单源契约及离线提交关联实验；真实采集准入 unresolved，不改权限、数据库、备份或 UI。LC-01 至 LC-10 均待编码会话验证，不能视为已通过 AC-06。
+按[程序员任务 03](superpowers/plans/2026-10-25-programmer-03-submission-correlation.md)、[RFC-02](superpowers/specs/2026-10-25-submission-correlation-design.md)和[接入来源核查](research/2026-10-25-leetcode-access-boundary.md)完成单源严格 schema、精确 UTF-8 摘要与离线纯关联。独立工作树 `submission-correlation`，分支 `codex/task-03-submission-correlation`，基准 `c1423b3`。没有改生产入口、权限、数据库、备份或 UI；真实采集准入仍 unresolved。
 
-实时核对远端 main 为 `605d619`，#21 文档交接仍 OPEN，head `e092362`。任务定义分支基于 #21，独立 PR 以其分支为 base，不混入 #21 或应用实现。后续实现按任务单建立独立工作树。本轮没有运行应用测试或真实平台实验，既有 179 项通过属于集成证据。
+本轮重跑基线 179 项与构建，均通过。新增 93 项先见行为 RED（88 失败、5 通过，类型检查已过），实现后 93 项通过；最终全量 272 项、类型检查与生产构建通过。9 个发布文件与本轮基线逐项 SHA-256 一致，独立模块与合成样本未进入发布包。LC-01 至 LC-10 的实际输入、结果和日志见[任务 03 验收](verification/2026-10-25-submission-correlation.md)。按任务单未重跑浏览器，真实平台未运行，不代表 AC-06 已通过。
+
+任务定义 PR #22 当前 OPEN、未合并，head `c1423b3`；实现基于该定义分支，独立 PR 暂以 `codex/task-03-definition` 为 base，依赖 #22 和 #21。实现与审查由本任务分支交回，不更改总架构工作树或旧 main 的未提交资料，不合并 PR，不启用真实采集。
 
 ## 已集成 main（2026-10-24）
 
