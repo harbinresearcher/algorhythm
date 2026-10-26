@@ -4,6 +4,8 @@
 
 ## 当前任务
 
+最新状态：#21—#25 已经用户授权合并，main 为 `0746dd6`。任务 04 已通过[架构范围验收](verification/2026-10-26-task04-architect-review.md)，最终 main 的 367 项测试、类型检查、构建及 CI 通过，见[集成记录](verification/2026-10-26-integration-02.md)。后续从最新远端 main 起步，任务 05 尚未定义。下方待合并、待审查描述为原交付历史，不再作为当前行动指令。
+
 当前交回[程序员任务 04](superpowers/plans/2026-10-25-programmer-04-manual-practice.md)，规格为 [RFC-03](superpowers/specs/2026-10-25-manual-practice-design.md)。用户手动建题、两端续练和备份 v1/v2 兼容已完成任务范围验证，等待总架构审查。[PR #25](https://github.com/harbinresearcher/algorhythm/pull/25) OPEN、未合并，首个实现提交 `40fe26d`。分支 `codex/task-04-manual-practice` 基于 `31e2508`，定义 #24 未合并时以 `codex/task-04-definition` 为 PR base。最新提交与检查见 STATUS 及 PR；不在脏主目录集成。
 
 先读[任务 04 验收](verification/2026-10-25-manual-practice.md)及[结果摘要](verification/2026-10-25-manual-practice-results.json)：本轮 367 项、构建、新旧 Chromium 及 Chrome 稳定版文件闭环已分层记录，受控故障不作真实故障。手动内容始终保留用户来源，不升级为平台事实；真实采集和模型未接入。
