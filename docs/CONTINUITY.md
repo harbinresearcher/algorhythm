@@ -1,8 +1,10 @@
 # AlgoRhythm 会话续接入口
 
-更新：2026-10-24。先读本页，需要细节时再打开对应规格；不用重新阅读全部聊天。
+更新：2026-10-25。先读本页，需要细节时再打开对应规格；不用重新阅读全部聊天。
 
 ## 当前任务
+
+下一编码任务已定义：[程序员任务 03](superpowers/plans/2026-10-25-programmer-03-submission-correlation.md)。先读 [RFC-02](superpowers/specs/2026-10-25-submission-correlation-design.md)和[接入来源核查](research/2026-10-25-leetcode-access-boundary.md)。仅做离线合成关联，不开发真实采集器；schema、匹配优先级、文件范围、10 类验收和停止点都在文档中。许可准入 unresolved，不通过修改来源标签伪造平台验证。
 
 当前[程序员任务 02](superpowers/plans/2026-10-14-programmer-02-backup-restore.md)已按[备份恢复 RFC-01](superpowers/specs/2026-10-14-prototype-backup-restore-design.md)和[ADR-0001](adr/0001-prototype-backup-restore.md)完成合成原型四表备份与非覆盖恢复，[分层验收](verification/2026-10-14-backup-restore.md)已记录，已完成范围审查和实现集成。不自动启动下一功能。任务 01 的[总架构验收](verification/2026-10-14-task01-architect-review.md)原样保留。
 
@@ -33,7 +35,7 @@
 
 ## 下一步从这里继续
 
-实现已集成，文档交接 PR 单独待审；编码会话等待任务 03。下一阶段先明确真实力扣接入的许可边界及题目—代码—判题关联证据，不自动启动采集。备份文件 v1 只覆盖 problems、sessions、events、actions；数据库升到 v2 只增加 backupImports。导出四表一致快照，事务外校验与哈希；导入先查持久回执，再在同一五表事务内核对同 ID 内容和受影响关系，补入缺失行。跨扩展恢复只转换动作指纹中的 extensionId，学习协议 v1 与原始事实不变。
+实现已集成，文档交接 PR 单独待审；编码会话按任务 03 做限定实验，不自动启动采集。备份文件 v1 只覆盖 problems、sessions、events、actions；数据库升到 v2 只增加 backupImports。导出四表一致快照，事务外校验与哈希；导入先查持久回执，再在同一五表事务内核对同 ID 内容和受影响关系，补入缺失行。跨扩展恢复只转换动作指纹中的 extensionId，学习协议 v1 与原始事实不变。
 
 备份只允许工作台发起，侧栏仍走原学习命令。先等当前草稿确认，再下载或确认导入；其他页面未确认输入不在文件中。选择文件只作本地预览，不写库。相同记录跳过，同 ID 不同内容整份拒绝，不提供强制覆盖或清空库。
 

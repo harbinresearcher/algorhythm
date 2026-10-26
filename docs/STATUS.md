@@ -1,6 +1,12 @@
 # 当前进度
 
-更新：2026-10-24。续接先读 [CONTINUITY](CONTINUITY.md)。
+更新：2026-10-25。续接先读 [CONTINUITY](CONTINUITY.md)。
+
+## 任务 03 已定义，尚未实现（2026-10-25）
+
+新增[程序员任务 03](superpowers/plans/2026-10-25-programmer-03-submission-correlation.md)、[RFC-02](superpowers/specs/2026-10-25-submission-correlation-design.md)与[接入来源核查](research/2026-10-25-leetcode-access-boundary.md)。本次只定义许可边界、单源契约及离线提交关联实验；真实采集准入 unresolved，不改权限、数据库、备份或 UI。LC-01 至 LC-10 均待编码会话验证，不能视为已通过 AC-06。
+
+实时核对远端 main 为 `605d619`，#21 文档交接仍 OPEN，head `e092362`。任务定义分支基于 #21，独立 PR 以其分支为 base，不混入 #21 或应用实现。后续实现按任务单建立独立工作树。本轮没有运行应用测试或真实平台实验，既有 179 项通过属于集成证据。
 
 ## 已集成 main（2026-10-24）
 
