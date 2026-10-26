@@ -10,7 +10,7 @@
 
 [任务 04 验收](verification/2026-10-25-manual-practice.md)及[结果摘要](verification/2026-10-25-manual-practice-results.json)记录 MP-01 至 MP-10、RED/GREEN、实际下载摘要、合成截图与未测边界。无采集、模型、判题或 FSRS；数据库六表及索引保持 v2，未接任务 03 模块，未增加依赖或权限。链接只解析本地字符串，不访问题目网站。真实配额、事务中途杀进程、旧 v1 二进制及完整支持矩阵未测，不代表正式发布或学习效果验收。
 
-任务定义 [PR #24](https://github.com/harbinresearcher/algorhythm/pull/24) 仍 OPEN、未合并，head `31e2508`；本实现独立 PR 暂以 `codex/task-04-definition` 为 base，依赖既有定义链。提交/推送/PR 信息在交回时补记，不合并，不自动启动后续功能。
+实现提交 `40fe26d7e93e49266537c4bab149af4a97044647` 已推送；[PR #25](https://github.com/harbinresearcher/algorhythm/pull/25) 已建立，OPEN、非草稿、未合并。任务定义 [PR #24](https://github.com/harbinresearcher/algorhythm/pull/24) 仍 OPEN、未合并，head `31e2508`；本 PR 暂以 `codex/task-04-definition` 为 base，依赖 #21 → #22 → #23 → #24。交回元数据另以 docs 提交保存；远端检查按 PR 当前 head 核对，本地通过不代替 CI。等待总架构审查，不合并，不自动启动后续功能。
 
 任务 03 已获[总架构范围验收](verification/2026-10-25-task03-architect-review.md)，独立复跑 272 项通过，发布包 9 个文件与基线一致。#21/#22/#23 仍 OPEN；[依赖集成准备](superpowers/plans/2026-10-25-repository-integration-02.md)已写明顺序及授权边界。下面“交回审查”为历史交付状态。
 

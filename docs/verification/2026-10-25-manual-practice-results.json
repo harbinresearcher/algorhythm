@@ -528,5 +528,13 @@
     "vitest": "5.0.4",
     "vite": "8.3.4",
     "ciConfiguredNode": "24"
+  },
+  "delivery": {
+    "implementationCommit": "40fe26d7e93e49266537c4bab149af4a97044647",
+    "pullRequest": "https://github.com/harbinresearcher/algorhythm/pull/25",
+    "base": "codex/task-04-definition",
+    "baseCommit": "31e25081d3219d05070857841ca299461867335d",
+    "stateAtHandoff": "OPEN, non-draft, unmerged",
+    "metadata": "Separate docs commit; final head and CI must be verified against the live pull request."
   }
 }

@@ -4,6 +4,8 @@
 
 ## 当前结论
 
+实现提交 `40fe26d7e93e49266537c4bab149af4a97044647` 已推送，[独立 PR #25](https://github.com/harbinresearcher/algorhythm/pull/25) OPEN、非草稿、未合并；base 为尚未合并的 `codex/task-04-definition`。本交回元数据另作 docs 提交；最新 head 与 CI 按 PR 核对，不将实现提交的旧检查冒充最终 head 的检查。
+
 任务 04 范围实现及本轮验证完成，交回总架构审查，未合并。备份全量测试和构建通过后，才开放建题表单。最终 367 项、类型检查与构建通过；原型 Chromium 13 项、备份 Chromium 主检查 14 项及 UI 边界 10 项、手动练习 Chromium 20 项及 Chrome 稳定版 10 项通过。这里的浏览器项是脚本检查点数，不是底层断言数；手动 Chromium 20 项中 8 项含受控故障注入，稳定版只跑真实主流程。
 
 没有采集、AI、判题、FSRS、题干导入或任务 03 关联模块接入。用户手动笔记不升级成平台事实，真实准入仍 unresolved。可核对的版本、产物及下载 SHA-256、检查点和证据边界见[结果摘要 JSON](2026-10-25-manual-practice-results.json)。
