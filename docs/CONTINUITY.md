@@ -4,11 +4,11 @@
 
 ## 当前任务
 
-下一编码任务已定义：[程序员任务 03](superpowers/plans/2026-10-25-programmer-03-submission-correlation.md)。先读 [RFC-02](superpowers/specs/2026-10-25-submission-correlation-design.md)和[接入来源核查](research/2026-10-25-leetcode-access-boundary.md)。仅做离线合成关联，不开发真实采集器；schema、匹配优先级、文件范围、10 类验收和停止点都在文档中。许可准入 unresolved，不通过修改来源标签伪造平台验证。
+当前[程序员任务 03](superpowers/plans/2026-10-25-programmer-03-submission-correlation.md)已按 [RFC-02](superpowers/specs/2026-10-25-submission-correlation-design.md)完成离线合成关联，[PR #23](https://github.com/harbinresearcher/algorhythm/pull/23) 已交回审查，未合并。先读 [STATUS](STATUS.md)、[本轮验收](verification/2026-10-25-submission-correlation.md)和[来源核查](research/2026-10-25-leetcode-access-boundary.md)。实现分支 `codex/task-03-submission-correlation` 基于定义提交 `c1423b3`；#22 未合并时 PR 暂以 `codex/task-03-definition` 为 base。许可准入仍 unresolved，没有真实采集器或生产入口接入，合成通过不代表 AC-06。
 
 当前[程序员任务 02](superpowers/plans/2026-10-14-programmer-02-backup-restore.md)已按[备份恢复 RFC-01](superpowers/specs/2026-10-14-prototype-backup-restore-design.md)和[ADR-0001](adr/0001-prototype-backup-restore.md)完成合成原型四表备份与非覆盖恢复，[分层验收](verification/2026-10-14-backup-restore.md)已记录，已完成范围审查和实现集成。不自动启动下一功能。任务 01 的[总架构验收](verification/2026-10-14-task01-architect-review.md)原样保留。
 
-2026-10-24 用户授权后，PR #14、#15 已合并，main 为 `605d619`；任务 02 已通过[总架构范围验收](verification/2026-10-24-task02-architect-review.md)。[集成记录](verification/2026-10-24-integration-01.md)说明验证与保留边界。当前文档交接分支 `codex/integration-01-handoff`，应用代码未改。新任务从集成后的 main 起步；先核对工作区、分支和未提交改动，不能恢复旧 demo。
+2026-10-24 用户授权后，PR #14、#15 已合并，main 为 `605d619`；任务 02 已通过[总架构范围验收](verification/2026-10-24-task02-architect-review.md)。[集成记录](verification/2026-10-24-integration-01.md)说明验证与保留边界。文档交接 #21 和任务定义 #22 未合并，实现分支保留其祖先关系。先核对工作区、分支和未提交改动，不能从旧 main `caac0c1` 或退役 demo 起步。
 
 ## 已冻结的方向
 
@@ -35,7 +35,7 @@
 
 ## 下一步从这里继续
 
-实现已集成，文档交接 PR 单独待审；编码会话按任务 03 做限定实验，不自动启动采集。备份文件 v1 只覆盖 problems、sessions、events、actions；数据库升到 v2 只增加 backupImports。导出四表一致快照，事务外校验与哈希；导入先查持久回执，再在同一五表事务内核对同 ID 内容和受影响关系，补入缺失行。跨扩展恢复只转换动作指纹中的 extensionId，学习协议 v1 与原始事实不变。
+交回任务 03 的实现、来源核查与分层证据，等待总架构审查及下一张任务单，不自动启动采集、接入 UI 或手动输入路线。任务 03 只新增未被生产入口导入的纯模块；既有备份文件 v1、数据库 v2 与学习协议 v1 保持。实际提交、PR、检查与未测项见 STATUS。
 
 备份只允许工作台发起，侧栏仍走原学习命令。先等当前草稿确认，再下载或确认导入；其他页面未确认输入不在文件中。选择文件只作本地预览，不写库。相同记录跳过，同 ID 不同内容整份拒绝，不提供强制覆盖或清空库。
 
