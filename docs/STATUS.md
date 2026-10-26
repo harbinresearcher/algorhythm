@@ -2,7 +2,15 @@
 
 更新：2026-10-24。续接先读 [CONTINUITY](CONTINUITY.md)。
 
-## 任务 02：备份与恢复（已交回审查）
+## 已集成 main（2026-10-24）
+
+用户授权后，#14、#15 已依次通过 merge commit 合入 main：`c0d5a9c`、`605d619`。任务 02 已获[总架构范围验收](verification/2026-10-24-task02-architect-review.md)。[集成记录](verification/2026-10-24-integration-01.md)保存实际提交与检查边界；后续以 `605d619` 或更新 main 为基线，不再从未合并原型起步。
+
+独立工作树对实际 main 重跑 179 项测试、类型检查和构建通过，文档检查 32 份、124 个引用、0 错误。整树与已审 #15 相同，本轮没有重跑浏览器。未改应用或仓库设置，未删除分支，未启动力扣、模型或任务 03。本次文档交接另建 PR，不包含在两个实现 PR 的合并授权中。
+
+以下是交回审查时的历史记录，其中未合并表述不代表当前状态。
+
+## 任务 02：备份与恢复（历史交付）
 
 基准 `f2f3e3f`；新工作树和分支 `feat/prototype-backup-restore`。按[程序员任务 02](superpowers/plans/2026-10-14-programmer-02-backup-restore.md)、[RFC-01](superpowers/specs/2026-10-14-prototype-backup-restore-design.md)与[ADR-0001](adr/0001-prototype-backup-restore.md)实现。三份架构文件及[任务 01 总架构验收](verification/2026-10-14-task01-architect-review.md)均从总架构目录原样复制，其余未提交文件保留。
 
