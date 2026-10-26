@@ -4,6 +4,10 @@
 
 ## 当前任务
 
+编码入口更新为[程序员任务 04](superpowers/plans/2026-10-25-programmer-04-manual-practice.md)，先读 [RFC-03](superpowers/specs/2026-10-25-manual-practice-design.md)。实现用户手动建题与两端续练，完整兼容备份后才开放 UI。无需真实站点或模型访问；所有手动内容保留用户来源，不升级为平台事实。任务尚未实现。
+
+任务 03 已获[总架构范围验收](verification/2026-10-25-task03-architect-review.md)。#21 → #22 → #23 的[集成准备](superpowers/plans/2026-10-25-repository-integration-02.md)独立保存，尚未合并；不在脏主目录操作集成。任务 04 从包含其定义的分支隔离开发，不回退到旧 main。
+
 当前[程序员任务 03](superpowers/plans/2026-10-25-programmer-03-submission-correlation.md)已按 [RFC-02](superpowers/specs/2026-10-25-submission-correlation-design.md)完成离线合成关联，[PR #23](https://github.com/harbinresearcher/algorhythm/pull/23) 已交回审查，未合并。先读 [STATUS](STATUS.md)、[本轮验收](verification/2026-10-25-submission-correlation.md)和[来源核查](research/2026-10-25-leetcode-access-boundary.md)。实现分支 `codex/task-03-submission-correlation` 基于定义提交 `c1423b3`；#22 未合并时 PR 暂以 `codex/task-03-definition` 为 base。许可准入仍 unresolved，没有真实采集器或生产入口接入，合成通过不代表 AC-06。
 
 当前[程序员任务 02](superpowers/plans/2026-10-14-programmer-02-backup-restore.md)已按[备份恢复 RFC-01](superpowers/specs/2026-10-14-prototype-backup-restore-design.md)和[ADR-0001](adr/0001-prototype-backup-restore.md)完成合成原型四表备份与非覆盖恢复，[分层验收](verification/2026-10-14-backup-restore.md)已记录，已完成范围审查和实现集成。不自动启动下一功能。任务 01 的[总架构验收](verification/2026-10-14-task01-architect-review.md)原样保留。
