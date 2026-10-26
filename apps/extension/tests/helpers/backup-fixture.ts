@@ -20,7 +20,7 @@ export async function createBackupFixture(store: Store) {
     const sender: Sender = { id: SOURCE_EXTENSION_ID, url: `chrome-extension://${SOURCE_EXTENSION_ID}/workspace.html`, frameId: 0 };
     let action = 100;
     const send = async (fields: Record<string, unknown>) => {
-      const result = await store.handle({ protocolVersion: 1, extensionId: SOURCE_EXTENSION_ID, actionId: fixtureId(action++), ...fields }, sender);
+      const result = await store.handle({ protocolVersion: 2, extensionId: SOURCE_EXTENSION_ID, actionId: fixtureId(action++), ...fields }, sender);
       if (!result.ok) throw new Error(`Synthetic fixture failed: ${result.code}`);
     };
     const active = { sessionId: fixtureId(1), problemSnapshotId: fixtureId(11) };
@@ -56,7 +56,7 @@ export async function createBackupFixture(store: Store) {
       problems: await store.db.problems.toArray(), sessions: await store.db.sessions.toArray(),
       events: await store.db.events.toArray(), actions: await store.db.actions.toArray(),
     }));
-    return { format: 'algorhythm-backup', formatVersion: 1, scope: 'prototype-storage-v1', backupId: fixtureId(900), exportedAt: FIXTURE_TIME + 100,
+    return { format: 'algorhythm-backup', formatVersion: 2, scope: 'practice-records-v2', backupId: fixtureId(900), exportedAt: FIXTURE_TIME + 100,
       source: { appVersion: '0.1.0', extensionId: SOURCE_EXTENSION_ID }, data };
   } finally { logger.info('读取合成备份快照结束'); }
 }

@@ -1,10 +1,16 @@
 # 当前进度
 
-更新：2026-10-25。续接先读 [CONTINUITY](CONTINUITY.md)。
+更新：2026-10-26。续接先读 [CONTINUITY](CONTINUITY.md)。
 
-## 任务 04 已定义，尚未实现
+## 任务 04：手动建题与完整备份（交回审查）
 
-新增 [RFC-03](superpowers/specs/2026-10-25-manual-practice-design.md)及[程序员任务 04](superpowers/plans/2026-10-25-programmer-04-manual-practice.md)：用户自定标题、可选原题链接，沿用两端会话记录思路和代码；协议 v2、新备份 v2及旧 v1 导入兼容先于 UI 开放。无采集、模型、判题或 FSRS，不另建笔记表。本轮仅设计，没有应用测试或 MP 用例通过结论。
+按 [RFC-03](superpowers/specs/2026-10-25-manual-practice-design.md)和[程序员任务 04](superpowers/plans/2026-10-25-programmer-04-manual-practice.md)完成手动建题、来源区分、两端续练、在线 v2 和备份 v1/v2 兼容。基准 `31e2508`，独立工作树 `manual-practice`、分支 `codex/task-04-manual-practice`；总架构和旧任务工作树保留。2026-10-26 基线 272 项/构建重新通过。manual 57 项先全部失败后通过；备份新增 36 项及原备份新增 2 项兼容用例。完整备份 367 项/构建通过后才接 UI，并取得缺建题按钮的真实 Chromium RED。最终全量 10 个文件、367 项、类型检查和生产构建通过；9 个发布文件与浏览器所用构建 SHA-256 一致。
+
+本轮原型 Chromium 13 项、备份 Chromium 主检查 14 项及串行 UI 边界 10 项、手动 Chromium 20 项、Chrome 稳定版 10 项通过，Playwright 页面未捕获异常均为 0。版本为 Chromium 156.0.8078.4 / Chrome 155.0.8059.85；稳定版官方加载，保留沙箱。实际建题、原生侧栏关闭工作台后保存、worker/浏览器重启、按钮下载及跨 ID 独立配置恢复有新证据。手动 Chromium 8 个检查点含限定故障注入，与真实主流程分开；网络只称监听期间未观察到外部请求。首次稳定版官方选择器环境失败单独保留，干净配置重试成功；未声称修复系统选择器。
+
+[任务 04 验收](verification/2026-10-25-manual-practice.md)及[结果摘要](verification/2026-10-25-manual-practice-results.json)记录 MP-01 至 MP-10、RED/GREEN、实际下载摘要、合成截图与未测边界。无采集、模型、判题或 FSRS；数据库六表及索引保持 v2，未接任务 03 模块，未增加依赖或权限。链接只解析本地字符串，不访问题目网站。真实配额、事务中途杀进程、旧 v1 二进制及完整支持矩阵未测，不代表正式发布或学习效果验收。
+
+实现提交 `40fe26d7e93e49266537c4bab149af4a97044647` 已推送；[PR #25](https://github.com/harbinresearcher/algorhythm/pull/25) 已建立，OPEN、非草稿、未合并。任务定义 [PR #24](https://github.com/harbinresearcher/algorhythm/pull/24) 仍 OPEN、未合并，head `31e2508`；本 PR 暂以 `codex/task-04-definition` 为 base，依赖 #21 → #22 → #23 → #24。交回元数据另以 docs 提交保存；远端检查按 PR 当前 head 核对，本地通过不代替 CI。等待总架构审查，不合并，不自动启动后续功能。
 
 任务 03 已获[总架构范围验收](verification/2026-10-25-task03-architect-review.md)，独立复跑 272 项通过，发布包 9 个文件与基线一致。#21/#22/#23 仍 OPEN；[依赖集成准备](superpowers/plans/2026-10-25-repository-integration-02.md)已写明顺序及授权边界。下面“交回审查”为历史交付状态。
 

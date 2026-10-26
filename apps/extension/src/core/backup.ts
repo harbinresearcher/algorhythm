@@ -1,10 +1,11 @@
 import type { Table } from 'dexie';
 import { z } from 'zod';
 import {
-  backupActionSchema, backupEventSchema, backupImportReceiptSchema, backupProblemSchema, backupSchema, backupSessionSchema,
+  backupActionSchema, backupEventSchema, backupImportReceiptSchema, backupProblemSchema, backupSchema, backupSessionSchema, backupSourceSchema,
   MAX_BACKUP_BYTES, MAX_BACKUP_RECORDS, type Backup, type BackupErrorCode, type BackupImportReceipt,
 } from '../shared/backup';
 import { commandSchema, type ActionRecord, type LearningEvent, type Problem, type Session, type WriteCommand } from '../shared/protocol';
+import { commandSchema as legacyCommandSchema, type WriteCommand as LegacyWriteCommand } from '../shared/legacy-protocol';
 import { classifyStorageError, type Store } from './store';
 
 const logger = console;
@@ -24,20 +25,28 @@ function uniqueRows<T extends { id: string }>(rows: T[]): Map<string, T> {
   if (index.size !== rows.length) invalid();
   return index;
 }
-function readWriteCommand(fingerprint: string, extensionId: string): WriteCommand {
+type StoredWriteCommand = WriteCommand | LegacyWriteCommand;
+function readWriteCommand(fingerprint: string, extensionId: string, formatVersion: Backup['formatVersion'] = 2): StoredWriteCommand {
   let raw: unknown;
   try { raw = JSON.parse(fingerprint); } catch { return invalid(); }
-  const result = commandSchema.safeParse(raw);
-  if (!result.success || result.data.type === 'read' || result.data.type === 'queryAction') return invalid();
+  const protocolVersion = raw && typeof raw === 'object' ? (raw as Record<string, unknown>).protocolVersion : undefined;
+  const result = protocolVersion === 1 ? legacyCommandSchema.safeParse(raw) :
+    formatVersion === 2 && protocolVersion === 2 ? commandSchema.safeParse(raw) : undefined;
+  if (!result?.success || result.data.type === 'read' || result.data.type === 'queryAction') return invalid();
   const command = result.data;
   if (command.extensionId !== extensionId || ('expectedRevision' in command && !Number.isSafeInteger(command.expectedRevision))) return invalid();
   return command;
 }
-function nextSession(command: WriteCommand, event: LearningEvent, previous: Session | undefined): Session {
+function nextSession(command: StoredWriteCommand, event: LearningEvent, problem: Problem, previous: Session | undefined): Session {
   if (command.actionId !== event.id || command.sessionId !== event.sessionId || command.problemSnapshotId !== event.problemSnapshotId) return invalid();
-  if (command.type === 'start') {
+  // 2.4 每条动作继承同一快照来源；旧协议的任何动作都不能描述手动记录。
+  if ((command.protocolVersion === 1 && problem.source !== 'synthetic-v1') ||
+      event.source !== (problem.source === 'manual-user-v1' ? 'manual-workspace' : 'synthetic-workspace')) return invalid();
+  if (command.type === 'start' || command.type === 'startManual') {
     if (previous || event.revision !== 0 || event.kind !== 'started' || event.text !== undefined) return invalid();
-    return { id: command.sessionId, problemSnapshotId: command.problemSnapshotId, problemKey: command.problemKey,
+    if (command.type === 'start' && (problem.source !== 'synthetic-v1' || command.problemKey !== problem.key)) return invalid();
+    if (command.type === 'startManual' && (problem.source !== 'manual-user-v1' || command.title !== problem.title || command.url !== problem.url)) return invalid();
+    return { id: command.sessionId, problemSnapshotId: command.problemSnapshotId, problemKey: problem.key,
       status: 'active', revision: 0, draft: '', createdAt: event.at, updatedAt: event.at };
   }
   if (!previous || command.expectedRevision !== previous.revision || previous.status !== (command.type === 'resume' ? 'paused' : 'active')) return invalid();
@@ -70,8 +79,9 @@ export function validateBackup(input: unknown): Backup {
     if (text === undefined) return invalid();
     if (jsonBytes(text) > MAX_BACKUP_BYTES) throw new BackupError('BACKUP_TOO_LARGE');
     const raw = input && typeof input === 'object' ? input as Record<string, unknown> : {};
-    if ((raw.format !== undefined && raw.format !== 'algorhythm-backup') || (raw.formatVersion !== undefined && raw.formatVersion !== 1) ||
-        (raw.scope !== undefined && raw.scope !== 'prototype-storage-v1')) throw new BackupError('BACKUP_UNSUPPORTED_VERSION');
+    if ((raw.format !== undefined && raw.format !== 'algorhythm-backup') ||
+        (raw.formatVersion !== undefined && raw.formatVersion !== 1 && raw.formatVersion !== 2) ||
+        (raw.scope !== undefined && raw.scope !== (raw.formatVersion === 1 ? 'prototype-storage-v1' : raw.formatVersion === 2 ? 'practice-records-v2' : undefined))) throw new BackupError('BACKUP_UNSUPPORTED_VERSION');
     const data = raw.data && typeof raw.data === 'object' ? raw.data as Record<string, unknown> : {};
     for (const table of Object.keys(MAX_BACKUP_RECORDS) as (keyof typeof MAX_BACKUP_RECORDS)[]) {
       const rows = data[table];
@@ -115,6 +125,7 @@ function validateRelations(backup: Backup): void {
     // 2.2 先比较数量，巨大 revision 也不会产生对应大小的循环或数组。
     for (const session of sessions) {
       const history = histories.get(session.id)!;
+      const problem = problemIndex.get(session.problemSnapshotId)!;
       if (history.length !== session.revision + 1) return invalid();
       history.sort((a, b) => a.revision - b.revision);
       let current: Session | undefined;
@@ -122,8 +133,8 @@ function validateRelations(backup: Backup): void {
         if (event.revision !== revision) return invalid();
         const action = actionIndex.get(event.id)!;
         if (action.result.actionId !== action.id) return invalid();
-        const command = readWriteCommand(action.fingerprint, backup.source.extensionId);
-        current = nextSession(command, event, current);
+        const command = readWriteCommand(action.fingerprint, backup.source.extensionId, backup.formatVersion);
+        current = nextSession(command, event, problem, current);
         if (canonical(current) !== canonical(action.result.session)) return invalid();
       }
       // 2.3 时钟可回拨；顺序仅由 revision 决定，最后回执必须等于当前快照。
@@ -173,7 +184,9 @@ const selectSession = (row: Session): Session => ({
   id: row.id, problemSnapshotId: row.problemSnapshotId, problemKey: row.problemKey, status: row.status, revision: row.revision,
   draft: row.draft, createdAt: row.createdAt, updatedAt: row.updatedAt,
 });
-const selectProblem = (row: Problem): Problem => ({ id: row.id, key: row.key, title: row.title, statement: row.statement, source: row.source });
+const selectProblem = (row: Problem): Problem => row.source === 'manual-user-v1' ?
+  { id: row.id, key: row.key, title: row.title, statement: row.statement, source: row.source, url: row.url } :
+  { id: row.id, key: row.key, title: row.title, statement: row.statement, source: row.source };
 const selectEvent = (row: LearningEvent): LearningEvent => ({
   id: row.id, actionId: row.actionId, sessionId: row.sessionId, problemSnapshotId: row.problemSnapshotId,
   revision: row.revision, at: row.at, kind: row.kind, source: row.source, ...(row.text === undefined ? {} : { text: row.text }),
@@ -184,7 +197,8 @@ const storageFailure = (error: unknown): never => { throw error instanceof Backu
 function normalizeAction(row: ActionRecord, originalExtensionId: string, targetExtensionId: string): ActionRecord {
   const command = readWriteCommand(row.fingerprint, originalExtensionId);
   // 6.1 必须使用共享 schema 的固定字段顺序，不能把字母排序 JSON 存成指纹。
-  return { ...row, fingerprint: JSON.stringify(commandSchema.parse({ ...command, extensionId: targetExtensionId })) };
+  const schema = command.protocolVersion === 1 ? legacyCommandSchema : commandSchema;
+  return { ...row, fingerprint: JSON.stringify(schema.parse({ ...command, extensionId: targetExtensionId })) };
 }
 
 export async function exportBackup(store: Store, source: Backup['source']): Promise<Backup> {
@@ -206,7 +220,7 @@ export async function exportBackup(store: Store, source: Backup['source']): Prom
     // 5.2 明确列出所有可导出字段；已知字段损坏时拒绝，不修复或截断。
     try { data = { problems: rows.problems.map(selectProblem), sessions: rows.sessions.map(selectSession), events: rows.events.map(selectEvent), actions: rows.actions.map(selectAction) }; }
     catch { return invalid(); }
-    const backup = validateBackup({ format: 'algorhythm-backup', formatVersion: 1, scope: 'prototype-storage-v1',
+    const backup = validateBackup({ format: 'algorhythm-backup', formatVersion: 2, scope: 'practice-records-v2',
       backupId: crypto.randomUUID(), exportedAt: Date.now(), source: { appVersion: source.appVersion, extensionId: source.extensionId }, data });
     for (const table of Object.keys(backup.data) as (keyof Backup['data'])[]) backup.data[table].sort((a, b) => a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
     return backup;
@@ -289,7 +303,7 @@ export async function importBackup(store: Store, input: unknown, expectedDigest:
   try {
     // 6.2 摘要涵盖原始完整 envelope，改目标指纹之前核对确认内容。
     const backup = validateBackup(input);
-    if (!backupSchema.shape.source.shape.extensionId.safeParse(targetExtensionId).success) return invalid();
+    if (!backupSourceSchema.shape.extensionId.safeParse(targetExtensionId).success) return invalid();
     const digest = await digestBackup(backup);
     if (digest !== expectedDigest) throw new BackupError('BACKUP_DIGEST_MISMATCH');
     const prepared = { ...backup.data, actions: backup.data.actions.map((row) => normalizeAction(row, backup.source.extensionId, targetExtensionId)) };

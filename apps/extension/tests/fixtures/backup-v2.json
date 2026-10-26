@@ -1,0 +1,728 @@
+{
+  "format": "algorhythm-backup",
+  "formatVersion": 2,
+  "scope": "practice-records-v2",
+  "backupId": "00000000-0000-4000-8000-000000000385",
+  "exportedAt": 1700000002000,
+  "source": {
+    "appVersion": "0.1.0",
+    "extensionId": "abcdefghijklmnopabcdefghijklmnop"
+  },
+  "data": {
+    "problems": [
+      {
+        "id": "00000000-0000-4000-8000-00000000000b",
+        "key": "unique",
+        "title": "找出重复编号",
+        "statement": "给定一组整数编号，判断是否有编号出现超过一次。\n\n例：[8, 3, 5, 3] → True\n例：[8, 3, 5] → False\n\n先写下一个可行的办法，再考虑能否少做一些重复查找。",
+        "source": "synthetic-v1"
+      },
+      {
+        "id": "00000000-0000-4000-8000-00000000000c",
+        "key": "pair",
+        "title": "寻找相邻差值",
+        "statement": "给定一个递增整数数组，返回所有相邻元素差值的最小值。数组至少有两个元素。\n\n例：[2, 6, 9, 15] → 3\n\n写出需要保留哪些信息，以及每次向后移动时怎样更新。",
+        "source": "synthetic-v1"
+      },
+      {
+        "id": "00000000-0000-4000-8000-00000000000d",
+        "key": "manual",
+        "title": "自建数组练习 <b>只作文本</b>",
+        "statement": "",
+        "source": "manual-user-v1",
+        "url": "https://leetcode.cn/problems/two-sum/"
+      },
+      {
+        "id": "00000000-0000-4000-8000-00000000000e",
+        "key": "manual",
+        "title": "无链接原创练习",
+        "statement": "",
+        "source": "manual-user-v1",
+        "url": null
+      },
+      {
+        "id": "00000000-0000-4000-8000-00000000000f",
+        "key": "pair",
+        "title": "寻找相邻差值",
+        "statement": "给定一个递增整数数组，返回所有相邻元素差值的最小值。数组至少有两个元素。\n\n例：[2, 6, 9, 15] → 3\n\n写出需要保留哪些信息，以及每次向后移动时怎样更新。",
+        "source": "synthetic-v1"
+      }
+    ],
+    "sessions": [
+      {
+        "id": "00000000-0000-4000-8000-000000000001",
+        "problemSnapshotId": "00000000-0000-4000-8000-00000000000b",
+        "problemKey": "unique",
+        "status": "active",
+        "revision": 6,
+        "draft": "# 旧会话用新协议继续保存",
+        "createdAt": 1700000000005,
+        "updatedAt": 1700000001098
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000002",
+        "problemSnapshotId": "00000000-0000-4000-8000-00000000000c",
+        "problemKey": "pair",
+        "status": "paused",
+        "revision": 6,
+        "draft": "暂停前已保存的中文思路\n# 下一次从这里继续",
+        "createdAt": 1700000000049,
+        "updatedAt": 1700000000093
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000003",
+        "problemSnapshotId": "00000000-0000-4000-8000-00000000000d",
+        "problemKey": "manual",
+        "status": "active",
+        "revision": 4,
+        "draft": "# 原创练习\nseen = set()",
+        "createdAt": 1700000001039,
+        "updatedAt": 1700000001072
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000004",
+        "problemSnapshotId": "00000000-0000-4000-8000-00000000000e",
+        "problemKey": "manual",
+        "status": "active",
+        "revision": 0,
+        "draft": "",
+        "createdAt": 1700000001080,
+        "updatedAt": 1700000001080
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000005",
+        "problemSnapshotId": "00000000-0000-4000-8000-00000000000f",
+        "problemKey": "pair",
+        "status": "active",
+        "revision": 0,
+        "draft": "",
+        "createdAt": 1700000001089,
+        "updatedAt": 1700000001089
+      }
+    ],
+    "events": [
+      {
+        "id": "00000000-0000-4000-8000-000000000064",
+        "actionId": "00000000-0000-4000-8000-000000000064",
+        "sessionId": "00000000-0000-4000-8000-000000000001",
+        "problemSnapshotId": "00000000-0000-4000-8000-00000000000b",
+        "revision": 0,
+        "at": 1700000000005,
+        "kind": "started",
+        "source": "synthetic-workspace"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000065",
+        "actionId": "00000000-0000-4000-8000-000000000065",
+        "sessionId": "00000000-0000-4000-8000-000000000001",
+        "problemSnapshotId": "00000000-0000-4000-8000-00000000000b",
+        "revision": 1,
+        "at": 1700000000014,
+        "kind": "draft",
+        "source": "synthetic-workspace",
+        "text": "先用集合保存见过的编号。\nseen = set()"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000066",
+        "actionId": "00000000-0000-4000-8000-000000000066",
+        "sessionId": "00000000-0000-4000-8000-000000000001",
+        "problemSnapshotId": "00000000-0000-4000-8000-00000000000b",
+        "revision": 2,
+        "at": 1700000000021,
+        "kind": "attempt",
+        "source": "synthetic-workspace",
+        "text": "先用集合保存见过的编号。\nseen = set()"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000067",
+        "actionId": "00000000-0000-4000-8000-000000000067",
+        "sessionId": "00000000-0000-4000-8000-000000000001",
+        "problemSnapshotId": "00000000-0000-4000-8000-00000000000b",
+        "revision": 3,
+        "at": 1700000000028,
+        "kind": "draft",
+        "source": "synthetic-workspace",
+        "text": "def has_duplicate(nums):\n    return len(nums) != len(set(nums))\n# 第二次尝试"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000068",
+        "actionId": "00000000-0000-4000-8000-000000000068",
+        "sessionId": "00000000-0000-4000-8000-000000000001",
+        "problemSnapshotId": "00000000-0000-4000-8000-00000000000b",
+        "revision": 4,
+        "at": 1700000000035,
+        "kind": "attempt",
+        "source": "synthetic-workspace",
+        "text": "def has_duplicate(nums):\n    return len(nums) != len(set(nums))\n# 第二次尝试"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000069",
+        "actionId": "00000000-0000-4000-8000-000000000069",
+        "sessionId": "00000000-0000-4000-8000-000000000001",
+        "problemSnapshotId": "00000000-0000-4000-8000-00000000000b",
+        "revision": 5,
+        "at": 1700000000042,
+        "kind": "draft",
+        "source": "synthetic-workspace",
+        "text": "# 已保存，还没有记录为尝试\nfor number in nums:\n    print(number)"
+      },
+      {
+        "id": "00000000-0000-4000-8000-00000000006a",
+        "actionId": "00000000-0000-4000-8000-00000000006a",
+        "sessionId": "00000000-0000-4000-8000-000000000002",
+        "problemSnapshotId": "00000000-0000-4000-8000-00000000000c",
+        "revision": 0,
+        "at": 1700000000049,
+        "kind": "started",
+        "source": "synthetic-workspace"
+      },
+      {
+        "id": "00000000-0000-4000-8000-00000000006b",
+        "actionId": "00000000-0000-4000-8000-00000000006b",
+        "sessionId": "00000000-0000-4000-8000-000000000002",
+        "problemSnapshotId": "00000000-0000-4000-8000-00000000000c",
+        "revision": 1,
+        "at": 1700000000058,
+        "kind": "draft",
+        "source": "synthetic-workspace",
+        "text": "# 相邻差值\nanswer = min(b - a for a, b in zip(nums, nums[1:]))"
+      },
+      {
+        "id": "00000000-0000-4000-8000-00000000006c",
+        "actionId": "00000000-0000-4000-8000-00000000006c",
+        "sessionId": "00000000-0000-4000-8000-000000000002",
+        "problemSnapshotId": "00000000-0000-4000-8000-00000000000c",
+        "revision": 2,
+        "at": 1700000000065,
+        "kind": "attempt",
+        "source": "synthetic-workspace",
+        "text": "# 相邻差值\nanswer = min(b - a for a, b in zip(nums, nums[1:]))"
+      },
+      {
+        "id": "00000000-0000-4000-8000-00000000006d",
+        "actionId": "00000000-0000-4000-8000-00000000006d",
+        "sessionId": "00000000-0000-4000-8000-000000000002",
+        "problemSnapshotId": "00000000-0000-4000-8000-00000000000c",
+        "revision": 3,
+        "at": 1700000000072,
+        "kind": "paused",
+        "source": "synthetic-workspace"
+      },
+      {
+        "id": "00000000-0000-4000-8000-00000000006e",
+        "actionId": "00000000-0000-4000-8000-00000000006e",
+        "sessionId": "00000000-0000-4000-8000-000000000002",
+        "problemSnapshotId": "00000000-0000-4000-8000-00000000000c",
+        "revision": 4,
+        "at": 1700000000079,
+        "kind": "resumed",
+        "source": "synthetic-workspace"
+      },
+      {
+        "id": "00000000-0000-4000-8000-00000000006f",
+        "actionId": "00000000-0000-4000-8000-00000000006f",
+        "sessionId": "00000000-0000-4000-8000-000000000002",
+        "problemSnapshotId": "00000000-0000-4000-8000-00000000000c",
+        "revision": 5,
+        "at": 1700000000086,
+        "kind": "draft",
+        "source": "synthetic-workspace",
+        "text": "暂停前已保存的中文思路\n# 下一次从这里继续"
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000070",
+        "actionId": "00000000-0000-4000-8000-000000000070",
+        "sessionId": "00000000-0000-4000-8000-000000000002",
+        "problemSnapshotId": "00000000-0000-4000-8000-00000000000c",
+        "revision": 6,
+        "at": 1700000000093,
+        "kind": "paused",
+        "source": "synthetic-workspace"
+      },
+      {
+        "id": "00000000-0000-4000-8000-0000000003e8",
+        "actionId": "00000000-0000-4000-8000-0000000003e8",
+        "sessionId": "00000000-0000-4000-8000-000000000003",
+        "problemSnapshotId": "00000000-0000-4000-8000-00000000000d",
+        "revision": 0,
+        "at": 1700000001039,
+        "kind": "started",
+        "source": "manual-workspace"
+      },
+      {
+        "id": "00000000-0000-4000-8000-0000000003e9",
+        "actionId": "00000000-0000-4000-8000-0000000003e9",
+        "sessionId": "00000000-0000-4000-8000-000000000003",
+        "problemSnapshotId": "00000000-0000-4000-8000-00000000000d",
+        "revision": 1,
+        "at": 1700000001048,
+        "kind": "draft",
+        "source": "manual-workspace",
+        "text": "# 原创练习\nseen = set()"
+      },
+      {
+        "id": "00000000-0000-4000-8000-0000000003ea",
+        "actionId": "00000000-0000-4000-8000-0000000003ea",
+        "sessionId": "00000000-0000-4000-8000-000000000003",
+        "problemSnapshotId": "00000000-0000-4000-8000-00000000000d",
+        "revision": 2,
+        "at": 1700000001056,
+        "kind": "attempt",
+        "source": "manual-workspace",
+        "text": "# 原创练习\nseen = set()"
+      },
+      {
+        "id": "00000000-0000-4000-8000-0000000003eb",
+        "actionId": "00000000-0000-4000-8000-0000000003eb",
+        "sessionId": "00000000-0000-4000-8000-000000000003",
+        "problemSnapshotId": "00000000-0000-4000-8000-00000000000d",
+        "revision": 3,
+        "at": 1700000001064,
+        "kind": "paused",
+        "source": "manual-workspace"
+      },
+      {
+        "id": "00000000-0000-4000-8000-0000000003ec",
+        "actionId": "00000000-0000-4000-8000-0000000003ec",
+        "sessionId": "00000000-0000-4000-8000-000000000003",
+        "problemSnapshotId": "00000000-0000-4000-8000-00000000000d",
+        "revision": 4,
+        "at": 1700000001072,
+        "kind": "resumed",
+        "source": "manual-workspace"
+      },
+      {
+        "id": "00000000-0000-4000-8000-0000000003ed",
+        "actionId": "00000000-0000-4000-8000-0000000003ed",
+        "sessionId": "00000000-0000-4000-8000-000000000004",
+        "problemSnapshotId": "00000000-0000-4000-8000-00000000000e",
+        "revision": 0,
+        "at": 1700000001080,
+        "kind": "started",
+        "source": "manual-workspace"
+      },
+      {
+        "id": "00000000-0000-4000-8000-0000000003ee",
+        "actionId": "00000000-0000-4000-8000-0000000003ee",
+        "sessionId": "00000000-0000-4000-8000-000000000005",
+        "problemSnapshotId": "00000000-0000-4000-8000-00000000000f",
+        "revision": 0,
+        "at": 1700000001089,
+        "kind": "started",
+        "source": "synthetic-workspace"
+      },
+      {
+        "id": "00000000-0000-4000-8000-0000000003ef",
+        "actionId": "00000000-0000-4000-8000-0000000003ef",
+        "sessionId": "00000000-0000-4000-8000-000000000001",
+        "problemSnapshotId": "00000000-0000-4000-8000-00000000000b",
+        "revision": 6,
+        "at": 1700000001098,
+        "kind": "draft",
+        "source": "synthetic-workspace",
+        "text": "# 旧会话用新协议继续保存"
+      }
+    ],
+    "actions": [
+      {
+        "id": "00000000-0000-4000-8000-000000000064",
+        "fingerprint": "{\"protocolVersion\":1,\"extensionId\":\"abcdefghijklmnopabcdefghijklmnop\",\"actionId\":\"00000000-0000-4000-8000-000000000064\",\"type\":\"start\",\"sessionId\":\"00000000-0000-4000-8000-000000000001\",\"problemSnapshotId\":\"00000000-0000-4000-8000-00000000000b\",\"problemKey\":\"unique\"}",
+        "result": {
+          "ok": true,
+          "kind": "committed",
+          "actionId": "00000000-0000-4000-8000-000000000064",
+          "session": {
+            "id": "00000000-0000-4000-8000-000000000001",
+            "problemSnapshotId": "00000000-0000-4000-8000-00000000000b",
+            "problemKey": "unique",
+            "status": "active",
+            "revision": 0,
+            "draft": "",
+            "createdAt": 1700000000005,
+            "updatedAt": 1700000000005
+          }
+        }
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000065",
+        "fingerprint": "{\"protocolVersion\":1,\"extensionId\":\"abcdefghijklmnopabcdefghijklmnop\",\"actionId\":\"00000000-0000-4000-8000-000000000065\",\"sessionId\":\"00000000-0000-4000-8000-000000000001\",\"problemSnapshotId\":\"00000000-0000-4000-8000-00000000000b\",\"expectedRevision\":0,\"type\":\"saveDraft\",\"text\":\"先用集合保存见过的编号。\\nseen = set()\"}",
+        "result": {
+          "ok": true,
+          "kind": "committed",
+          "actionId": "00000000-0000-4000-8000-000000000065",
+          "session": {
+            "id": "00000000-0000-4000-8000-000000000001",
+            "problemSnapshotId": "00000000-0000-4000-8000-00000000000b",
+            "problemKey": "unique",
+            "status": "active",
+            "revision": 1,
+            "draft": "先用集合保存见过的编号。\nseen = set()",
+            "createdAt": 1700000000005,
+            "updatedAt": 1700000000014
+          }
+        }
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000066",
+        "fingerprint": "{\"protocolVersion\":1,\"extensionId\":\"abcdefghijklmnopabcdefghijklmnop\",\"actionId\":\"00000000-0000-4000-8000-000000000066\",\"sessionId\":\"00000000-0000-4000-8000-000000000001\",\"problemSnapshotId\":\"00000000-0000-4000-8000-00000000000b\",\"expectedRevision\":1,\"type\":\"recordAttempt\"}",
+        "result": {
+          "ok": true,
+          "kind": "committed",
+          "actionId": "00000000-0000-4000-8000-000000000066",
+          "session": {
+            "id": "00000000-0000-4000-8000-000000000001",
+            "problemSnapshotId": "00000000-0000-4000-8000-00000000000b",
+            "problemKey": "unique",
+            "status": "active",
+            "revision": 2,
+            "draft": "先用集合保存见过的编号。\nseen = set()",
+            "createdAt": 1700000000005,
+            "updatedAt": 1700000000021
+          }
+        }
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000067",
+        "fingerprint": "{\"protocolVersion\":1,\"extensionId\":\"abcdefghijklmnopabcdefghijklmnop\",\"actionId\":\"00000000-0000-4000-8000-000000000067\",\"sessionId\":\"00000000-0000-4000-8000-000000000001\",\"problemSnapshotId\":\"00000000-0000-4000-8000-00000000000b\",\"expectedRevision\":2,\"type\":\"saveDraft\",\"text\":\"def has_duplicate(nums):\\n    return len(nums) != len(set(nums))\\n# 第二次尝试\"}",
+        "result": {
+          "ok": true,
+          "kind": "committed",
+          "actionId": "00000000-0000-4000-8000-000000000067",
+          "session": {
+            "id": "00000000-0000-4000-8000-000000000001",
+            "problemSnapshotId": "00000000-0000-4000-8000-00000000000b",
+            "problemKey": "unique",
+            "status": "active",
+            "revision": 3,
+            "draft": "def has_duplicate(nums):\n    return len(nums) != len(set(nums))\n# 第二次尝试",
+            "createdAt": 1700000000005,
+            "updatedAt": 1700000000028
+          }
+        }
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000068",
+        "fingerprint": "{\"protocolVersion\":1,\"extensionId\":\"abcdefghijklmnopabcdefghijklmnop\",\"actionId\":\"00000000-0000-4000-8000-000000000068\",\"sessionId\":\"00000000-0000-4000-8000-000000000001\",\"problemSnapshotId\":\"00000000-0000-4000-8000-00000000000b\",\"expectedRevision\":3,\"type\":\"recordAttempt\"}",
+        "result": {
+          "ok": true,
+          "kind": "committed",
+          "actionId": "00000000-0000-4000-8000-000000000068",
+          "session": {
+            "id": "00000000-0000-4000-8000-000000000001",
+            "problemSnapshotId": "00000000-0000-4000-8000-00000000000b",
+            "problemKey": "unique",
+            "status": "active",
+            "revision": 4,
+            "draft": "def has_duplicate(nums):\n    return len(nums) != len(set(nums))\n# 第二次尝试",
+            "createdAt": 1700000000005,
+            "updatedAt": 1700000000035
+          }
+        }
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000069",
+        "fingerprint": "{\"protocolVersion\":1,\"extensionId\":\"abcdefghijklmnopabcdefghijklmnop\",\"actionId\":\"00000000-0000-4000-8000-000000000069\",\"sessionId\":\"00000000-0000-4000-8000-000000000001\",\"problemSnapshotId\":\"00000000-0000-4000-8000-00000000000b\",\"expectedRevision\":4,\"type\":\"saveDraft\",\"text\":\"# 已保存，还没有记录为尝试\\nfor number in nums:\\n    print(number)\"}",
+        "result": {
+          "ok": true,
+          "kind": "committed",
+          "actionId": "00000000-0000-4000-8000-000000000069",
+          "session": {
+            "id": "00000000-0000-4000-8000-000000000001",
+            "problemSnapshotId": "00000000-0000-4000-8000-00000000000b",
+            "problemKey": "unique",
+            "status": "active",
+            "revision": 5,
+            "draft": "# 已保存，还没有记录为尝试\nfor number in nums:\n    print(number)",
+            "createdAt": 1700000000005,
+            "updatedAt": 1700000000042
+          }
+        }
+      },
+      {
+        "id": "00000000-0000-4000-8000-00000000006a",
+        "fingerprint": "{\"protocolVersion\":1,\"extensionId\":\"abcdefghijklmnopabcdefghijklmnop\",\"actionId\":\"00000000-0000-4000-8000-00000000006a\",\"type\":\"start\",\"sessionId\":\"00000000-0000-4000-8000-000000000002\",\"problemSnapshotId\":\"00000000-0000-4000-8000-00000000000c\",\"problemKey\":\"pair\"}",
+        "result": {
+          "ok": true,
+          "kind": "committed",
+          "actionId": "00000000-0000-4000-8000-00000000006a",
+          "session": {
+            "id": "00000000-0000-4000-8000-000000000002",
+            "problemSnapshotId": "00000000-0000-4000-8000-00000000000c",
+            "problemKey": "pair",
+            "status": "active",
+            "revision": 0,
+            "draft": "",
+            "createdAt": 1700000000049,
+            "updatedAt": 1700000000049
+          }
+        }
+      },
+      {
+        "id": "00000000-0000-4000-8000-00000000006b",
+        "fingerprint": "{\"protocolVersion\":1,\"extensionId\":\"abcdefghijklmnopabcdefghijklmnop\",\"actionId\":\"00000000-0000-4000-8000-00000000006b\",\"sessionId\":\"00000000-0000-4000-8000-000000000002\",\"problemSnapshotId\":\"00000000-0000-4000-8000-00000000000c\",\"expectedRevision\":0,\"type\":\"saveDraft\",\"text\":\"# 相邻差值\\nanswer = min(b - a for a, b in zip(nums, nums[1:]))\"}",
+        "result": {
+          "ok": true,
+          "kind": "committed",
+          "actionId": "00000000-0000-4000-8000-00000000006b",
+          "session": {
+            "id": "00000000-0000-4000-8000-000000000002",
+            "problemSnapshotId": "00000000-0000-4000-8000-00000000000c",
+            "problemKey": "pair",
+            "status": "active",
+            "revision": 1,
+            "draft": "# 相邻差值\nanswer = min(b - a for a, b in zip(nums, nums[1:]))",
+            "createdAt": 1700000000049,
+            "updatedAt": 1700000000058
+          }
+        }
+      },
+      {
+        "id": "00000000-0000-4000-8000-00000000006c",
+        "fingerprint": "{\"protocolVersion\":1,\"extensionId\":\"abcdefghijklmnopabcdefghijklmnop\",\"actionId\":\"00000000-0000-4000-8000-00000000006c\",\"sessionId\":\"00000000-0000-4000-8000-000000000002\",\"problemSnapshotId\":\"00000000-0000-4000-8000-00000000000c\",\"expectedRevision\":1,\"type\":\"recordAttempt\"}",
+        "result": {
+          "ok": true,
+          "kind": "committed",
+          "actionId": "00000000-0000-4000-8000-00000000006c",
+          "session": {
+            "id": "00000000-0000-4000-8000-000000000002",
+            "problemSnapshotId": "00000000-0000-4000-8000-00000000000c",
+            "problemKey": "pair",
+            "status": "active",
+            "revision": 2,
+            "draft": "# 相邻差值\nanswer = min(b - a for a, b in zip(nums, nums[1:]))",
+            "createdAt": 1700000000049,
+            "updatedAt": 1700000000065
+          }
+        }
+      },
+      {
+        "id": "00000000-0000-4000-8000-00000000006d",
+        "fingerprint": "{\"protocolVersion\":1,\"extensionId\":\"abcdefghijklmnopabcdefghijklmnop\",\"actionId\":\"00000000-0000-4000-8000-00000000006d\",\"sessionId\":\"00000000-0000-4000-8000-000000000002\",\"problemSnapshotId\":\"00000000-0000-4000-8000-00000000000c\",\"expectedRevision\":2,\"type\":\"pause\"}",
+        "result": {
+          "ok": true,
+          "kind": "committed",
+          "actionId": "00000000-0000-4000-8000-00000000006d",
+          "session": {
+            "id": "00000000-0000-4000-8000-000000000002",
+            "problemSnapshotId": "00000000-0000-4000-8000-00000000000c",
+            "problemKey": "pair",
+            "status": "paused",
+            "revision": 3,
+            "draft": "# 相邻差值\nanswer = min(b - a for a, b in zip(nums, nums[1:]))",
+            "createdAt": 1700000000049,
+            "updatedAt": 1700000000072
+          }
+        }
+      },
+      {
+        "id": "00000000-0000-4000-8000-00000000006e",
+        "fingerprint": "{\"protocolVersion\":1,\"extensionId\":\"abcdefghijklmnopabcdefghijklmnop\",\"actionId\":\"00000000-0000-4000-8000-00000000006e\",\"sessionId\":\"00000000-0000-4000-8000-000000000002\",\"problemSnapshotId\":\"00000000-0000-4000-8000-00000000000c\",\"expectedRevision\":3,\"type\":\"resume\"}",
+        "result": {
+          "ok": true,
+          "kind": "committed",
+          "actionId": "00000000-0000-4000-8000-00000000006e",
+          "session": {
+            "id": "00000000-0000-4000-8000-000000000002",
+            "problemSnapshotId": "00000000-0000-4000-8000-00000000000c",
+            "problemKey": "pair",
+            "status": "active",
+            "revision": 4,
+            "draft": "# 相邻差值\nanswer = min(b - a for a, b in zip(nums, nums[1:]))",
+            "createdAt": 1700000000049,
+            "updatedAt": 1700000000079
+          }
+        }
+      },
+      {
+        "id": "00000000-0000-4000-8000-00000000006f",
+        "fingerprint": "{\"protocolVersion\":1,\"extensionId\":\"abcdefghijklmnopabcdefghijklmnop\",\"actionId\":\"00000000-0000-4000-8000-00000000006f\",\"sessionId\":\"00000000-0000-4000-8000-000000000002\",\"problemSnapshotId\":\"00000000-0000-4000-8000-00000000000c\",\"expectedRevision\":4,\"type\":\"saveDraft\",\"text\":\"暂停前已保存的中文思路\\n# 下一次从这里继续\"}",
+        "result": {
+          "ok": true,
+          "kind": "committed",
+          "actionId": "00000000-0000-4000-8000-00000000006f",
+          "session": {
+            "id": "00000000-0000-4000-8000-000000000002",
+            "problemSnapshotId": "00000000-0000-4000-8000-00000000000c",
+            "problemKey": "pair",
+            "status": "active",
+            "revision": 5,
+            "draft": "暂停前已保存的中文思路\n# 下一次从这里继续",
+            "createdAt": 1700000000049,
+            "updatedAt": 1700000000086
+          }
+        }
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000070",
+        "fingerprint": "{\"protocolVersion\":1,\"extensionId\":\"abcdefghijklmnopabcdefghijklmnop\",\"actionId\":\"00000000-0000-4000-8000-000000000070\",\"sessionId\":\"00000000-0000-4000-8000-000000000002\",\"problemSnapshotId\":\"00000000-0000-4000-8000-00000000000c\",\"expectedRevision\":5,\"type\":\"pause\"}",
+        "result": {
+          "ok": true,
+          "kind": "committed",
+          "actionId": "00000000-0000-4000-8000-000000000070",
+          "session": {
+            "id": "00000000-0000-4000-8000-000000000002",
+            "problemSnapshotId": "00000000-0000-4000-8000-00000000000c",
+            "problemKey": "pair",
+            "status": "paused",
+            "revision": 6,
+            "draft": "暂停前已保存的中文思路\n# 下一次从这里继续",
+            "createdAt": 1700000000049,
+            "updatedAt": 1700000000093
+          }
+        }
+      },
+      {
+        "id": "00000000-0000-4000-8000-0000000003e8",
+        "fingerprint": "{\"protocolVersion\":2,\"extensionId\":\"abcdefghijklmnopabcdefghijklmnop\",\"actionId\":\"00000000-0000-4000-8000-0000000003e8\",\"type\":\"startManual\",\"sessionId\":\"00000000-0000-4000-8000-000000000003\",\"problemSnapshotId\":\"00000000-0000-4000-8000-00000000000d\",\"title\":\"自建数组练习 <b>只作文本</b>\",\"url\":\"https://leetcode.cn/problems/two-sum/\"}",
+        "result": {
+          "ok": true,
+          "kind": "committed",
+          "actionId": "00000000-0000-4000-8000-0000000003e8",
+          "session": {
+            "id": "00000000-0000-4000-8000-000000000003",
+            "problemSnapshotId": "00000000-0000-4000-8000-00000000000d",
+            "problemKey": "manual",
+            "status": "active",
+            "revision": 0,
+            "draft": "",
+            "createdAt": 1700000001039,
+            "updatedAt": 1700000001039
+          }
+        }
+      },
+      {
+        "id": "00000000-0000-4000-8000-0000000003e9",
+        "fingerprint": "{\"protocolVersion\":2,\"extensionId\":\"abcdefghijklmnopabcdefghijklmnop\",\"actionId\":\"00000000-0000-4000-8000-0000000003e9\",\"sessionId\":\"00000000-0000-4000-8000-000000000003\",\"problemSnapshotId\":\"00000000-0000-4000-8000-00000000000d\",\"expectedRevision\":0,\"type\":\"saveDraft\",\"text\":\"# 原创练习\\nseen = set()\"}",
+        "result": {
+          "ok": true,
+          "kind": "committed",
+          "actionId": "00000000-0000-4000-8000-0000000003e9",
+          "session": {
+            "id": "00000000-0000-4000-8000-000000000003",
+            "problemSnapshotId": "00000000-0000-4000-8000-00000000000d",
+            "problemKey": "manual",
+            "status": "active",
+            "revision": 1,
+            "draft": "# 原创练习\nseen = set()",
+            "createdAt": 1700000001039,
+            "updatedAt": 1700000001048
+          }
+        }
+      },
+      {
+        "id": "00000000-0000-4000-8000-0000000003ea",
+        "fingerprint": "{\"protocolVersion\":2,\"extensionId\":\"abcdefghijklmnopabcdefghijklmnop\",\"actionId\":\"00000000-0000-4000-8000-0000000003ea\",\"sessionId\":\"00000000-0000-4000-8000-000000000003\",\"problemSnapshotId\":\"00000000-0000-4000-8000-00000000000d\",\"expectedRevision\":1,\"type\":\"recordAttempt\"}",
+        "result": {
+          "ok": true,
+          "kind": "committed",
+          "actionId": "00000000-0000-4000-8000-0000000003ea",
+          "session": {
+            "id": "00000000-0000-4000-8000-000000000003",
+            "problemSnapshotId": "00000000-0000-4000-8000-00000000000d",
+            "problemKey": "manual",
+            "status": "active",
+            "revision": 2,
+            "draft": "# 原创练习\nseen = set()",
+            "createdAt": 1700000001039,
+            "updatedAt": 1700000001056
+          }
+        }
+      },
+      {
+        "id": "00000000-0000-4000-8000-0000000003eb",
+        "fingerprint": "{\"protocolVersion\":2,\"extensionId\":\"abcdefghijklmnopabcdefghijklmnop\",\"actionId\":\"00000000-0000-4000-8000-0000000003eb\",\"sessionId\":\"00000000-0000-4000-8000-000000000003\",\"problemSnapshotId\":\"00000000-0000-4000-8000-00000000000d\",\"expectedRevision\":2,\"type\":\"pause\"}",
+        "result": {
+          "ok": true,
+          "kind": "committed",
+          "actionId": "00000000-0000-4000-8000-0000000003eb",
+          "session": {
+            "id": "00000000-0000-4000-8000-000000000003",
+            "problemSnapshotId": "00000000-0000-4000-8000-00000000000d",
+            "problemKey": "manual",
+            "status": "paused",
+            "revision": 3,
+            "draft": "# 原创练习\nseen = set()",
+            "createdAt": 1700000001039,
+            "updatedAt": 1700000001064
+          }
+        }
+      },
+      {
+        "id": "00000000-0000-4000-8000-0000000003ec",
+        "fingerprint": "{\"protocolVersion\":2,\"extensionId\":\"abcdefghijklmnopabcdefghijklmnop\",\"actionId\":\"00000000-0000-4000-8000-0000000003ec\",\"sessionId\":\"00000000-0000-4000-8000-000000000003\",\"problemSnapshotId\":\"00000000-0000-4000-8000-00000000000d\",\"expectedRevision\":3,\"type\":\"resume\"}",
+        "result": {
+          "ok": true,
+          "kind": "committed",
+          "actionId": "00000000-0000-4000-8000-0000000003ec",
+          "session": {
+            "id": "00000000-0000-4000-8000-000000000003",
+            "problemSnapshotId": "00000000-0000-4000-8000-00000000000d",
+            "problemKey": "manual",
+            "status": "active",
+            "revision": 4,
+            "draft": "# 原创练习\nseen = set()",
+            "createdAt": 1700000001039,
+            "updatedAt": 1700000001072
+          }
+        }
+      },
+      {
+        "id": "00000000-0000-4000-8000-0000000003ed",
+        "fingerprint": "{\"protocolVersion\":2,\"extensionId\":\"abcdefghijklmnopabcdefghijklmnop\",\"actionId\":\"00000000-0000-4000-8000-0000000003ed\",\"type\":\"startManual\",\"sessionId\":\"00000000-0000-4000-8000-000000000004\",\"problemSnapshotId\":\"00000000-0000-4000-8000-00000000000e\",\"title\":\"无链接原创练习\",\"url\":null}",
+        "result": {
+          "ok": true,
+          "kind": "committed",
+          "actionId": "00000000-0000-4000-8000-0000000003ed",
+          "session": {
+            "id": "00000000-0000-4000-8000-000000000004",
+            "problemSnapshotId": "00000000-0000-4000-8000-00000000000e",
+            "problemKey": "manual",
+            "status": "active",
+            "revision": 0,
+            "draft": "",
+            "createdAt": 1700000001080,
+            "updatedAt": 1700000001080
+          }
+        }
+      },
+      {
+        "id": "00000000-0000-4000-8000-0000000003ee",
+        "fingerprint": "{\"protocolVersion\":2,\"extensionId\":\"abcdefghijklmnopabcdefghijklmnop\",\"actionId\":\"00000000-0000-4000-8000-0000000003ee\",\"type\":\"start\",\"sessionId\":\"00000000-0000-4000-8000-000000000005\",\"problemSnapshotId\":\"00000000-0000-4000-8000-00000000000f\",\"problemKey\":\"pair\"}",
+        "result": {
+          "ok": true,
+          "kind": "committed",
+          "actionId": "00000000-0000-4000-8000-0000000003ee",
+          "session": {
+            "id": "00000000-0000-4000-8000-000000000005",
+            "problemSnapshotId": "00000000-0000-4000-8000-00000000000f",
+            "problemKey": "pair",
+            "status": "active",
+            "revision": 0,
+            "draft": "",
+            "createdAt": 1700000001089,
+            "updatedAt": 1700000001089
+          }
+        }
+      },
+      {
+        "id": "00000000-0000-4000-8000-0000000003ef",
+        "fingerprint": "{\"protocolVersion\":2,\"extensionId\":\"abcdefghijklmnopabcdefghijklmnop\",\"actionId\":\"00000000-0000-4000-8000-0000000003ef\",\"sessionId\":\"00000000-0000-4000-8000-000000000001\",\"problemSnapshotId\":\"00000000-0000-4000-8000-00000000000b\",\"expectedRevision\":5,\"type\":\"saveDraft\",\"text\":\"# 旧会话用新协议继续保存\"}",
+        "result": {
+          "ok": true,
+          "kind": "committed",
+          "actionId": "00000000-0000-4000-8000-0000000003ef",
+          "session": {
+            "id": "00000000-0000-4000-8000-000000000001",
+            "problemSnapshotId": "00000000-0000-4000-8000-00000000000b",
+            "problemKey": "unique",
+            "status": "active",
+            "revision": 6,
+            "draft": "# 旧会话用新协议继续保存",
+            "createdAt": 1700000000005,
+            "updatedAt": 1700000001098
+          }
+        }
+      }
+    ]
+  }
+}

@@ -7,7 +7,7 @@ const backupId = '00000000-0000-4000-8000-000000000001';
 const otherId = '00000000-0000-4000-8000-000000000002';
 const digest = 'a'.repeat(64);
 const otherDigest = 'b'.repeat(64);
-const backup: Backup = { format: 'algorhythm-backup', formatVersion: 1, scope: 'prototype-storage-v1',
+const backup: Backup = { format: 'algorhythm-backup', formatVersion: 2, scope: 'practice-records-v2',
   backupId, exportedAt: 1, source: { appVersion: '0.1.0', extensionId },
   data: { problems: [], sessions: [], events: [], actions: [] } };
 const receipt: BackupImportReceipt = { backupId, digest, sourceExtensionId: extensionId, exportedAt: 1, importedAt: 2,
@@ -27,15 +27,16 @@ describe('备份客户端边界', () => {
     });
     expect(await client.exportBackup()).toEqual(backup);
     expect(commands).toHaveLength(1);
-    expect(commands[0]).toMatchObject({ type: 'backup.export', protocolVersion: 1, extensionId });
+    expect(commands[0]).toMatchObject({ type: 'backup.export', protocolVersion: 2, extensionId });
   });
 
-  it('导入返回身份匹配的成功回执', async () => {
+  it('v2在线命令仍可导入v1文件并返回身份匹配的成功回执', async () => {
     const commands: BackupCommand[] = [];
+    const legacyBackup: Backup = { ...backup, formatVersion: 1, scope: 'prototype-storage-v1', data: { problems: [], sessions: [], events: [], actions: [] } };
     const client = createBackupClient(extensionId, async (command) => { commands.push(command); return imported(command); });
-    expect(await client.importBackup(backup, digest)).toEqual(receipt);
+    expect(await client.importBackup(legacyBackup, digest)).toEqual(receipt);
     expect(commands).toHaveLength(1);
-    expect(commands[0]).toMatchObject({ type: 'backup.import', backup, expectedDigest: digest });
+    expect(commands[0]).toMatchObject({ type: 'backup.import', protocolVersion: 2, backup: legacyBackup, expectedDigest: digest });
   });
 
   it.each(['BACKUP_CONFLICT', 'STORAGE_FULL', 'FORBIDDEN'])('已分类后台错误%s直接失败，不查询或重发', async (code) => {

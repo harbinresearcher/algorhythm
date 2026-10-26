@@ -6,7 +6,9 @@ import { backupCommandSchema, backupImportReceiptSchema, backupResponseSchema, M
 import fixtureJson from './fixtures/backup-v1.json';
 import { createBackupFixture, FIXTURE_TIME, SOURCE_EXTENSION_ID, TARGET_EXTENSION_ID, fixtureId } from './helpers/backup-fixture';
 
-const fixture = fixtureJson as Backup;
+type LegacyBackup = Extract<Backup, { formatVersion: 1 }>;
+const logger = console;
+const fixture = fixtureJson as LegacyBackup;
 const fresh = () => structuredClone(fixture);
 const stores: Store[] = [];
 const makeStore = (extensionId = SOURCE_EXTENSION_ID) => {
@@ -16,7 +18,7 @@ const rejects = (input: unknown, code = 'BACKUP_INVALID') => {
   expect(() => validateBackup(input)).toThrow(BackupError);
   expect(() => validateBackup(input)).toThrow(expect.objectContaining({ code }));
 };
-const changeCommand = (b: Backup, index: number, fields: Record<string, unknown>) => {
+const changeCommand = (b: LegacyBackup, index: number, fields: Record<string, unknown>) => {
   const command = JSON.parse(b.data.actions[index].fingerprint);
   b.data.actions[index].fingerprint = JSON.stringify({ ...command, ...fields });
 };
@@ -33,13 +35,39 @@ afterEach(async () => {
  * 操作：1) 分别断言拒绝类别。2) 验证空备份和合法时钟回拨。
  */
 describe('BK-01/04 文件与事实链纯校验', () => {
-  it('fixture 保留真实 UUID、指纹、active/paused、多尝试和未尝试草稿', async () => {
-    // 1.1 用真实学习命令重建预期 fixture，不调用备份核心制造预期结果。
-    let time = FIXTURE_TIME; vi.spyOn(Date, 'now').mockImplementation(() => time++);
-    expect(await createBackupFixture(makeStore())).toEqual(fixture);
+  it('冻结 v1 fixture 保留真实 UUID、指纹、active/paused、多尝试和未尝试草稿', () => {
+    // 1.1 独立验证历史文件，不用在线 v2 命令重建或改写旧指纹。
     expect(validateBackup(fresh())).toEqual(fixture);
+    expect(fixture).toMatchObject({ formatVersion: 1, scope: 'prototype-storage-v1' });
+    expect(fixture.data.sessions.map((row) => row.id)).toEqual([fixtureId(1), fixtureId(2)]);
+    expect(fixture.data.sessions.map((row) => row.status)).toEqual(['active', 'paused']);
+    expect(fixture.data.actions.every((row) => JSON.parse(row.fingerprint).protocolVersion === 1)).toBe(true);
     expect(fixture.data.events.filter((row) => row.kind === 'attempt')).toHaveLength(3);
     expect(fixture.data.sessions[0].draft).toContain('还没有记录为尝试');
+  });
+  it('真实 Store helper 生成在线 v2 动作和 v2 文件', async () => {
+    /*
+     * ========================================================================
+     * 步骤1：区分在线生成与冻结历史样本
+     * ========================================================================
+     * 数据源：真实 Store 的 v2 命令与固定 v1 fixture。
+     * 操作：1) 验证新文件版本与完整事实链。2) 分别核对新旧动作的协议版本。
+     */
+    logger.info('开始核对在线与历史备份版本');
+    try {
+      // 1.1 固定后台时钟，独立校验在线命令生成的四表事实。
+      let time = FIXTURE_TIME; vi.spyOn(Date, 'now').mockImplementation(() => time++);
+      const current = await createBackupFixture(makeStore());
+      expect(current).toMatchObject({ formatVersion: 2, scope: 'practice-records-v2' });
+      expect(validateBackup(current)).toEqual(current);
+      expect(current.data.problems).toEqual(fixture.data.problems);
+      expect(current.data.sessions.map(({ id, status, revision, draft }) => ({ id, status, revision, draft }))).toEqual(fixture.data.sessions.map(({ id, status, revision, draft }) => ({ id, status, revision, draft })));
+      expect(current.data.events).toHaveLength(13);
+      expect(current.data.actions).toHaveLength(13);
+      // 1.2 在线动作使用 v2，历史动作的协议版本仍是 v1。
+      expect(current.data.actions.every((row) => JSON.parse(row.fingerprint).protocolVersion === 2)).toBe(true);
+      expect(fixture.data.actions.every((row) => JSON.parse(row.fingerprint).protocolVersion === 1)).toBe(true);
+    } finally { logger.info('核对在线与历史备份版本结束'); }
   });
   it('允许空备份', () => {
     const b = fresh(); b.data = { problems: [], sessions: [], events: [], actions: [] };
@@ -55,9 +83,9 @@ describe('BK-01/04 文件与事实链纯校验', () => {
     expect(() => parseBackup(` ${boundary}`)).toThrow(expect.objectContaining({ code: 'BACKUP_TOO_LARGE' }));
   });
   it.each(['format', 'formatVersion', 'scope'] as const)('未知 %s 单独归类', (field) => {
-    rejects({ ...fresh(), [field]: field === 'formatVersion' ? 2 : 'foreign' }, 'BACKUP_UNSUPPORTED_VERSION');
+    rejects({ ...fresh(), [field]: field === 'formatVersion' ? 3 : 'foreign' }, 'BACKUP_UNSUPPORTED_VERSION');
   });
-  const invalid: [string, (b: Backup) => void][] = [
+  const invalid: [string, (b: LegacyBackup) => void][] = [
     ['顶层未知字段', (b) => Object.assign(b, { apiKey: 'CONFIG_SENTINEL' })],
     ['source 未知字段', (b) => Object.assign(b.source, { config: 'CONFIG_SENTINEL' })],
     ['data 未知表', (b) => Object.assign(b.data, { backupImports: [] })],
@@ -204,7 +232,7 @@ describe('BK-04/08 规范 JSON 摘要', () => {
  * 操作：1) 不让学习命令混入管理 API。2) 拒绝不完整或夹带字段的成功回执。
  */
 describe('BK-04/11 共享备份消息 schema', () => {
-  const envelope = { protocolVersion: 1, extensionId: SOURCE_EXTENSION_ID, actionId: fixtureId(901) };
+  const envelope = { protocolVersion: 2, extensionId: SOURCE_EXTENSION_ID, actionId: fixtureId(901) };
   it('三个管理消息通过，未知字段及学习动作不通过', () => {
     expect(backupCommandSchema.safeParse({ ...envelope, type: 'backup.export' }).success).toBe(true);
     expect(backupCommandSchema.safeParse({ ...envelope, type: 'backup.import', backup: fresh(), expectedDigest: 'a'.repeat(64) }).success).toBe(true);
@@ -244,16 +272,16 @@ describe('BK-01/02/03/05/06/07/08 备份核心事务', () => {
     problems: await store.db.problems.toArray(), sessions: await store.db.sessions.toArray(), events: await store.db.events.toArray(),
     actions: await store.db.actions.toArray(), receipts: await store.db.backupImports.toArray(),
   });
-  const restore = async (store = makeStore(TARGET_EXTENSION_ID), backup = fresh()) => {
+  const restore = async (store = makeStore(TARGET_EXTENSION_ID), backup: Backup = fresh()) => {
     const digest = await digestBackup(backup);
     const receipt = await importBackup(store, backup, digest, TARGET_EXTENSION_ID);
     return { store, backup, digest, receipt };
   };
   const saveCurrent = (session: Backup['data']['sessions'][number], extensionId = TARGET_EXTENSION_ID, text = '恢复后继续保存') => ({
-    protocolVersion: 1, extensionId, actionId: crypto.randomUUID(), type: 'saveDraft', sessionId: session.id,
+    protocolVersion: 2, extensionId, actionId: crypto.randomUUID(), type: 'saveDraft', sessionId: session.id,
     problemSnapshotId: session.problemSnapshotId, expectedRevision: session.revision, text,
   });
-  const addIndependentSession = (backup: Backup) => {
+  const addIndependentSession = (backup: LegacyBackup) => {
     // 4.4 混入完全独立且合法的缺失会话，证明冲突拒绝覆盖整份文件。
     const session = { ...fixture.data.actions[0].result.session, id: fixtureId(70_001), problemSnapshotId: fixtureId(70_002) };
     const id = fixtureId(70_003);
@@ -276,7 +304,7 @@ describe('BK-01/02/03/05/06/07/08 备份核心事务', () => {
     for (const action of expected.actions) action.fingerprint = JSON.stringify({ ...JSON.parse(action.fingerprint), extensionId: TARGET_EXTENSION_ID });
     expect(again.data).toEqual(expected);
     for (const action of backup.data.actions) {
-      expect(await store.handle({ protocolVersion: 1, extensionId: TARGET_EXTENSION_ID, actionId: crypto.randomUUID(), type: 'queryAction', targetActionId: action.id }, sender())).toMatchObject({ ok: true, result: action.result });
+      expect(await store.handle({ protocolVersion: 2, extensionId: TARGET_EXTENSION_ID, actionId: crypto.randomUUID(), type: 'queryAction', targetActionId: action.id }, sender())).toMatchObject({ ok: true, result: action.result });
       const command = { ...JSON.parse(action.fingerprint), extensionId: TARGET_EXTENSION_ID };
       expect(await store.handle(command, sender())).toEqual(action.result);
     }
@@ -284,6 +312,27 @@ describe('BK-01/02/03/05/06/07/08 备份核心事务', () => {
     expect(await store.handle(command, sender())).toMatchObject({ ok: false, code: 'ACTION_COLLISION' });
     expect(await store.handle(JSON.parse(backup.data.actions[0].fingerprint), sender())).toMatchObject({ ok: false, code: 'INSTANCE_MISMATCH' });
     expect(await store.handle(saveCurrent(again.data.sessions[0]), sender())).toMatchObject({ ok: true, session: { revision: 6, draft: '恢复后继续保存' } });
+  });
+  it('旧 v1 恢复后可用 v2 查询原回执，原 v1 指纹在线重发仍拒绝', async () => {
+    /*
+     * ========================================================================
+     * 步骤4：保留历史查询与在线版本的边界
+     * ========================================================================
+     * 数据源：冻结 v1 文件在另一扩展实例中的导入记录。
+     * 操作：1) v2 查询原动作结果。2) 拒绝重发 v1，不重写持久指纹。
+     */
+    logger.info('开始核对历史动作查询与重发');
+    try {
+      // 4.1 跨扩展只规范化路由 ID，历史动作仍携带 v1。
+      const { store, backup } = await restore();
+      for (const action of backup.data.actions) {
+        const command = { ...JSON.parse(action.fingerprint), extensionId: TARGET_EXTENSION_ID };
+        expect(await store.handle({ protocolVersion: 2, extensionId: TARGET_EXTENSION_ID, actionId: crypto.randomUUID(), type: 'queryAction', targetActionId: action.id }, sender())).toMatchObject({ ok: true, result: action.result });
+        // 4.2 版本检查先于动作幂等，不能把旧在线消息当作成功重试。
+        expect(await store.handle(command, sender())).toMatchObject({ ok: false, code: 'PROTOCOL_MISMATCH' });
+        expect(JSON.parse((await store.db.actions.get(action.id))!.fingerprint)).toEqual(command);
+      }
+    } finally { logger.info('核对历史动作查询与重发结束'); }
   });
   it('空库导出和空备份恢复都成立，每次导出生成新的 envelope', async () => {
     const store = makeStore(); const first = await exportBackup(store, source); const second = await exportBackup(store, source);
@@ -312,7 +361,7 @@ describe('BK-01/02/03/05/06/07/08 备份核心事务', () => {
   });
   it('已有相同行跳过，只添加缺失行，目标独立会话完整保留', async () => {
     const store = makeStore(TARGET_EXTENSION_ID);
-    const command = { protocolVersion: 1, extensionId: TARGET_EXTENSION_ID, actionId: fixtureId(5_000), type: 'start', sessionId: fixtureId(5_001), problemSnapshotId: fixtureId(5_002), problemKey: 'pair' };
+    const command = { protocolVersion: 2, extensionId: TARGET_EXTENSION_ID, actionId: fixtureId(5_000), type: 'start', sessionId: fixtureId(5_001), problemSnapshotId: fixtureId(5_002), problemKey: 'pair' };
     expect(await store.handle(command, sender())).toMatchObject({ ok: true });
     await store.db.problems.add(fixture.data.problems[0]);
     const { receipt } = await restore(store);
@@ -431,7 +480,7 @@ describe('BK-01/02/03/05/06/07/08 备份核心事务', () => {
   });
   it('导出遇损坏数据或未知指纹版本时失败，不修复源行', async () => {
     const store = makeStore(); await seed(store); const action = structuredClone(fixture.data.actions[0]);
-    action.fingerprint = JSON.stringify({ ...JSON.parse(action.fingerprint), protocolVersion: 2 }); await store.db.actions.put(action);
+    action.fingerprint = JSON.stringify({ ...JSON.parse(action.fingerprint), protocolVersion: 3 }); await store.db.actions.put(action);
     const before = await snapshot(store);
     await expect(exportBackup(store, source)).rejects.toMatchObject({ code: 'BACKUP_INVALID' });
     expect(await snapshot(store)).toEqual(before);

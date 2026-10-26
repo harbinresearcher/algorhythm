@@ -1,10 +1,12 @@
 # AlgoRhythm 会话续接入口
 
-更新：2026-10-25。先读本页，需要细节时再打开对应规格；不用重新阅读全部聊天。
+更新：2026-10-26。先读本页，需要细节时再打开对应规格；不用重新阅读全部聊天。
 
 ## 当前任务
 
-编码入口更新为[程序员任务 04](superpowers/plans/2026-10-25-programmer-04-manual-practice.md)，先读 [RFC-03](superpowers/specs/2026-10-25-manual-practice-design.md)。实现用户手动建题与两端续练，完整兼容备份后才开放 UI。无需真实站点或模型访问；所有手动内容保留用户来源，不升级为平台事实。任务尚未实现。
+当前交回[程序员任务 04](superpowers/plans/2026-10-25-programmer-04-manual-practice.md)，规格为 [RFC-03](superpowers/specs/2026-10-25-manual-practice-design.md)。用户手动建题、两端续练和备份 v1/v2 兼容已完成任务范围验证，等待总架构审查。[PR #25](https://github.com/harbinresearcher/algorhythm/pull/25) OPEN、未合并，首个实现提交 `40fe26d`。分支 `codex/task-04-manual-practice` 基于 `31e2508`，定义 #24 未合并时以 `codex/task-04-definition` 为 PR base。最新提交与检查见 STATUS 及 PR；不在脏主目录集成。
+
+先读[任务 04 验收](verification/2026-10-25-manual-practice.md)及[结果摘要](verification/2026-10-25-manual-practice-results.json)：本轮 367 项、构建、新旧 Chromium 及 Chrome 稳定版文件闭环已分层记录，受控故障不作真实故障。手动内容始终保留用户来源，不升级为平台事实；真实采集和模型未接入。
 
 任务 03 已获[总架构范围验收](verification/2026-10-25-task03-architect-review.md)。#21 → #22 → #23 的[集成准备](superpowers/plans/2026-10-25-repository-integration-02.md)独立保存，尚未合并；不在脏主目录操作集成。任务 04 从包含其定义的分支隔离开发，不回退到旧 main。
 
@@ -39,7 +41,7 @@
 
 ## 下一步从这里继续
 
-交回任务 03 的实现、来源核查与分层证据，等待总架构审查及下一张任务单，不自动启动采集、接入 UI 或手动输入路线。任务 03 只新增未被生产入口导入的纯模块；既有备份文件 v1、数据库 v2 与学习协议 v1 保持。实际提交、PR、检查与未测项见 STATUS。
+交回任务 04 的实现、完整备份及分层证据，等待总架构审查与下一张任务单；不合并 PR，不启动任务 05、采集、模型或 FSRS。当前在线协议 v2、默认备份 v2（继续导入冻结 v1）、数据库布局 v2。旧 action 的 v1 指纹与回执原样保留，旧包不能当作回退方案。任务 03 仍是未被生产入口导入的纯模块；实际提交、PR、检查与未测项见 STATUS。
 
 备份只允许工作台发起，侧栏仍走原学习命令。先等当前草稿确认，再下载或确认导入；其他页面未确认输入不在文件中。选择文件只作本地预览，不写库。相同记录跳过，同 ID 不同内容整份拒绝，不提供强制覆盖或清空库。
 

@@ -1,5 +1,6 @@
 import { z } from 'zod';
-import { actionRecordSchema, envelope, errorCodeSchema, eventSchema, problemSchema, sessionSchema } from './protocol';
+import { actionRecordSchema, envelope, errorCodeSchema, eventSchema, manualProblemSnapshotSchema, sessionSchema, syntheticProblemSchema } from './protocol';
+import { actionRecordSchema as legacyActionRecordSchema, eventSchema as legacyEventSchema, problemSchema as legacyProblemSchema, sessionSchema as legacySessionSchema } from './legacy-protocol';
 
 export const MAX_BACKUP_BYTES = 10 * 1024 * 1024;
 export const MAX_BACKUP_RECORDS = { problems: 1_000, sessions: 1_000, events: 10_000, actions: 10_000 } as const;
@@ -7,17 +8,35 @@ const safeInteger = z.number().int().nonnegative().max(Number.MAX_SAFE_INTEGER);
 const extensionId = z.string().regex(/^[a-p]{32}$/);
 const digest = z.string().regex(/^[0-9a-f]{64}$/);
 const id = z.uuid();
-export const backupProblemSchema = problemSchema.extend({ title: z.string().max(200), statement: z.string().max(32_000) });
+const backupSyntheticProblemSchema = syntheticProblemSchema.extend({ title: z.string().max(200), statement: z.string().max(32_000) });
+export const backupProblemSchema = z.discriminatedUnion('source', [backupSyntheticProblemSchema, manualProblemSnapshotSchema]);
 export const backupSessionSchema = sessionSchema.extend({ revision: safeInteger, createdAt: safeInteger, updatedAt: safeInteger });
 export const backupEventSchema = eventSchema.extend({ revision: safeInteger, at: safeInteger, text: z.string().max(32_000).optional() });
 export const backupActionSchema = actionRecordSchema.extend({
   fingerprint: z.string().max(256_000),
   result: actionRecordSchema.shape.result.extend({ session: backupSessionSchema }),
 });
-export const backupSchema = z.strictObject({
+export const backupSourceSchema = z.strictObject({ appVersion: z.string().min(1).max(64), extensionId });
+const legacyBackupSessionSchema = legacySessionSchema.extend({ revision: safeInteger, createdAt: safeInteger, updatedAt: safeInteger });
+const legacyBackupActionSchema = legacyActionRecordSchema.extend({
+  fingerprint: z.string().max(256_000),
+  result: legacyActionRecordSchema.shape.result.extend({ session: legacyBackupSessionSchema }),
+});
+const backupV1Schema = z.strictObject({
   format: z.literal('algorhythm-backup'), formatVersion: z.literal(1), scope: z.literal('prototype-storage-v1'),
   backupId: id, exportedAt: safeInteger,
-  source: z.strictObject({ appVersion: z.string().min(1).max(64), extensionId }),
+  source: backupSourceSchema,
+  data: z.strictObject({
+    problems: z.array(legacyProblemSchema.extend({ title: z.string().max(200), statement: z.string().max(32_000) })).max(MAX_BACKUP_RECORDS.problems),
+    sessions: z.array(legacyBackupSessionSchema).max(MAX_BACKUP_RECORDS.sessions),
+    events: z.array(legacyEventSchema.extend({ revision: safeInteger, at: safeInteger, text: z.string().max(32_000).optional() })).max(MAX_BACKUP_RECORDS.events),
+    actions: z.array(legacyBackupActionSchema).max(MAX_BACKUP_RECORDS.actions),
+  }),
+});
+const backupV2Schema = z.strictObject({
+  format: z.literal('algorhythm-backup'), formatVersion: z.literal(2), scope: z.literal('practice-records-v2'),
+  backupId: id, exportedAt: safeInteger,
+  source: backupSourceSchema,
   data: z.strictObject({
     problems: z.array(backupProblemSchema).max(MAX_BACKUP_RECORDS.problems),
     sessions: z.array(backupSessionSchema).max(MAX_BACKUP_RECORDS.sessions),
@@ -25,6 +44,7 @@ export const backupSchema = z.strictObject({
     actions: z.array(backupActionSchema).max(MAX_BACKUP_RECORDS.actions),
   }),
 });
+export const backupSchema = z.discriminatedUnion('formatVersion', [backupV1Schema, backupV2Schema]);
 export type Backup = z.infer<typeof backupSchema>;
 const counts = z.strictObject({ problems: safeInteger, sessions: safeInteger, events: safeInteger, actions: safeInteger });
 export const backupImportReceiptSchema = z.strictObject({

@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "AlgoRhythm · 存储原型",
-  "version": "0.1.0",
-  "description": "合成题目的练习记录原型。工作台与侧栏共用本地数据，不采集网站或调用模型。",
+  "version": "0.2.0",
+  "description": "手动记录题目与练习思路。工作台与侧栏共用本地数据，未接入自动采集、AI 或判题。",
   "minimum_chrome_version": "116",
   "permissions": ["sidePanel"],
   "background": { "service_worker": "background.js", "type": "module" },
