@@ -10,7 +10,8 @@
     "test": "vitest run",
     "build": "npm run typecheck && vite build",
     "check:browser": "node scripts/browser-check.mjs",
-    "check:backup-browser": "node scripts/backup-browser-check.mjs"
+    "check:backup-browser": "node scripts/backup-browser-check.mjs",
+    "check:manual-browser": "node scripts/manual-browser-check.mjs"
   },
   "dependencies": {
     "dexie": "4.4.6",

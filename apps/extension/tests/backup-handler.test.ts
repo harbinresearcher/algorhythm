@@ -11,7 +11,7 @@ const fixture = validateBackup(rawFixture);
 const sender: Sender = { id: extensionId, url: `chrome-extension://${extensionId}/workspace.html`, frameId: 0 };
 const stores: Store[] = [];
 const makeStore = () => { const store = new Store(`handler-${crypto.randomUUID()}`, extensionId); stores.push(store); return store; };
-const envelope = () => ({ protocolVersion: 1, extensionId, actionId: crypto.randomUUID() });
+const envelope = () => ({ protocolVersion: 2, extensionId, actionId: crypto.randomUUID() });
 const invoke = (store: Store, input: unknown, source = sender) => handleBackup(store, input, source, extensionId, '0.1.0');
 afterEach(async () => { vi.restoreAllMocks(); await Promise.all(stores.splice(0).map(store => store.db.delete())); });
 
@@ -34,7 +34,7 @@ describe('BK-06/11: 独立备份消息入口', () => {
 
   it('版本、实例、未知字段和伪造角色分别拒绝', async () => {
     const store = makeStore(); const base = { ...envelope(), type: 'backup.export' };
-    expect(await invoke(store, { ...base, protocolVersion: 2 })).toMatchObject({ code: 'PROTOCOL_MISMATCH' });
+    expect(await invoke(store, { ...base, protocolVersion: 1 })).toMatchObject({ code: 'PROTOCOL_MISMATCH' });
     expect(await invoke(store, { ...base, extensionId: 'other' })).toMatchObject({ code: 'INSTANCE_MISMATCH' });
     expect(await invoke(store, { ...base, role: 'workspace' })).toMatchObject({ code: 'INVALID_COMMAND' });
     expect(await invoke(store, { ...base, type: 'backup.unknown' })).toMatchObject({ code: 'INVALID_COMMAND' });
@@ -46,7 +46,7 @@ describe('BK-06/11: 独立备份消息入口', () => {
     const exported = await invoke(store, exportCommand);
     expect(backupResponseSchema.safeParse(exported).success).toBe(true);
     expect(exported).toMatchObject({ ok: true, kind: 'backup.exported', actionId: exportCommand.actionId,
-      backup: { source: { extensionId, appVersion: '0.1.0' }, data: { sessions: [] } } });
+      backup: { formatVersion: 2, scope: 'practice-records-v2', source: { extensionId, appVersion: '0.1.0' }, data: { sessions: [] } } });
     const digest = await digestBackup(fixture); const command = { ...envelope(), type: 'backup.import', backup: fixture, expectedDigest: digest };
     const imported = await invoke(store, command);
     expect(backupResponseSchema.safeParse(imported).success).toBe(true);
@@ -63,7 +63,7 @@ describe('BK-06/11: 独立备份消息入口', () => {
 
   it.each([
     ['format', 'other', 'BACKUP_UNSUPPORTED_VERSION'],
-    ['formatVersion', 2, 'BACKUP_UNSUPPORTED_VERSION'],
+    ['formatVersion', 3, 'BACKUP_UNSUPPORTED_VERSION'],
     ['scope', 'future', 'BACKUP_UNSUPPORTED_VERSION'],
     ['unknown', 'value', 'BACKUP_INVALID'],
   ])('损坏backup返回备份类别而非信封错误 %s', async (field, value, code) => {

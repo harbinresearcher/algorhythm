@@ -36,7 +36,7 @@ function comparableData(data, extensionId) {
   return copy;
 }
 async function send(page, fields) {
-  return page.evaluate((input) => chrome.runtime.sendMessage({ protocolVersion: 1, extensionId: chrome.runtime.id, actionId: crypto.randomUUID(), ...input }), fields);
+  return page.evaluate((input) => chrome.runtime.sendMessage({ protocolVersion: 2, extensionId: chrome.runtime.id, actionId: crypto.randomUUID(), ...input }), fields);
 }
 async function waitSaved(page) { await page.locator('.save-status').filter({ hasText: /^已保存$/ }).waitFor(); }
 async function closeContext(context) { if (context) { await context.close(); contexts.delete(context); } }
@@ -204,13 +204,13 @@ async function verifySources(installation, page, backup) {
     // 4.1 原生宿主不冒充普通标签页；三个管理消息全部受限。
     const evaluate = await attachNativePanel(installation.context, page);
     for (const fields of [{ type: 'backup.export' }, { type: 'backup.import', backup, expectedDigest: digestBackup(backup) }, { type: 'backup.query', backupId: backup.backupId, expectedDigest: digestBackup(backup) }]) {
-      const result = await evaluate(`chrome.runtime.sendMessage({ protocolVersion: 1, extensionId: chrome.runtime.id, actionId: crypto.randomUUID(), ...${JSON.stringify(fields)} })`);
+      const result = await evaluate(`chrome.runtime.sendMessage({ protocolVersion: 2, extensionId: chrome.runtime.id, actionId: crypto.randomUUID(), ...${JSON.stringify(fields)} })`);
       assert.equal(result.code, 'FORBIDDEN');
     }
     assert.equal(await evaluate('document.querySelector("input[type=file]") === null'), true);
-    const current = await evaluate('chrome.runtime.sendMessage({ protocolVersion: 1, extensionId: chrome.runtime.id, actionId: crypto.randomUUID(), type: "read" })');
+    const current = await evaluate('chrome.runtime.sendMessage({ protocolVersion: 2, extensionId: chrome.runtime.id, actionId: crypto.randomUUID(), type: "read" })');
     const active = current.sessions.find((session) => session.status === 'active'); assert.ok(active);
-    const saved = await evaluate(`chrome.runtime.sendMessage({ protocolVersion: 1, extensionId: chrome.runtime.id, actionId: crypto.randomUUID(), type: 'saveDraft', sessionId: '${active.id}', problemSnapshotId: '${active.problemSnapshotId}', expectedRevision: ${active.revision}, text: '原生侧栏隔离后仍可保存' })`);
+    const saved = await evaluate(`chrome.runtime.sendMessage({ protocolVersion: 2, extensionId: chrome.runtime.id, actionId: crypto.randomUUID(), type: 'saveDraft', sessionId: '${active.id}', problemSnapshotId: '${active.problemSnapshotId}', expectedRevision: ${active.revision}, text: '原生侧栏隔离后仍可保存' })`);
     assert.equal(saved.ok, true);
     record('BK-11', '原生 SIDE_PANEL 拒绝三个备份消息，学习保存仍可用');
     // 4.2 本机普通网页和生产 CSP 提供真实隔离证据，不增加产品权限。
@@ -375,7 +375,7 @@ try {
   await workspace.getByRole('button', { name: '取消', exact: true }).click();
   await chooseBackup(workspace, { ...structuredClone(original.backup), backupId: randomUUID(), data: independent });
   await workspace.getByRole('button', { name: '取消', exact: true }).click(); assert.deepEqual(await facts(workspace), beforeConflict);
-  for (const [name, text] of [['invalid.json', '{ invalid'], ['future.json', JSON.stringify({ ...original.backup, formatVersion: 2 })]]) {
+  for (const [name, text] of [['invalid.json', '{ invalid'], ['future.json', JSON.stringify({ ...original.backup, formatVersion: 3 })]]) {
     await workspace.getByLabel('选择备份文件', { exact: true }).setInputFiles({ name, mimeType: 'application/json', buffer: Buffer.from(text) });
     await region(workspace).getByRole('alert').waitFor(); assert.deepEqual(await facts(workspace), beforeConflict);
   }
@@ -390,7 +390,37 @@ try {
 
   /*
    * ========================================================================
-   * 步骤6：真实旧库升级与升级中断
+   * 步骤6：导入冻结旧文件并查询历史回执
+   * ========================================================================
+   * 数据源：未修改的 backup-v1.json、全新临时配置与真实后台。
+   * 操作：1) 原文件经 UI 导入。2) 在线 v2 查询旧回执，旧指纹保留 v1。
+   */
+  logger.info('开始冻结 v1 文件兼容验证');
+  const legacy = await openContext(await mkdtemp(join(tmpdir(), 'algorhythm-backup-legacy-')), extensionPath);
+  workspace = await openWorkspace(legacy);
+  // 6.1 保留原文件格式及摘要，不用在线版本替换旧动作协议。
+  const legacyPath = join(extensionRoot, 'tests/fixtures/backup-v1.json');
+  const legacyBackup = JSON.parse(await readFile(legacyPath, 'utf8'));
+  assert.equal(legacyBackup.formatVersion, 1); assert.equal(legacyBackup.scope, 'prototype-storage-v1');
+  assert.ok(legacyBackup.data.actions.every((row) => JSON.parse(row.fingerprint).protocolVersion === 1));
+  await chooseBackup(workspace, legacyPath); await confirmImport(workspace);
+  const legacyFacts = await facts(workspace);
+  assert.deepEqual(comparableData(Object.fromEntries(tables.map((table) => [table, legacyFacts[table]])), legacy.id), comparableData(legacyBackup.data, legacy.id));
+  // 6.2 历史写命令不能在线重发；用当前协议查询原动作与原备份回执。
+  for (const action of legacyBackup.data.actions) {
+    assert.deepEqual((await send(workspace, { type: 'queryAction', targetActionId: action.id })).result, action.result);
+    assert.equal(JSON.parse(legacyFacts.actions.find((row) => row.id === action.id).fingerprint).protocolVersion, 1);
+  }
+  assert.deepEqual((await send(workspace, { type: 'backup.query', backupId: legacyBackup.backupId, expectedDigest: digestBackup(legacyBackup) })).receipt, legacyFacts.backupImports[0]);
+  const legacyExport = await downloadBackup(workspace, 'legacy-v1-imported-v2-export');
+  assert.equal(legacyExport.backup.formatVersion, 2); assert.equal(legacyExport.backup.scope, 'practice-records-v2');
+  assert.deepEqual(comparableData(legacyExport.backup.data, legacy.id), comparableData(legacyBackup.data, legacy.id));
+  record('BK-01/08', '冻结 v1 文件真实导入，在线 v2 查询原回执，默认 v2 导出保留 v1 指纹');
+  await closeContext(legacy.context); logger.info('冻结 v1 文件兼容验证结束');
+
+  /*
+   * ========================================================================
+   * 步骤7：真实旧库升级与升级中断
    * ========================================================================
    * 数据源：第三个独立配置的旧版五表布局与固定合成 fixture。
    * 操作：1) 升级前同事务导出四表。2) 中断生产打开，重启后台完成升级并实际下载核对。
@@ -419,7 +449,7 @@ try {
   }, { dbName, data: fixture.data, extensionId: migration.id });
   const beforeUpgrade = await rawRead(migration.worker, tables); assert.equal(beforeUpgrade.nativeVersion, 10);
   await writeFile(join(artifactDir, 'migration-v1-tool-snapshot.json'), JSON.stringify(beforeUpgrade, null, 2));
-  // 6.1 故障只注入测试 worker 的原生升级请求，生产包没有故障开关。
+  // 7.1 故障只注入测试 worker 的原生升级请求，生产包没有故障开关。
   await migration.worker.evaluate((dbName) => {
     const open = indexedDB.open.bind(indexedDB);
     indexedDB.open = (name, version) => { const request = version === undefined ? open(name) : open(name, version);
@@ -431,7 +461,7 @@ try {
   const preserved = await rawRead(workspace, [...tables, 'diagnostics']);
   assert.equal(preserved.nativeVersion, 10); assert.equal(preserved.storeNames.includes('backupImports'), false);
   assert.deepEqual(Object.fromEntries(tables.map((table) => [table, preserved.data[table]])), beforeUpgrade.data); assert.equal(preserved.data.diagnostics.length, 1);
-  // 6.2 后台真实停启移除故障注入，由新 Store 正常升级后下载比对。
+  // 7.2 后台真实停启移除故障注入，由新 Store 正常升级后下载比对。
   await stopWorker(migration.context, workspace, migration.worker.url()); await workspace.reload();
   await workspace.getByRole('heading', { name: '备份与恢复', exact: true }).waitFor();
   const migrated = await downloadBackup(workspace, 'migration-v2-backup');
@@ -446,7 +476,7 @@ try {
   assert.deepEqual(evidence.errors, []); logger.info('真实 IndexedDB 迁移验证结束');
   await closeContext(migration.context);
   if (!stable) {
-    // 6.3 当前三个配置均已关闭，再串行运行页面范围内的 UI 故障验证。
+    // 7.3 当前配置均已关闭，再串行运行页面范围内的 UI 故障验证。
     const child = await promisify(execFile)(process.execPath, [join(extensionRoot, 'scripts/backup-ui-boundaries.mjs')], { cwd: extensionRoot, windowsHide: true, timeout: 120_000 });
     await writeFile(join(artifactDir, 'ui-boundaries.log'), child.stdout + child.stderr);
     const boundaries = JSON.parse(await readFile(join(extensionRoot, 'output/task02/ui-boundaries/results.json'), 'utf8'));

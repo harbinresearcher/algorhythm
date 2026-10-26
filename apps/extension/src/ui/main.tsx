@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { DraftController } from '../client/draft';
 import { ClientError, createClient } from '../client/transport';
 import { MAX_DRAFT_LENGTH, SYNTHETIC_PROBLEMS, type Session, type Snapshot, type WriteCommand } from '../shared/protocol';
+import ManualProblemForm, { type ManualProblemFields } from './ManualProblemForm';
 import { formatTime, timeDateTime } from './time';
 import './style.css';
 
@@ -68,6 +69,7 @@ function App() {
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
   const [pending, setPending] = useState<WriteCommand | null>(null);
+  const [manualOpen, setManualOpen] = useState(false);
   const [windowId, setWindowId] = useState<number>();
   const controller = useRef<DraftController | null>(null);
   const lock = useRef(false);
@@ -141,20 +143,63 @@ function App() {
   }, []);
 
   async function mutate(command: WriteCommand, recovering = false) {
+    /*
+     * ========================================================================
+     * 步骤1：确认原命令，再更新已保存记录
+     * ========================================================================
+     * 数据源：既有学习命令、持久化回执与后续读取结果。
+     * 操作：1) 未知结果保留原命令。2) 已确认建题立即关闭表单，读取失败不重新建题。
+     */
+    logger.info('开始确认学习动作');
     setPending(command);
     try {
+      // 1.1 回执确认后先清除待恢复动作，建题表单不依赖后续读取才能关闭。
       const result = await client.write(command, recovering);
       setPending(null);
-      // 1.2 回执属于此命令；写入期间禁用选择，随后从数据库重新读取。
+      if (command.type === 'startManual') setManualOpen(false);
       setActive(result.session); setEpoch((value) => value + 1);
-      await load(result.session.id);
       setNotice(command.type === 'recordAttempt' ? '这次尝试已记录。尚未判题，也没有判定掌握。' : '记录已保存。');
+      // 1.2 读取失败与写入失败分开，不能给已确认动作提供重建入口。
+      try { await load(result.session.id); }
+      catch { setError('记录已保存，但工作台记录更新失败。请点击“更新记录”。'); }
     } catch (failure) {
       if (failure instanceof ClientError && !['OUTCOME_UNKNOWN', 'STORAGE_FULL', 'STORAGE_FAILED', 'STORAGE_DENIED'].includes(failure.code)) setPending(null);
       throw failure;
-    }
+    } finally { logger.info('学习动作确认结束'); }
   }
-  function start(problemKey: Session['problemKey']) {
+  function changeManualForm(open: boolean) {
+    /*
+     * ========================================================================
+     * 步骤1：切换本地建题表单
+     * ========================================================================
+     * 数据源：工作台入口与当前互斥、待确认状态。
+     * 操作：1) 侧栏和待确认操作不开放新表单。2) 取消只移除表单，不写库或切题。
+     */
+    if (isPanel || lock.current || backupLock.current || pending !== null) return;
+    logger.info('开始切换建题表单');
+    try {
+      // 1.1 保留当前编辑器与选择；只有确认时才等待草稿保存。
+      setManualOpen(open);
+    } finally { logger.info('建题表单切换结束'); }
+  }
+  function startManual(problem: ManualProblemFields) {
+    void guarded(async () => {
+      /*
+       * ========================================================================
+       * 步骤1：确认当前草稿后提交手动建题
+       * ========================================================================
+       * 数据源：表单规范结果与当前草稿控制器。
+       * 操作：1) flush失败不创建新命令。2) 后续恢复复用首次生成的全部ID和内容。
+       */
+      logger.info('开始提交手动建题');
+      try {
+        // 1.1 当前草稿确认后，才生成一次新会话和动作。
+        await controller.current?.flush();
+        await mutate({ ...client.envelope(), type: 'startManual', sessionId: crypto.randomUUID(), problemSnapshotId: crypto.randomUUID(), ...problem });
+      } finally { logger.info('手动建题提交结束'); }
+    });
+  }
+  function start(problemKey: keyof typeof SYNTHETIC_PROBLEMS) {
     void guarded(async () => {
       await controller.current?.flush();
       await mutate({ ...client.envelope(), type: 'start', sessionId: crypto.randomUUID(), problemSnapshotId: crypto.randomUUID(), problemKey });
@@ -181,27 +226,36 @@ function App() {
         if (windowId !== undefined) void chrome.sidePanel.open({ windowId }).catch(() => setError('侧栏未能打开。可从浏览器侧栏菜单选择 AlgoRhythm。'));
       }}>打开练习侧栏</button>}
     </header>
-    <p className="prototype">存储验证原型 · 仅含两道合成练习，暂未接入力扣或 AI 教练。</p>
+    <p className="prototype">练习记录原型 · 未接入自动采集、AI 或判题</p>
     {error && <div className="error-box" role="alert"><p>{error}</p>{pending && <button disabled={busy} onClick={() => { void guarded(() => mutate(pending, true)); }}>恢复上次操作</button>}
       {!snapshot && <button disabled={busy} onClick={() => { void guarded(async () => { await load(); }); }}>重新连接</button>}</div>}
     <p className="notice" role="status">{notice}</p>
     <div className="workspace">
       <aside aria-label="练习导航"><details className="nav-disclosure" open={!isPanel || !active}><summary hidden={!isPanel}>练习与切换</summary><div className="section-heading"><h2>练习</h2><button className="quiet" disabled={disabled} onClick={() => { void guarded(async () => { await controller.current?.flush(); await load(active?.id); }); }}>更新记录</button></div>
-        {snapshot?.sessions.length ? <ul className="sessions">{snapshot.sessions.map((session) => <li key={session.id}><button disabled={disabled} aria-current={active?.id === session.id ? 'true' : undefined} onClick={() => select(session.id)}>
-          <span>{SYNTHETIC_PROBLEMS[session.problemKey].title}</span><small>{session.status === 'paused' ? '已暂停' : '练习中'} · {formatTime(session.createdAt)}</small>
-        </button></li>)}</ul> : <p className="muted">{snapshot ? '还没有练习记录。' : '正在读取本地记录…'}</p>}
-        <div className="new-session"><h3>开始合成练习</h3>{Object.values(SYNTHETIC_PROBLEMS).map((item) => <button disabled={disabled || !snapshot} key={item.key} onClick={() => start(item.key)}>{item.title}<span aria-hidden="true">＋</span></button>)}</div>
+        {!isPanel && <button className="manual-start" disabled={disabled || !snapshot || manualOpen} onClick={() => changeManualForm(true)}>记录自己的题目</button>}
+        {snapshot?.sessions.length ? <ul className="sessions">{snapshot.sessions.map((session) => {
+          const savedProblem = snapshot.problems.find((item) => item.id === session.problemSnapshotId);
+          return <li key={session.id}><button disabled={disabled} aria-current={active?.id === session.id ? 'true' : undefined} onClick={() => select(session.id)}>
+            <span>{savedProblem?.title ?? '数据错误：缺少题目快照'}</span><small>{savedProblem ? savedProblem.source === 'manual-user-v1' ? '手动记录' : '演示' : '数据错误'} · {session.status === 'paused' ? '已暂停' : '练习中'} · {formatTime(session.createdAt)}</small>
+          </button></li>;
+        })}</ul> : <p className="muted">{snapshot ? '还没有练习记录。' : '正在读取本地记录…'}</p>}
+        <div className="new-session"><h3>合成练习 · 演示</h3>{Object.values(SYNTHETIC_PROBLEMS).map((item) => <button disabled={disabled || !snapshot} key={item.key} onClick={() => start(item.key)}>{item.title}<span aria-hidden="true">＋</span></button>)}</div>
       </details></aside>
-      <main>{active && problem ? <>
-        <section className="problem"><h1>{problem.title}</h1><p className="statement">{problem.statement}</p><p className="muted hint">原创合成题 · Python · 无自动判题</p></section>
+      <main>{!isPanel && manualOpen && <ManualProblemForm disabled={disabled} onConfirm={startManual} onCancel={() => changeManualForm(false)} />}
+        {active && problem ? <>
+        <section className="problem"><h1>{problem.title}</h1>{problem.source === 'manual-user-v1' ? <>
+          <p className="muted hint">用户手动记录，未读取原题</p>
+          {problem.url && <p><a className="problem-link" href={problem.url} target="_blank" rel="noopener noreferrer">打开原题</a></p>}
+        </> : <><p className="statement">{problem.statement}</p><p className="muted hint">演示 · 原创合成题 · Python · 无自动判题</p></>}</section>
         <Editor key={`${active.id}:${epoch}`} session={active} busy={disabled} register={register} onAction={action}
           reload={() => { void guarded(async () => { await load(active.id); }); }} />
         <section className="history"><h2>这次练习留下的尝试</h2>{attempts.length ? <ol>{attempts.map((attempt) => <li key={attempt.id}><time dateTime={timeDateTime(attempt.at)}>{formatTime(attempt.at)}</time><pre>{attempt.text}</pre></li>)}</ol> : <p className="muted">草稿会自动保存。点击“记录这次尝试”，才会在这里留下当时的思路或代码。</p>}</section>
-      </> : <section className="empty"><h1>先留下你的思路。</h1><p>选择一道合成练习，写几行想法，再从侧栏接着写。</p><p className="muted">工作台关掉后，侧栏仍能保存。重新打开时，可以继续上次练习。</p></section>}</main>
+      </> : active ? <section className="error-box" role="alert"><h1>练习数据不完整</h1><p>缺少当前练习的题目快照。请点击“更新记录”重新读取。</p></section>
+        : <section className="empty"><h1>先留下你的思路。</h1><p>{isPanel ? '从工作台记录自己的题目，或选择一道合成演示练习，再接着写。' : '记录自己正在练习的题，或先选择一道合成演示练习。'}</p><p className="muted">工作台关掉后，侧栏仍能保存。重新打开时，可以继续上次练习。</p></section>}</main>
     </div>
     {!isPanel && <Suspense fallback={<p className="muted hint">正在载入备份工具…</p>}><BackupPanel busy={busy} blocked={pending !== null}
       run={runBackup} onPendingChange={changeBackupPending} onImported={async () => { await load(active?.id, true); }} /></Suspense>}
-    <footer><details><summary>本地数据说明</summary><p>记录仅属于当前浏览器配置与扩展 ID。更换 ID、浏览器配置或卸载扩展不会自动迁移。工作台可备份本合成原型四表的已保存数据；“导出草稿”只保存当前文本。</p><code>扩展 ID：{chrome.runtime.id}</code></details></footer>
+    <footer><details><summary>本地数据说明</summary><p>记录仅属于当前浏览器配置与扩展 ID。更换 ID、浏览器配置或卸载扩展不会自动迁移。工作台可备份本练习记录原型四表的已保存数据；“导出草稿”只保存当前文本。</p><code>扩展 ID：{chrome.runtime.id}</code></details></footer>
   </div>;
 }
 

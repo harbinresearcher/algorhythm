@@ -34,6 +34,16 @@ p { margin: 8px 0 16px; }
 .sessions button[aria-current="true"] { background: #213348; border-color: #5b7997; }
 .sessions span, .sessions small { display: block; }
 .sessions small { color: var(--muted); font-size: 12px; margin-top: 4px; }
+.sessions span, .sessions small, .problem h1 { overflow-wrap: anywhere; }
+.manual-start { width: 100%; margin-bottom: 12px; text-align: left; }
+.manual-problem-form { padding: 10px 0 24px; margin-bottom: 24px; border-bottom: 1px solid var(--line); }
+.manual-problem-form label { display: block; margin-top: 16px; font-size: 14px; font-weight: 600; }
+.manual-problem-form input { width: 100%; min-width: 0; min-height: 44px; padding: 8px 12px; border: 1px solid #57708a; border-radius: 6px; color: inherit; background: #0e151e; font: inherit; }
+.manual-problem-form input:disabled { color: var(--muted); }
+.manual-problem-form input[aria-invalid="true"] { border-color: #ffc1b5; }
+.manual-problem-form .hint { margin: 4px 0 12px; }
+.field-error { color: #ffc1b5; font-size: 14px; overflow-wrap: anywhere; }
+.problem-link { color: var(--accent); text-underline-offset: 3px; }
 .new-session button { display: flex; justify-content: space-between; width: 100%; margin-top: 8px; text-align: left; font-size: 14px; }
 .statement { white-space: pre-wrap; }
 .problem { padding: 10px 0 24px; }

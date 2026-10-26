@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { Store, type Sender } from '../src/core/store';
+import { PROTOCOL_VERSION } from '../src/shared/protocol';
 
 const extensionId = 'abcdefghijklmnopabcdefghijklmnop';
 const sender: Sender = { id: extensionId, url: `chrome-extension://${extensionId}/workspace.html`, frameId: 0 };
@@ -9,7 +10,7 @@ const makeStore = () => {
   stores.push(store);
   return store;
 };
-const envelope = () => ({ protocolVersion: 1, extensionId, actionId: crypto.randomUUID() });
+const envelope = () => ({ protocolVersion: PROTOCOL_VERSION, extensionId, actionId: crypto.randomUUID() });
 const start = () => ({ ...envelope(), type: 'start', sessionId: crypto.randomUUID(), problemSnapshotId: crypto.randomUUID(), problemKey: 'unique' });
 const save = (session: ReturnType<typeof start>, revision = 0, text = '先遍历') => ({
   ...envelope(), type: 'saveDraft', sessionId: session.sessionId,
@@ -106,7 +107,7 @@ describe('持久化命令协议', () => {
 
   it('SC-10: 版本/扩展数据空间不兼容被明确拒绝', async () => {
     const store = makeStore();
-    expect(await store.handle({ ...start(), protocolVersion: 2 }, sender)).toMatchObject({ code: 'PROTOCOL_MISMATCH' });
+    expect(await store.handle({ ...start(), protocolVersion: 1 }, sender)).toMatchObject({ code: 'PROTOCOL_MISMATCH' });
     expect(await store.handle({ ...start(), extensionId: 'other-instance' }, sender)).toMatchObject({ code: 'INSTANCE_MISMATCH' });
     expect(await store.handle({ ...start(), role: 'admin' }, sender)).toMatchObject({ code: 'INVALID_COMMAND' });
     expect(await store.handle({ ...start(), problemKey: 'arbitrary-url' }, sender)).toMatchObject({ code: 'INVALID_COMMAND' });

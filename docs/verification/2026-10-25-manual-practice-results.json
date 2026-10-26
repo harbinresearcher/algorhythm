@@ -1,0 +1,532 @@
+{
+  "taskDate": "2026-10-25",
+  "verifiedOn": "2026-10-26",
+  "baselineCommit": "31e25081d3219d05070857841ca299461867335d",
+  "branch": "codex/task-04-manual-practice",
+  "scope": "RFC-03 M-01..M-06, MP-01..MP-10; implementation awaiting architect review; no merge",
+  "versions": {
+    "protocol": 2,
+    "databaseLayout": 2,
+    "backupExport": 2,
+    "backupImport": [
+      1,
+      2
+    ],
+    "manifest": "0.2.0"
+  },
+  "unitTests": {
+    "baseline": 272,
+    "final": 367,
+    "files": 10,
+    "added": {
+      "manual": 57,
+      "backupV2": 36,
+      "backupCompatibility": 2
+    },
+    "exitCode": 0,
+    "log": "apps/extension/output/task04/final-tests-2026-10-26.log"
+  },
+  "build": {
+    "exitCode": 0,
+    "typecheckIncluded": true,
+    "modules": 128,
+    "log": "apps/extension/output/task04/final-build-2026-10-26.log",
+    "sameAsBrowserBuild": true,
+    "files": [
+      {
+        "path": "dist/assets/backup-baFC-GHq.js",
+        "bytes": 112638,
+        "sha256": "40a3365b25271edf25122288025392a89aa9fe05d629e011f9ea96cad4a8a9c8"
+      },
+      {
+        "path": "dist/assets/BackupPanel-DaEqx9O2.js",
+        "bytes": 9545,
+        "sha256": "aae19c2cd2593e90dfa8c28b058c4c9cdd023e21d3b00ee20454a5198f8833eb"
+      },
+      {
+        "path": "dist/assets/main-CMJG_uEc.css",
+        "bytes": 6012,
+        "sha256": "b1147bb4bf2bdb5aee07036e1b8a69a522da4d81f62157ed9fa60122374df2ea"
+      },
+      {
+        "path": "dist/assets/main-DShZDSiO.js",
+        "bytes": 159722,
+        "sha256": "e38c4bdad74796756462e49dc461ce1d1a7d1ba7dc19ff800dd6cf79449156d2"
+      },
+      {
+        "path": "dist/assets/protocol-DczopjeN.js",
+        "bytes": 91056,
+        "sha256": "57bcbb52b1dadc33e64aff36e5f83914f7ed7e2803a59e7365566467260ca462"
+      },
+      {
+        "path": "dist/background.js",
+        "bytes": 1776,
+        "sha256": "fa083a22e35269f11ed0022542c0a20a79be84ea6e2df59af4eaf27a0c79fbd0"
+      },
+      {
+        "path": "dist/manifest.json",
+        "bytes": 613,
+        "sha256": "841138c0a4bde1ad16138ab1c6bfc4da6daf402c221e104c214b386afee17446"
+      },
+      {
+        "path": "dist/sidepanel.html",
+        "bytes": 459,
+        "sha256": "38b3af01d140a23a39bfb5ea2a4786134effb527ef0cdb84ee3b3d96c37527a0"
+      },
+      {
+        "path": "dist/workspace.html",
+        "bytes": 462,
+        "sha256": "cbc76a760abfd84d7c20abced93300a20818f1c1e208bb89c05df4b85ca9e6b7"
+      }
+    ]
+  },
+  "frozenLegacy": {
+    "gitBlob": "7d0cf597acd8e164ebc406d311229eb077de79df",
+    "equalsBaseProtocolBlob": true,
+    "v1BackupFixtureUnchanged": true,
+    "v1CanonicalDigest": "b1827a2f8d7010ea02b28517a22d727132ccc6b90f0b21bbe9572498ad022b7f"
+  },
+  "browserRuns": [
+    {
+      "name": "original",
+      "date": "2026-10-26",
+      "browserVersion": "156.0.8078.4",
+      "checkpointCount": 13,
+      "pageerrorCount": 0,
+      "rawResultPath": "apps/extension/output/task04/original-browser-2026-10-26/results.json",
+      "rawResultSha256": "874268c495d305ba3bb103119e77aefa1dcbfb10e5412f1c122137ededdc4d86",
+      "nativePanelContextTypes": [
+        "SIDE_PANEL"
+      ],
+      "checkpoints": [
+        {
+          "name": "生产扩展工作台：创建、保存、尝试记录"
+        },
+        {
+          "name": "SC-01 原生：Chrome SIDE_PANEL 上下文内保存草稿和尝试，关闭工作台不影响；历史按 revision 排序"
+        },
+        {
+          "name": "SC-01 页面级：关闭工作台后侧栏页面继续保存，重开一致"
+        },
+        {
+          "name": "360px 无横向溢出，编辑区可用键盘进入动作按钮"
+        },
+        {
+          "name": "SC-03：忽略首次回执后查询与重放均返回原提交，只有一条事件"
+        },
+        {
+          "name": "SC-05：过期 revision 被拒绝"
+        },
+        {
+          "name": "SC-10：协议和扩展实例不一致明确拒绝"
+        },
+        {
+          "name": "SC-02：CDP 确认后台 stopped 后，保存消息唤醒后台且原数据保留"
+        },
+        {
+          "name": "暂停保留输入，恢复后可继续"
+        },
+        {
+          "name": "SC-07：同一隔离配置重启浏览器后，草稿与尝试恢复"
+        },
+        {
+          "name": "SC-05 UI：另一窗口保存后，本地冲突文本保留且显示恢复入口"
+        },
+        {
+          "name": "SC-11 UI：迟到 A 确认不会把 B 标为已保存，B 确认后才显示保存"
+        },
+        {
+          "name": "SC-06 UI：切题前保存并等待，新旧题草稿分别归属"
+        }
+      ],
+      "files": []
+    },
+    {
+      "name": "backup",
+      "date": "2026-10-26T04:50:48.551Z",
+      "browserVersion": "156.0.8078.4",
+      "checkpointCount": 14,
+      "pageerrorCount": 0,
+      "rawResultPath": "apps/extension/output/task04/backup-browser-2026-10-26/results.json",
+      "rawResultSha256": "e20ec36d835b8dd2991077b80274be5a376fdbf96a2c50975dc468217f45b67e",
+      "sourceExtensionId": "lbjlahbpdfemnlfplhmcjonfdpjcoapg",
+      "targetExtensionId": "iiffmnpopffgpnmedbbhaieaaofgcmha",
+      "checkpoints": [
+        {
+          "id": "BK-01/07/10",
+          "name": "真实下载含多会话、中文、Python、尝试和确认草稿，系统哨兵未导出"
+        },
+        {
+          "id": "BK-11",
+          "name": "原生 SIDE_PANEL 拒绝三个备份消息，学习保存仍可用"
+        },
+        {
+          "id": "BK-11",
+          "name": "普通网页无备份授权，工作台子框架不能发送管理消息",
+          "detail": "实际装载子框架的三个备份消息均收到 FORBIDDEN，五表不变"
+        },
+        {
+          "id": "BK-01/06/08",
+          "name": "另一空配置跨扩展 ID 恢复；模拟丢 ACK 后只查询一次，没有自动重发",
+          "detail": "真实 IndexedDB 提交，传输异常由测试页面模拟"
+        },
+        {
+          "id": "BK-01/08",
+          "name": "实际回导四表一致，历史动作可查询去重，旧实例与篡改命令仍拒绝"
+        },
+        {
+          "id": "BK-03/04",
+          "name": "共享题目快照的新会话整份拒绝且五表不变，之后仍可导出"
+        },
+        {
+          "id": "BK-03/04",
+          "name": "同会话另一套事件历史整份拒绝且五表不变，之后仍可导出"
+        },
+        {
+          "id": "BK-02/06/10",
+          "name": "续练后重复导入不覆盖，刷新与真实 worker 停启后原回执保留"
+        },
+        {
+          "id": "BK-03",
+          "name": "同 ID 冲突整份拒绝，独立新会话、原事实及回执均不变"
+        },
+        {
+          "id": "BK-04/10",
+          "name": "预览取消、非法 JSON 及未知版本均无学习写入或成功回执"
+        },
+        {
+          "id": "BK-06/10",
+          "name": "整个目标浏览器关闭并重开后，续练草稿与回执保留"
+        },
+        {
+          "id": "BK-01/08",
+          "name": "冻结 v1 文件真实导入，在线 v2 查询原回执，默认 v2 导出保留 v1 指纹"
+        },
+        {
+          "id": "BK-09",
+          "name": "真实 v1 工具快照→升级中断保留→后台重启升级 v2→按钮下载四表一致",
+          "detail": "升级前快照由测试工具读取，旧应用没有导出按钮；原生低版本请求不清库"
+        },
+        {
+          "id": "BK-04/06/10",
+          "name": "串行 UI 边界脚本10项通过",
+          "detail": "页面范围模拟：flush、未知恢复、迟到文件/摘要、读取失败、超Date时间"
+        }
+      ],
+      "files": [
+        {
+          "name": "source-backup.json",
+          "bytes": 11322,
+          "sha256": "001c30a9f17b62c65b52b9f0edc1e3a8dbc9d50d7a97d85df9bdeaaa72f00765"
+        },
+        {
+          "name": "target-round-trip.json",
+          "bytes": 11322,
+          "sha256": "d2d6658e9f59c6bb75ff90392e932b4ef6c5433da3d56fa20ef6bc88b6433928"
+        },
+        {
+          "name": "legacy-v1-imported-v2-export.json",
+          "bytes": 15823,
+          "sha256": "97a6257f60e8790bf63bd4f6da9c4109485f6f19f684f2dc43ff0e1d74e13233"
+        },
+        {
+          "name": "migration-v2-backup.json",
+          "bytes": 15823,
+          "sha256": "4f4937fb4b93d83a8669f1b11b515189e8e5ab49103bc7a8475a14e70cc9561a"
+        }
+      ]
+    },
+    {
+      "name": "backup-ui",
+      "date": "2026-10-26T04:51:02.233Z",
+      "browserVersion": "156.0.8078.4",
+      "checkpointCount": 10,
+      "pageerrorCount": 0,
+      "rawResultPath": "apps/extension/output/task04/backup-ui-boundaries-2026-10-26/results.json",
+      "rawResultSha256": "2a9d6ea069bf0efe48210d294360e35bae88e0494cdc7800b46046e970352004",
+      "checkpoints": [
+        {
+          "name": "BK-10 真实后台：未等debounce的当前输入先flush，再导出且下载文件含新草稿"
+        },
+        {
+          "name": "BK-10 模拟保存失败：不发backup.export、不下载完整文件，保留导出草稿"
+        },
+        {
+          "name": "BK-06/10 模拟传输丢失：unknown锁住原文件与切题；手动恢复先query，null后同文件摘要导入"
+        },
+        {
+          "name": "BK-10 真实导入+模拟read失败：成功notice和回执保留，只有更新失败提示，不变成unknown"
+        },
+        {
+          "name": "BK-10 模拟text迟到：cancel后旧结果不恢复预览"
+        },
+        {
+          "name": "BK-10 模拟text迟到：replace后旧结果不恢复预览"
+        },
+        {
+          "name": "BK-10 模拟hash迟到：cancel后旧结果不恢复预览"
+        },
+        {
+          "name": "BK-10 模拟hash迟到：replace后旧结果不恢复预览"
+        },
+        {
+          "name": "BK-04/10 超10MiB文件在File.text前拒绝，预览与取消均不发备份写消息"
+        },
+        {
+          "name": "BK-04/10 真实事务：MAX_SAFE_INTEGER时间预览、导入、手动选题及历史读取均通过；空选择保持为空"
+        }
+      ],
+      "files": []
+    },
+    {
+      "name": "manual-chromium",
+      "date": "2026-10-26T04:54:59.704Z",
+      "browserVersion": "156.0.8078.4",
+      "checkpointCount": 20,
+      "pageerrorCount": 0,
+      "rawResultPath": "apps/extension/output/task04/manual-browser/chromium/results.json",
+      "rawResultSha256": "3c8c3de801e78e636587acba73e91bec1121dda147739c51f60fd405a15d06dc",
+      "observedExternalRequests": 0,
+      "workerNetworkAttachmentCount": 12,
+      "sourceExtensionId": "lbjlahbpdfemnlfplhmcjonfdpjcoapg",
+      "targetExtensionId": "akjldklmjohkfjiclflphfcailhbganp",
+      "nativePanelContextTypes": [
+        "SIDE_PANEL"
+      ],
+      "checkpoints": [
+        {
+          "id": "MP-06/07",
+          "name": "冻结v1文件真实导入；原v1指纹保留，在线v2查询返回旧回执",
+          "simulated": false
+        },
+        {
+          "id": "MP-01/10",
+          "name": "键盘完成无链接建题，标题去除首尾空白，本地草稿保存",
+          "simulated": false
+        },
+        {
+          "id": "MP-01/02/05",
+          "name": "链接本地规范化；HTML标题和笔记纯文本；手动来源、快照与事件一致",
+          "simulated": false
+        },
+        {
+          "id": "MP-05",
+          "name": "同链接建立不同会话，原草稿和尝试互不覆盖",
+          "simulated": false
+        },
+        {
+          "id": "MP-03/10",
+          "name": "原生侧栏在工作台关闭后保存；真实worker停启、暂停恢复与浏览器重启均保留",
+          "simulated": false
+        },
+        {
+          "id": "MP-10",
+          "name": "360px侧栏页面无横向溢出，编辑器键盘进入尝试按钮",
+          "simulated": false
+        },
+        {
+          "id": "MP-07/09/10",
+          "name": "实际v2下载在另一空配置跨ID恢复；四表及v1/v2指纹一致，续练后重导不回退",
+          "simulated": false
+        },
+        {
+          "id": "MP-08",
+          "name": "本地预览拒绝未来版本、scope错配、来源/标题/事件矛盾及无主引用，五表不变",
+          "simulated": false
+        },
+        {
+          "id": "MP-03/07",
+          "name": "恢复目标配置再次完整重启后，续写、尝试与导入回执保留",
+          "simulated": false
+        },
+        {
+          "id": "MP-01/04/10",
+          "name": "空/超长标题、恶意URL及未知字段拒绝；键盘取消不写库",
+          "simulated": false
+        },
+        {
+          "id": "MP-02",
+          "name": "worker限定最后回执写入失败，真实IndexedDB事务四表回滚",
+          "simulated": true
+        },
+        {
+          "id": "MP-04",
+          "name": "模拟flush失败保留表单和草稿，未生成startManual命令",
+          "simulated": true
+        },
+        {
+          "id": "MP-04",
+          "name": "模拟发送前丢失：先查回执，手动恢复重用完整原命令和所有ID",
+          "simulated": true
+        },
+        {
+          "id": "MP-04",
+          "name": "模拟已提交ACK丢失：真实query确认，仅一次startManual且表单关闭",
+          "simulated": true
+        },
+        {
+          "id": "MP-04",
+          "name": "模拟提交后read失败保留成功提示、关闭表单，无恢复重建入口",
+          "simulated": true
+        },
+        {
+          "id": "MP-02/04",
+          "name": "模拟迟到建题回执并快速双击：一条命令和一个会话，期间禁止重复建题",
+          "simulated": true
+        },
+        {
+          "id": "MP-04",
+          "name": "模拟A/B迟到确认：B确认前不建新题，新旧草稿归属隔离",
+          "simulated": true
+        },
+        {
+          "id": "MP-04/10",
+          "name": "手动会话真实双页面revision冲突，冲突方保留本地文本",
+          "simulated": false
+        },
+        {
+          "id": "MP-06",
+          "name": "受控旧页面信封被真实v2后台拒绝，UI提示重开且不显示空库",
+          "simulated": true
+        },
+        {
+          "id": "MP-05/09",
+          "name": "监听期间未观察到生产扩展页面及worker的HTTP/HTTPS/WebSocket请求",
+          "simulated": false
+        }
+      ],
+      "files": [
+        {
+          "name": "manual-source-backup.json",
+          "bytes": 30852,
+          "sha256": "656e6f231ede475a4d891f2e2e46ce101dc9f5e400ec998793724fdc68111f30"
+        },
+        {
+          "name": "manual-target-continued.json",
+          "bytes": 33094,
+          "sha256": "5d23ec30e511ebbb6feae01d807c5ee51ea8299cc75b9728681025e21aaecabf"
+        }
+      ]
+    },
+    {
+      "name": "manual-chrome-stable",
+      "date": "2026-10-26T04:56:49.326Z",
+      "browserVersion": "155.0.8059.85",
+      "checkpointCount": 10,
+      "pageerrorCount": 0,
+      "rawResultPath": "apps/extension/output/task04/manual-browser/chrome-stable/results.json",
+      "rawResultSha256": "84fb45bb8191f713c905c14b3ad84a3513625d99f091c4317111264c37ea533e",
+      "observedExternalRequests": 0,
+      "workerNetworkAttachmentCount": 4,
+      "sourceExtensionId": "lbjlahbpdfemnlfplhmcjonfdpjcoapg",
+      "targetExtensionId": "dmolnmmnkdeghbeainmijoheioodkopf",
+      "nativePanelContextTypes": [
+        "SIDE_PANEL"
+      ],
+      "checkpoints": [
+        {
+          "id": "MP-06/07",
+          "name": "冻结v1文件真实导入；原v1指纹保留，在线v2查询返回旧回执",
+          "simulated": false
+        },
+        {
+          "id": "MP-01/10",
+          "name": "键盘完成无链接建题，标题去除首尾空白，本地草稿保存",
+          "simulated": false
+        },
+        {
+          "id": "MP-01/02/05",
+          "name": "链接本地规范化；HTML标题和笔记纯文本；手动来源、快照与事件一致",
+          "simulated": false
+        },
+        {
+          "id": "MP-05",
+          "name": "同链接建立不同会话，原草稿和尝试互不覆盖",
+          "simulated": false
+        },
+        {
+          "id": "MP-03/10",
+          "name": "原生侧栏在工作台关闭后保存；真实worker停启、暂停恢复与浏览器重启均保留",
+          "simulated": false
+        },
+        {
+          "id": "MP-10",
+          "name": "360px侧栏页面无横向溢出，编辑器键盘进入尝试按钮",
+          "simulated": false
+        },
+        {
+          "id": "MP-07/09/10",
+          "name": "实际v2下载在另一空配置跨ID恢复；四表及v1/v2指纹一致，续练后重导不回退",
+          "simulated": false
+        },
+        {
+          "id": "MP-08",
+          "name": "本地预览拒绝未来版本、scope错配、来源/标题/事件矛盾及无主引用，五表不变",
+          "simulated": false
+        },
+        {
+          "id": "MP-03/07",
+          "name": "恢复目标配置再次完整重启后，续写、尝试与导入回执保留",
+          "simulated": false
+        },
+        {
+          "id": "MP-05/09",
+          "name": "监听期间未观察到生产扩展页面及worker的HTTP/HTTPS/WebSocket请求",
+          "simulated": false
+        }
+      ],
+      "files": [
+        {
+          "name": "manual-source-backup.json",
+          "bytes": 30852,
+          "sha256": "a804a83df78b62b66b87eb6becc95dc3ea0dbac4e0d6877db9fefca4551faed3"
+        },
+        {
+          "name": "manual-target-continued.json",
+          "bytes": 33094,
+          "sha256": "b2a96b7017a1c848956f28a4f68d34e5dc115ef7840253830d4e37298837da20"
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "path": "docs/images/manual-practice-workspace.png",
+      "bytes": 122766,
+      "sha256": "66e6d189f6f17c3977298d374d6ad1094d84be62958a3657c583ceeddd1ee6b4",
+      "source": "Chrome Stable 155.0.8059.85; original synthetic manual records"
+    },
+    {
+      "path": "docs/images/manual-practice-panel-360.png",
+      "bytes": 42864,
+      "sha256": "84fae07334eac7d7c45d54d29510b93cbb862ba458a52c582ea5a4df4541335b",
+      "source": "Chrome Stable 155.0.8059.85; original synthetic manual records"
+    }
+  ],
+  "failedAttempts": [
+    {
+      "stage": "Chrome Stable first official Load Unpacked chooser",
+      "kind": "environment loader failure before product test",
+      "message": "Official isolated test chooser missing",
+      "outcome": "separate archive; clean isolated-profile retry passed; root cause unresolved; helper, sandbox and safety guards unchanged",
+      "rawDirectory": "apps/extension/output/task04/manual-browser/chrome-stable-loader-attempt-1-2026-10-26"
+    }
+  ],
+  "evidenceLimits": [
+    "Checkpoint counts are script checkpoints, not individual assertions; manual Chromium includes 8 simulated checkpoints, Stable runs 10 real main checkpoints.",
+    "errors[] counts Playwright Page.pageerror only; native side panel and worker Runtime exceptions are not comprehensively observed.",
+    "Manual product network monitoring observed zero HTTP/HTTPS/WebSocket requests during attached windows only; worker CDP pre-attach and post-restart-before-attach windows are not covered.",
+    "Backup BK-11 serves a local 127.0.0.1 synthetic untrusted tool page, separately from product network monitoring.",
+    "Manual malformed-backup browser cases are local-preview rejection with unchanged five tables; direct backend/relation rollback is additionally verified by unit tests and original backup browser cases.",
+    "Chromium transport/ACK/flush/delay/old-page and worker receipt-failure injections are simulations over real IndexedDB; not genuine disk, quota or permission failures.",
+    "Not verified: real quota exhaustion, transaction-midway browser termination, old v1 executable, privacy mode, full browser support/source matrices, real LeetCode collection, model behavior or learning outcomes.",
+    "Final script edits after browser execution only clarify evidence labels/notes, with no assertion, flow, helper or product-code changes; raw successful results are preserved unchanged."
+  ],
+  "localRuntime": {
+    "node": "26.3.0",
+    "npm": "12.0.1",
+    "vitest": "5.0.4",
+    "vite": "8.3.4",
+    "ciConfiguredNode": "24"
+  }
+}

@@ -171,7 +171,7 @@ export default function BackupPanel({ busy, blocked, run, onPendingChange, onImp
   const rows = preview?.backup.data;
   return <section className="backup-panel" aria-labelledby="backup-title">
     <h2 id="backup-title">备份与恢复</h2>
-    <p className="muted hint">仅包含本合成原型四表中已保存的数据。其他页面尚未确认的输入不在备份内。文件含思路和代码，请自行保管。</p>
+    <p className="muted hint">仅包含本练习记录原型四表中已保存的数据，包括手动记录和合成演示。其他页面尚未确认的输入不在备份内。文件含思路和代码，请自行保管。</p>
     <div className="button-row"><button disabled={disabled || unknown || reading} onClick={() => { void exportFile(); }}>下载备份</button></div>
     <label className="backup-file-label" htmlFor="backup-file">选择备份文件</label>
     <input ref={input} id="backup-file" type="file" accept=".json,application/json" aria-label="选择备份文件"

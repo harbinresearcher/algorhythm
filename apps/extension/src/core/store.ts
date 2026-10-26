@@ -3,7 +3,7 @@ import { z } from 'zod';
 import type { BackupImportReceipt } from '../shared/backup';
 import { isAllowedSource, type Sender } from './source';
 import {
-  commandSchema, PROTOCOL_VERSION, SYNTHETIC_PROBLEMS,
+  commandSchema, problemSchema, PROTOCOL_VERSION, SYNTHETIC_PROBLEMS,
   type ActionRecord, type Command, type Committed, type Diagnostic, type ErrorCode,
   type LearningEvent, type Problem, type Response, type Session, type WriteCommand,
 } from '../shared/protocol';
@@ -112,17 +112,29 @@ export class Store {
         const now = Date.now();
         let session: Session;
         let kind: LearningEvent['kind'];
+        let source: LearningEvent['source'];
         let text: string | undefined;
         if (command.type === 'start') {
           if (await this.db.sessions.get(command.sessionId) || await this.db.problems.get(command.problemSnapshotId)) throw new Rejection('REFERENCE_MISMATCH');
           session = { id: command.sessionId, problemSnapshotId: command.problemSnapshotId, problemKey: command.problemKey, status: 'active', revision: 0, draft: '', createdAt: now, updatedAt: now };
           await this.db.problems.add({ id: command.problemSnapshotId, ...SYNTHETIC_PROBLEMS[command.problemKey] });
           kind = 'started';
+          source = 'synthetic-workspace';
+        } else if (command.type === 'startManual') {
+          // 2.2 手动快照只接收已规范的标题和链接，来源与空题干由后台固定。
+          if (await this.db.sessions.get(command.sessionId) || await this.db.problems.get(command.problemSnapshotId)) throw new Rejection('REFERENCE_MISMATCH');
+          session = { id: command.sessionId, problemSnapshotId: command.problemSnapshotId, problemKey: 'manual', status: 'active', revision: 0, draft: '', createdAt: now, updatedAt: now };
+          await this.db.problems.add({ id: command.problemSnapshotId, key: 'manual', title: command.title, statement: '', source: 'manual-user-v1', url: command.url });
+          kind = 'started'; source = 'manual-workspace';
         } else {
           // 2.2 题目身份与 revision 不由当前标签页推测。
           const current = await this.db.sessions.get(command.sessionId);
           if (!current) throw new Rejection('NOT_FOUND');
           if (current.problemSnapshotId !== command.problemSnapshotId) throw new Rejection('REFERENCE_MISMATCH');
+          // 2.3 从真实快照核对类型并推导事件来源，不用当前 UI 或 key 猜来源。
+          const snapshot = problemSchema.safeParse(await this.db.problems.get(current.problemSnapshotId));
+          if (!snapshot.success || snapshot.data.key !== current.problemKey) throw new Rejection('REFERENCE_MISMATCH');
+          source = snapshot.data.source === 'manual-user-v1' ? 'manual-workspace' : 'synthetic-workspace';
           if (current.revision !== command.expectedRevision) throw new Rejection('REVISION_CONFLICT');
           if (current.status !== (command.type === 'resume' ? 'paused' : 'active')) throw new Rejection('INVALID_STATE');
           session = { ...current, revision: current.revision + 1, updatedAt: now };
@@ -134,9 +146,9 @@ export class Store {
             kind = 'attempt'; text = current.draft;
           }
         }
-        // 2.3 事务完成后才返回成功，事件与原回执不覆写。
+        // 2.4 事务完成后才返回成功，事件与原回执不覆写。
         await this.db.sessions.put(session);
-        await this.db.events.add({ id: command.actionId, actionId: command.actionId, sessionId: session.id, problemSnapshotId: session.problemSnapshotId, revision: session.revision, at: now, kind, source: 'synthetic-workspace', ...(text === undefined ? {} : { text }) });
+        await this.db.events.add({ id: command.actionId, actionId: command.actionId, sessionId: session.id, problemSnapshotId: session.problemSnapshotId, revision: session.revision, at: now, kind, source, ...(text === undefined ? {} : { text }) });
         const result: Committed = { ok: true, kind: 'committed', actionId: command.actionId, session };
         await this.db.actions.add({ id: command.actionId, fingerprint, result });
         return result;

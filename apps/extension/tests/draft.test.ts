@@ -1,11 +1,11 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { DraftController } from '../src/client/draft';
 import { createClient, ClientError } from '../src/client/transport';
-import type { Committed, Session, WriteCommand } from '../src/shared/protocol';
+import { PROTOCOL_VERSION, type Committed, type Session, type WriteCommand } from '../src/shared/protocol';
 
 const extensionId = 'abcdefghijklmnopabcdefghijklmnop';
 const session: Session = { id: crypto.randomUUID(), problemSnapshotId: crypto.randomUUID(), problemKey: 'unique', status: 'active', revision: 0, draft: '', createdAt: 1, updatedAt: 1 };
-const envelope = () => ({ protocolVersion: 1 as const, extensionId, actionId: crypto.randomUUID() });
+const envelope = () => ({ protocolVersion: PROTOCOL_VERSION, extensionId, actionId: crypto.randomUUID() } as const);
 const commit = (command: WriteCommand): Committed => ({ ok: true, kind: 'committed', actionId: command.actionId, session: { ...session, revision: 'expectedRevision' in command ? command.expectedRevision + 1 : 0, draft: command.type === 'saveDraft' ? command.text : '' } });
 afterEach(() => { vi.useRealTimers(); vi.restoreAllMocks(); });
 

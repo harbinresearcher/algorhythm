@@ -20,7 +20,7 @@ async function openContext() {
 }
 async function waitSaved(page) { await page.locator('.save-status').filter({ hasText: /^已保存$/ }).waitFor(); }
 async function send(page, command) {
-  return page.evaluate((input) => chrome.runtime.sendMessage({ protocolVersion: 1, extensionId: chrome.runtime.id, actionId: crypto.randomUUID(), ...input }), command);
+  return page.evaluate((input) => chrome.runtime.sendMessage({ protocolVersion: 2, extensionId: chrome.runtime.id, actionId: crypto.randomUUID(), ...input }), command);
 }
 
 async function attachNativePanel(cdp, targetId) {
@@ -143,7 +143,7 @@ try {
   const conflict = await send(workspace, { ...command, actionId: crypto.randomUUID(), text: '过期版本' });
   assert.equal(conflict.code, 'REVISION_CONFLICT');
   record('SC-05：过期 revision 被拒绝');
-  assert.equal((await send(workspace, { type: 'read', protocolVersion: 2 })).code, 'PROTOCOL_MISMATCH');
+  assert.equal((await send(workspace, { type: 'read', protocolVersion: 1 })).code, 'PROTOCOL_MISMATCH');
   assert.equal((await send(workspace, { type: 'read', extensionId: 'other-instance' })).code, 'INSTANCE_MISMATCH');
   record('SC-10：协议和扩展实例不一致明确拒绝');
 
